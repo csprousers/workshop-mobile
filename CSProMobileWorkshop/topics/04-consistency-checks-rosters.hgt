@@ -1,0 +1,268 @@
+﻿<title>Session 4: More Logic in Data Entry, Rosters, Subscripts and Loops</title>
+
+At the end of this lesson participants will be able to:
+<list>
+	<li>Implement consistency checks across individuals in the household roster</li>
+	<li>Understand the order of PROCs and where to place edit checks</li>
+	<li>Use subscripts, <logiccolor>totocc()</logiccolor>, <logiccolor>count()</logiccolor>, <logiccolor>seek()</logiccolor> and <logiccolor>curocc()</logiccolor> to work with rosters</li>
+	<li>Use loops (<logiccolor>do while</logiccolor>) to implement edit checks on repeating records/items (rosters)</li>
+	<li>Understand and use “special values” (<logiccolor>notappl</logiccolor>, <logiccolor>missing</logiccolor> and <logiccolor>default</logiccolor>) in logic</li>
+	<li>Set occurrence labels on rosters from logic</li>
+</list>
+
+<subheader>Groups and Subscripts</subheader>
+Let’s add a check to the line number of mother to ensure that the line number entered corresponds to a woman 12 or over in the household. To do this we need to link the line number entered in <b>B10</b> back to the corresponding row of the roster in section B. This is done through subscripts to get the age and sex of the mother based on the line number.
+
+For any item that is repeated, adding a number in parentheses after it gives you the value of a particular occurrence of the variable. For example, <logiccolor>AGE(1)</logiccolor> will be the age of the first household member, <logiccolor>AGE(2)</logiccolor> the age of the second member… If we omit the subscript when executing logic in a proc of a roster CSPro will assume that we want the one for the current row of the current roster. However, in this case we don't want the sex and age of the person in the current row, we want the age and sex in the row specified by <b>MOTHER_LINE_NUMBER</b>. To get that we need to use <logiccolor>AGE(MOTHER_LINE_NUMBER)</logiccolor> and <logiccolor>SEX(MOTHER_LINE_NUMBER)</logiccolor>.
+
+<logic>
+PROC MOTHER_LINE_NUMBER
+
+// Ensure that line number of mother is line number of woman over 12
+// in section B roster.
+if not MOTHER_LINE_NUMBER in 87:88 then
+
+    if SEX(MOTHER_LINE_NUMBER) = 1 then
+        errmsg("Sex of mother %s is male", 
+               strip(NAME(MOTHER_LINE_NUMBER)))
+               select("Correct mother", 
+                      MOTHER_LINE_NUMBER,
+                      "Correct sex of " +
+                      strip(NAME(MOTHER_LINE_NUMBER)), 
+                      SEX(MOTHER_LINE_NUMBER));
+    endif;
+    
+    if AGE(MOTHER_LINE_NUMBER) <> 999 and AGE(MOTHER_LINE_NUMBER) < 12 then
+        errmsg("Age of mother %s is %d but must be at least 12", 
+               strip(NAME(MOTHER_LINE_NUMBER)), 
+               AGE(MOTHER_LINE_NUMBER))
+               select("Correct mother", MOTHER_LINE_NUMBER,
+                      "Correct age of " + strip(NAME(MOTHER_LINE_NUMBER)), 
+                      AGE(MOTHER_LINE_NUMBER));
+    endif;
+endif;
+</logic>
+
+<subheader>Blanks and special values</subheader>
+What happens if we refer to an occurrence of a row in the section B roster that doesn’t exist? Try entering a line number for the mother greater than the number of rows in the section B roster. Our tests for age and sex are not triggered. What are the values of <b>NAME</b>, <b>SEX</b> and <b>AGE</b> when they are empty? Let’s print them out using <logiccolor>errmsg</logiccolor> and see.
+
+<logic>
+errmsg("NAME = %s, AGE=%d, SEX=%d", strip(NAME(MOTHER_LINE_NUMBER)), 
+        AGE(MOTHER_LINE_NUMBER), SEX(MOTHER_LINE_NUMBER));
+</logic>
+
+The alphanumeric variable <b>NAME</b> is just empty but the numeric values <b>AGE</b> and <b>SEX</b> are <logiccolor>notappl</logiccolor>. What does this mean? Generally, numeric fields that are blank (skipped or not yet entered) have a special value called <logiccolor>notappl</logiccolor> that can be used in comparisons in logic. For example, to test if the <b>SEX</b> is blank we can use the following comparison:
+
+<logic>
+    if SEX(MOTHERS_LINE_NUMBER) = notappl then
+        // Sex is blank, must be an empty row in section B roster
+        errmsg("%d is not a valid line in section B", MOTHERS_LINE_NUMBER);
+        reenter;
+    endif;
+</logic>
+<pagebreak />
+There are other special values that are used in CSPro:
+<list>
+	<li><logiccolor>Missing</logiccolor>: can be used as an alias for no response/refused codes (9, 99, 999…). You must create an entry for it in the value set.</li>
+	<li><logiccolor>Default</logiccolor>: results from an error reading from a data file or from a calculation error (like trying to calculate notappl + 2 or n/0 (divide by zero)) or moving a field into a field that is too small to hold the value.  For example, if AGE is a two digit field, AGE = 118 will result in Default.</li>
+</list>
+
+<subheader>Getting the size of a roster</subheader>
+In our error message, it would be nice to tell the interviewer what the maximum valid line number is. We can do that using the function <logiccolor>totocc()</logiccolor> which gives you the total number of occurrences of a group.
+
+<logic>
+    if MOTHER_LINE_NUMBER > totocc(HOUSEHOLD_MEMBERS_ROSTER) then
+        // This is beyond the end of the roster
+        errmsg("%d is not a valid line in section B. Must be between 1 and %d.", 
+            MOTHER_LINE_NUMBER, totocc(HOUSEHOLD_MEMBERS_ROSTER));
+        reenter;
+    endif;
+</logic>
+
+<subheader>Setting Occurrence Labels in Logic</subheader>
+If you look at the case tree in Android you will see that the roster occurrences are displayed with the name of the roster and the occurrence number “Demographics(1), Demographics(2)…” which is not useful. Using logic, we can set the occurrence labels to the names of the individuals instead. For that we use the command <logiccolor>setocclabel()</logiccolor> which takes the name of the group (roster or repeating form) and the string to set it to. For example, to set the occurrence label of each row of the demographics roster once the name is entered we can do the following in the postproc of the name field (<b>NAME</b>):
+
+<logic>
+PROC NAME
+setocclabel(HOUSEHOLD_MEMBERS_ROSTER, strip(NAME));
+setocclabel(DEMOGRAPHICS_ROSTER, strip(NAME));
+setocclabel(EDUCATION_ROSTER, strip(NAME));
+setocclabel(FERTILITY_ROSTER, strip(NAME));
+</logic>
+
+This works fine when we are adding a new case, however we open an existing case in modify mode the occurrence labels are not set until we get to the person roster even though the occurrences already exist. In modify mode, while still on the demographics roster you can scroll the case tree to see Demographics (1), Demographics (2)… as we had before. In order to prevent this, we need to set the occurrence labels for the rosters as soon as we open the case. 
+
+<subheader>More About Procs</subheader>
+What proc can we use to set the occurrence labels? We could use the preproc of the first field of the first form but there is a better option. It turns out that every element in the form tree has a PROC. Not only do variables have procs but there are procs for forms, rosters, levels and even the application itself. Everything you see in the forms tree can have both a preproc and a postproc. Understanding the order in which procs are executed is important in understanding CSPro logic. 
+
+The general rule is that 
+<list ordered>
+	<li>Parent items have their preproc called first,</li>
+	<li>then the procs of the child items are called</li>
+	<li>and finally, the postproc of the parent is called.</li>
+</list>
+
+<callout>
+<center><b>Group Exercise: Proc Order</b></center>
+Form teams of three to five people. The instructor adds errmsg to the postproc and preproc of the following: <b>POPSTAN2020_FF</b> (application), <b>POPSTAN2020_QUEST</b> (level), <b>DEMOGRAPHICS_FORM</b> (form), <b>HOUSEHOLD_MEMBERS_ROSTER</b> (roster), <b>NAME</b> (variable), <b>NUMBER_OF_ROOMS</b> (variable). Each team receives slips of paper with the names of each preproc and postproc. BEFORE running the application, the teams have to put the slips in the order that the errmsgs will be shown when the application is run. Teams have three minutes to complete the exercise. Then the application is run and teams see if they have the correct results.
+</callout>
+
+<subheader>Setting Occurrence Labels (take 2)</subheader>
+Now that we understand procs, which proc should we set the occurrence labels in? The preproc of the questionnaire! We can do something like the following:
+
+<logic>
+PROC POPSTANLFS_QUEST
+preproc
+setocclabel(HOUSEHOLD_MEMBERS_ROSTER(1), strip(NAME(1)));
+setocclabel(HOUSEHOLD_MEMBERS_ROSTER(2), strip(NAME(2)));
+setocclabel(HOUSEHOLD_MEMBERS_ROSTER(3), strip(NAME(3)));
+</logic>
+<pagebreak />
+<subheader>Loops</subheader>
+The problem is that we want to do this for each household member, but the number of household members varies from case to case. The above works only if we know the size of the household in advance. In order to handle any size household, we need a loop. We can use a <logiccolor>do</logiccolor> loop which lets you repeat something until a certain condition is true. How many times do we loop? We use the function <logiccolor>totocc()</logiccolor> that gives us the total number of occurrences of the roster.
+
+<logic>
+PROC POPSTAN2020_QUEST
+preproc
+
+// Fill in occurrence labels in rosters when entering a case that
+// has existing data (partial save or modify mode). If we don't do
+// this then the case tree will not have correct occurrence labels
+// until after we pass through the household members roster.
+        
+do numeric i = 1 while i <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
+	setocclabel(HOUSEHOLD_MEMBERS_ROSTER(i), strip(NAME(i)));
+	setocclabel(DEMOGRAPHICS_ROSTER(i), strip(NAME(i)));
+	setocclabel(EDUCATION_ROSTER(i), strip(NAME(i)));
+	setocclabel(FERTILITY_ROSTER(i), strip(NAME(i)));
+enddo;
+</logic>
+
+<subheader>Counting Heads of Household</subheader>
+It is currently possible to enter multiple heads of household or no head of household at all. How can we add a consistency check to ensure that there is exactly one head of household? In which proc would such a check go? We can put it in the postproc of the roster since that will be run after all the rows have been entered.
+
+How do we determine the number of heads of household? In each row of the roster, we can check the relationship to see if it is head of household. To do this we need to a logic variable to keep track of the number of heads of household.
+
+<logic>
+numeric numberOfHeads = 0;
+</logic>
+
+Now we can increment the variable for each head of household we find:
+
+<logic>
+PROC HOUSEHOLD_MEMBERS_ROSTER
+
+// After person roster is complete, check to make sure that there is
+// exactly one head of household.
+
+numeric numberOfHeads = 0;
+
+if RELATIONSHIP(1) = 1 then
+    numberOfHeads = numberOfHeads + 1;
+endif;
+
+if RELATIONSHIP(2) = 1 then
+    numberOfHeads = numberOfHeads + 1;
+endif;
+
+if RELATIONSHIP(3) = 1 then
+    numberOfHeads = numberOfHeads + 1;
+endif;
+
+if numberOfHeads <> 1 then
+    errmsg("Number of heads of household must be exactly one");
+    reenter RELATIONSHIP(1);
+endif;
+</logic>
+
+Since there is more than one row in the roster we need to use a subscript to tell CSEntry which row of the roster to look in. <logiccolor>RELATIONSHIP(3)</logiccolor> refers to the relationship of the 3rd row of the roster.
+
+The above works but only if we know the size of the household in advance. In order to handle any size household, we need a loop. We can use a do loop. Just like with the occurrence labels, we can loop from 1 to the number of rows in the roster.
+
+<logic>
+PROC HOUSEHOLD_MEMBERS_ROSTER
+
+// After adults roster is complete, check to make sure that there is
+// exactly one head of household.
+
+numeric numberOfHeads = 0;
+do numeric i = 1 while i <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
+    if RELATIONSHIP(i) = 1 then
+        numberOfHeads = numberOfHeads + 1;
+    endif;
+enddo;
+
+if numberOfHeads <> 1 then
+    errmsg("Number of heads of household must be exactly one");
+    reenter RELATIONSHIP(1);
+endif;
+</logic>
+
+<callout>
+<center><b>Activity: Acting out a loop</b></center>
+Show a household with four members on the whiteboard/flipchart and show the code above on the screen. Pick three volunteers. One volunteer plays the role of the variable numberOfHeads, a second plays the role of the variable i and a third is the loop director. Give them each a sign so everyone knows who they are playing. The two people playing variables should show their current values by holding up the correct number of fingers. The director is responsible for walking through the code line by line and updating the variable values until the loop ends explaining what they do step by step.
+</callout>
+
+Now that we all understand loops let’s see how we can simplify our code by using the function <logiccolor>count()</logiccolor> instead of a loop.
+
+<logic>
+PROC HOUSEHOLD_MEMBERS_ROSTER
+
+// After demographics roster is complete, check to make sure that there is
+// exactly one head of household.
+
+numeric numberOfHeads = count(PERSON_REC where RELATIONSHIP = 1);
+
+if numberOfHeads <> 1 then
+    errmsg("Number of heads of household must be exactly one");
+    reenter RELATIONSHIP(1);
+endif;
+</logic>
+
+<subheader>Force Head of Household to First Row</subheader>
+Instead of allowing the interviewer to enter the head of household on any line of the roster, we can greatly simplify our logic if we force them to list the head on the first row. We can implement this in the postproc of <b>RELATIONSHIP</b>.
+
+<logic>
+PROC RELATIONSHIP
+// Don't allow non-head of household on first row
+if RELATIONSHIP <> 1 and curocc() = 1 then
+	errmsg("Please enter the head of household before the other household members.");
+	reenter;
+endif;
+
+// Don't allow head of household on a row other than first row
+if RELATIONSHIP = 1 and curocc() <> 1 then
+    errmsg("Only one head of household is allowed. Head of household was already entered.");
+	reenter;
+endif;
+</logic>
+
+This replaces our logic for counting the number of heads of household in the postproc of the roster. This is simpler and will also simplify any other checks involving the head. For example to ensure that the head of household is at least 12 years old than his/her children we can simply compare the age of the individual to the age of head. Since the head is on the first row, the age of the head will always be <logiccolor>AGE(1)</logiccolor>. Since the head is entered first, we can do this check in the proc for <b>AGE</b> instead of in the roster postproc.
+
+<logic>
+PROG AGE
+// Compare age of child to age of the head
+if RELATIONSHIP = 3 and AGE(1) - AGE < 12 then
+	errmsg("Child %s is %d years old but head %s is %d. Parent must be at least 12 years older than child.",
+                strip(NAME), 
+                AGE,
+                strip(NAME(1)), 
+                AGE(1))
+                select("Correct age of " + strip(NAME), AGE,
+                       "Correct age of " + strip(NAME(1)), AGE(1),
+                       "Correct relationship of " + strip(NAME),
+                       RELATIONSHIP(,
+                       "Correct relationship of " + strip(NAME(1)),
+                       RELATIONSHIP(1));
+    endif;
+enddo;
+</logic>
+
+<subheader>Exercises</subheader>
+<list ordered>
+	<li>Ensure that the age difference between the head of household and the grandchild should not be less than 24 years. If age of head is X years and the age of the child is Y years, then X-Y ≥ 24.</li>
+	<li>Show an error message if the head of household has at least one spouse in the household and the marital of status of the head of household is not married.</li>
+	<li>Show an error message if the head of household and his/her spouse are of the same gender. Make sure that your logic works with polygamous households as well as households with just one spouse.</li>
+	<li>Set the occurrence labels in the section E roster, deaths, to the names of the deceased in that section. Make sure that the labels are set correctly when resuming from partial save.</li>
+</list>
+<pagebreak />
