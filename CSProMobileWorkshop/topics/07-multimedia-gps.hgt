@@ -1,0 +1,361 @@
+﻿<title>Session 7: Multimedia & GPS</title>
+
+At the end of this session participants will be able to:
+<list>
+	<li>Use images in value sets</li>
+	<li>Launch external applications from a data entry application</li>
+	<li>Launch photo and document viewers from a data entry application</li>
+	<li>Capture GPS coordinates in a data entry application</li>
+	<li>Display captured GPS points on a map</li>
+	<li>Generate and view reports from a data entry application</li>
+</list>
+
+<subheader>Value Set Images</subheader>
+In addition to showing text in a value set we can also display images. To add an image to a value set, select the variable in the dictionary editor and click on the “…” button next to the value. Browse to pick an image file. CSPro supports standard image file formats: png, jpeg, bmp… We recommend using png or jpeg as they tend have smaller file sizes. The images are not added to the pen file by default so it is a good idea to first put your images in a resources directory so that you won’t have to worry about copying them to the device.
+
+Let’s add images for the roof types in <b>F08</b>. Copy the RoofImages folder into the application directory. Now open the value set for <b>F08</b> and add each image to its respective value. We do not have a picture for other (specify) so we will leave that one without an image. Run the application on Windows and on Android and see the images.
+
+<subheader>Launching External Applications on Windows</subheader>
+The command <logiccolor>execsystem()</logiccolor> lets you launch another application from logic. It takes the name of the application to launch. For example, using a userbar button you could bring up the Window’s calculator:
+
+<logic>
+PROC GLOBAL
+
+// Launch the calculator
+function showCalculator()
+    execsystem("calc.exe");
+end;
+
+PROC POPSTAN2020_FF
+preproc
+userbar(clear);
+userbar(add button, "Go To...", goto);
+userbar(add button, "Household summary", showHouseholdSummary);
+userbar(add button, "Calculator", showCalculator);
+userbar(show);
+</logic>
+
+For Windows utilities like Calculator and Notepad which are in the system directory you can simply give the name. For other applications that are installed in the Program Files directory you may need to specify the full path. For example, to launch Microsoft Word (Office 2016 version) you would use:
+
+<logic>
+execsystem("C:\Program Files (x86)\Microsoft Office\root\Office16\WINWORD.EXE");
+</logic>
+
+<subheader>Launching External Applications on Android</subheader>
+The <logiccolor>execsystem()</logiccolor> command is slightly different on Android. On Android to launch an application with <logiccolor>execsystem()</logiccolor> use “app:” followed by the package name of the application. For example, to launch Gmail:
+
+<logic>
+execsystem("app:com.google.android.gm"); 
+</logic>
+
+Finding the package name can be a bit tricky. The easiest way is to use your web browser to search for the application on the Google Play website (play.google.com). On the page for the application the package name will be the last part of the address in the address bar of your browser, after the “?id=”. For example, if you go the page for CSEntry on the Google Play Store the address is:
+
+<indent><i>https://play.google.com/store/apps/details?id=gov.census.cspro.csentry</i></indent>
+
+The package name is therefore “gov.census.cspro.csentry”.
+
+To launc the calculator from Android we would use: <html><sup>1</sup></html>
+ 
+<logic>
+execsystem("app:com.google.android.calculator");
+</logic>
+~!~
+~!~
+
+<html><hr/></html>
+<font 0.8><html><sup>1</sup></html>On some Android devices the default calculator is replaced with a different package and the package name may need be changed.</font>
+<pagebreak />
+
+To make our code work on both Android and Windows we can use the function <logiccolor>getos()</logiccolor> which returns a number between representing the operating system:
+
+<table 2 header>
+	<cell>Code</cell><cell>Operating System</cell>
+	<cell>10</cell><cell>Windows</cell>
+	<cell>20</cell><cell>Android</cell>
+	<cell>30</cell><cell>Universal Windows</cell> 
+</table>
+
+<logic>
+// Launch the calculator
+function showCalculator()
+    if getos() = 10 then
+        // Windows
+        execsystem("calc.exe");
+    elseif getos() = 20 then
+        execsystem("app:com.google.android.calculator");
+	else
+		errmsg("Calculator not supported on this system");
+    endif;
+end;
+</logic>
+
+<subheader>Viewing Files on Android</subheader>
+On Android <logiccolor>execsystem()</logiccolor> can also be used to launch files with their default viewer.
+
+<logic>
+execsystem("view:/mnt/sdcard/csentry/picture.jpg");
+execsystem("view:/mnt/sdcard/csentry/audio.mp3");
+execsystem("view:/mnt/sdcard/csentry/movie.mp4");
+execsystem("view:/mnt/sdcard/csentry/document.pdf");
+</logic>
+
+For this to work, the device must have an application installed capable of viewing the type of file specified. Android determines which application to launch to view the file based on the file extension. All Android devices have viewers for most photo, music, and video file formats, however not all have a built-in PDF viewer. If you do not have one on your device, you can always download one from Google Play.
+
+Let’s add a userbar button to show a map of the enumeration area as a visual aid for the interviewer.
+
+<logic>
+// Display an image containing a map of the enumeration area
+function showEAMap()
+    execsystem("view:/mnt/sdcard/csentry/Popstan2020/Housing/resources/maps/EAMap.png");
+end;
+</logic>
+
+We can make our code a little more flexible by using the function <logiccolor>pathname()</logiccolor> to get the directory where the application is stored. This way if someone copies it into a different folder on the phone/tablet it will still work:
+
+<logic>
+// Display an image containing a map of the enumeration area
+function showEAMap()
+    execsystem(maketext("view:%s/resources/maps/EAMap.png", 
+                         pathname(Application)));
+end;
+</logic>
+
+Our code is currently limited to a single enumeration area. We could improve it to the show a different image based on the current value of the enumeration area variable.
+
+<logic>
+// Display an image containing a map of the enumeration area
+function showEAMap()
+    execsystem(maketext("view:%sresources/maps/EAMap%03d.png", 
+                         pathname(Application), ENUMERATION_AREA));
+end;
+</logic>
+
+<subheader>Taking Photos on Android</subheader>
+To take a picture on Android you can use execsystem with “camera:” followed by the full path in which to save the photo:
+
+<logic>
+execsystem("camera:/mnt/sdcard/csentry/photo.jpg");
+</logic>
+
+Note that photos do not get saved into the application data file. You need to save them to a folder/file on the device that will make it easy to link the photo back to the interview that it was taken for. The easiest way to do this is to make the name of the photo based on the id-items of the questionnaire:
+
+<logic>
+string photoFilename = pathname(application) + 
+                maketext("../Data/HouseholdPhotos/photo%d%02d%03d%d%03d.jpg", 
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+                                AREA_TYPE, HOUSEHOLD_NUMBER);
+execsystem(maketext("camera:/mnt/sdcard/csentry/%s", photoFilename));
+</logic>
+
+Note that we are putting the photo in a subdirectory of the data directory named HouseholdPhotos. We will need to create this folder on the tablet for this to work.
+
+Let’s have the interviewer take a photo of the household being interviewed in section A. Rather than adding a userbar button which would be easy for the interviewer to forget, we will make it part of the questionnaire by adding a dummy variable to the dictionary. In the postproc of the variable we will call <logiccolor>execsystem()</logiccolor> to take the photo. We can add a refused code in case the household doesn’t want a picture taken.
+
+<logic>
+PROC PHOTO
+
+if PHOTO = 1 then
+    // Take photo
+    string photoFilename = pathname(application) + 
+               maketext("../Data/HouseholdPhotos/photo%d%02d%03d%d%03d.jpg", 
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+                                AREA_TYPE, HOUSEHOLD_NUMBER);
+    execsystem(maketext("camera:%s", photoFilename));
+elseif PHOTO = 9 then
+    // refused, move to next field with no photo
+endif;
+</logic>
+
+This works the first time through the questionnaire but if we go back through the photo question a second time then we are forced to take another photo. We can avoid this by adding another option to the value set “Keep photo” that the interviewer will select once they are happy with the photo that they took. When “keep photo” is selected we won’t launch the camera. We can add another option “View photo” to let them look at the photo that was taken.
+
+<logic>
+PROC PHOTO
+
+string photoFilename = pathname(application) + 
+               maketext("../Data/HouseholdPhotos /photo%d%02d%03d%d%03d.jpg", 
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+                                AREA_TYPE, HOUSEHOLD_NUMBER);
+
+if PHOTO = 1 then
+    // Take/retake photo
+    execsystem(maketext("camera:%s", photoFilename));
+    
+    // reenter so that interview can retake if it is not good.
+    reenter;
+elseif PHOTO = 2 then
+    // view existing photo
+    execsystem(maketext("view:%s", photoFilename));
+    
+    // reenter so that interview can retake if it is not good.
+    reenter;
+elseif PHOTO = 3 then
+    // Keep photo - move to next field
+elseif PHOTO = 9 then
+    // No photo (refused)
+    // Delete photo if it exists
+    filedelete(photoFilename);
+endif;
+</logic>
+
+This works except that it is possible for the interviewer to select “Keep photo” even when there is no existing photo and to attempt to view a photo that doesn’t exist. We can solve this by only showing the “Keep photo” and “View photo” options in the value set if the photo exists already.
+
+<logic>
+PROC PHOTO
+onfocus
+string photoFilename = pathname(application) + 
+               maketext("../Data/HouseholdPhotos/photo%d%02d%03d%d%03d.jpg", 
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+                                AREA_TYPE, HOUSEHOLD_NUMBER);
+
+// Only show the view and keep options in value set
+// if the photo exists.
+if fileexist(photoFilename) then
+    setvalueset(PHOTO, PHOTO_VS_PHOTO_TAKEN);
+else
+    setvalueset(PHOTO, PHOTO_VS_NO_PHOTO);
+endif;
+</logic>
+
+<subheader>Viewing GPS Points</subheader>
+On Android you can use <logiccolor>execsystem</logiccolor> to display a GPS point on a map using “gps:” followed by the latitude and longitude. We can add a userbar button to display the household location on a map:
+
+<logic>
+// Display household GPS point on map
+function showHouseholdOnMap()
+    execsystem(maketext("gps:%f,%f", LATITUDE,LONGITUDE));
+end;
+</logic>
+
+<subheader>Capturing GPS Points</subheader>
+To capture a GPS point first you need to start up the GPS hardware:
+
+<logic>
+gps(open);
+</logic>
+
+Then you request a GPS reading giving it a timeout in seconds and optionally a desired accuracy in meters:
+
+<logic>
+if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy 
+    errmsg("Latitude is %f, longitude is %f",gps(latitude),gps(longitude));
+else
+    errmsg("GPS signal could not be acquired");
+endif;
+</logic>
+
+Finally, you close the GPS:
+
+<logic>
+gps(close);
+</logic>
+
+In addition to querying the GPS latitude and longitude you can also query the accuracy, number of satellites, and altitude (although on Android altitude is not very accurate). See the help on GPS for details.
+The longitude and latitude reported are in degrees in the WGS84 datum and are returned as decimal numbers.
+
+Let’s add a user button to update the GPS coordinates for the household:
+
+<logic>
+// Capture current household location using GPS
+function getGPS()
+    gps(open);
+    if gps(read, 60) then // Read for up to 60 seconds
+        LATITUDE = gps(latitude);
+        LONGITUDE = gps(longitude); 
+    else
+        errmsg("GPS signal could not be acquired");
+    endif;
+    gps(close);
+end;
+</logic>
+
+If we want to be fancy, we can display the point on the map first so that the interviewer can view it and then decide whether or not to use it.
+
+<logic>
+// Capture current household location using GPS
+function getGPS()
+    gps(open);
+    if gps(read, 60) then // Read for up to 60 seconds
+        // Show map so that interview can see result.
+        execsystem(maketext("gps:%f,%f", 
+                   gps(latitude),gps(longitude)));      
+        if accept("Save this result", "Yes", "No") = 1 then
+            LATITUDE = gps(latitude);
+            LONGITUDE = gps(longitude); 
+        endif;
+    else
+        errmsg("GPS signal could not be acquired");
+    endif;
+    gps(close);
+end;
+</logic>
+
+<callout>
+<center>Group Exercise</center>
+Build a CSPro application for the household listing questionnaire. Place your application in the folder Popstan2020/Listing. Treat each household as a separate case. In other words, do not use a repeating record and roster to try to match the paper questionnaire. When creating the listing dictionary use "LI_" as a prefix for the all the variable names so that they will not conflict with the names in the household dictionary. There is no need to validate the id-items using a lookup file like we did for the household questionnaire. We will prefill the id-items from the menu program tomorrow. For each household, automatically record the GPS coordinates in the latitude field. Give the interviewer the option of taking a photo of the household but allow for refusal. Name the photo based on the case id-items and put the photos in the directory Popstan2020/Data/ListingPhotos. Go outside and test your listing application on a tablet.
+</callout>
+
+<subheader>Writing and Viewing Reports</subheader>
+With <logiccolor>execsystem()</logiccolor> on Android you can view web pages using “browse:” followed by the address:
+
+<logic>
+execsystem("browse:https://www.census.gov");
+</logic>
+
+We can use this to view web pages (HTML documents) and text documents that we write out from CSPro. To write out files from a CSEntry application we have to first declare a file variable in the PROC GLOBAL:
+
+<logic>
+PROC GLOBAL
+file tempFile;
+</logic>
+
+Then we can use the commands <logiccolor>setfile()</logiccolor>, <logiccolor>filewrite()</logiccolor> and <logiccolor>close()</logiccolor> to open, write to and close the file. Let’s create a userbar button to write a simple text report that lists the household members:
+
+<logic>
+// Write out and display household summary report
+function showHouseholdReport()
+    string reportFilename = maketext("%sreport.txt", pathname(Application));
+    setfile(tempFile, reportFilename);
+    filewrite(tempFile, "Household Summary Report");
+    filewrite(tempFile, "------------------------");
+    filewrite(tempFile, "");
+    filewrite(tempFile, "Province %d District %d EA %d Area type %d Household Number %d", 
+                        visualvalue(PROVINCE), 
+                        visualvalue(DISTRICT), 
+                        visualvalue(ENUMERATION_AREA), 
+                        visualvalue(AREA_TYPE), 
+                        visualvalue(HOUSEHOLD_NUMBER));
+    filewrite(tempFile, "");
+    filewrite(tempFile, "Household Members:");
+    filewrite(tempFile, "");
+    filewrite(tempFile, "Name                           Sex    Age  Relationship");
+    filewrite(tempFile, "----                           ---    ---  ------------");
+    do numeric i = 1 while i <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
+        filewrite(tempFile, "%s %-6s %3d  %s",
+                            NAME(i),
+                            getlabel(SEX, visualvalue(SEX(i))),
+                            visualvalue(AGE(i)),
+                            getlabel(RELATIONSHIP_VS1,
+                            visualvalue(RELATIONSHIP(i))));
+    enddo;  
+    close(tempFile);
+    if getos() = 20 then
+        // Android - use "view:"
+        execsystem(maketext("view:%s", reportFilename));
+    elseif getos() = 10 then
+        // Windows - use "explorer.exe <filename>"
+        execsystem(maketext("explorer.exe %s", reportFilename));
+    endif;  
+end;
+</logic>
+
+On Windows we can’t use execsystem with “view:” so instead we launch Windows Explorer (explorer.exe) with the name of the file and that will open the file in notepad for a text file and in the web browser for an HTML file.
+
+If you are familiar with HTML you can write out HTML and have nicer formatting and pictures. CSPro has a built in templating engine to generate HTML reports using templates. See "Templated Reports" in the CSPro help for details.
+
+<subheader>Exercises</subheader>
+<list ordered>
+	<li>Add a button to the userbar that opens your website (the website for your organization). Test this on Android. Bonus if you can get it to work on Windows too.</li>
+	<li>Add a button to the userbar that shows the interviewer manual. You can use the PDF interviewer manual that is on the course website (it only has a cover page but is enough for this exercise).</li>
+	<li>Add the following additional information to the summary report. a.	Total number of household members, total males, total females. b. List of household assets from section G with quantity. Do not list assets where the quantity is zero.</li>
+</list>
+<pagebreak />

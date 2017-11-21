@@ -185,7 +185,7 @@ endif;
 </logic>
 
 <subheader>Case Labels</subheader>
-By default, the case listing screen shows the id-items concatenated together. This is not very easy for an interviewer to read. You can customize the case listing for a case using the <logiccolor>setcaselabel</logiccolor> command. As an example let’s set the case label to the string “province-district-ea-household number: name of head of household”. Since we need to have the name of the head of household to do this, we can add it in the postproc of <b>RELATIONSHIP</b>.
+By default, the case listing screen shows the id-items concatenated together. This is not very easy for an interviewer to read. You can customize the case listing for a case using the <logiccolor>setcaselabel</logiccolor> command. As an example let’s set the case label to the string “province-district-ea-household number: name of head of household”. Since we need to have the name of the head of household to do this, we can add it in the postproc of <b>RELATIONSHIP</b>. In order to format the case label from the variables we can use the function <logiccolor>maketext()</logiccolor> which works like <logiccolor>errmsg()</logiccolor> but returns a string instead of displaying it on the screen.
 
 <logic>
 PROC RELATIONSHIP
@@ -279,6 +279,41 @@ setvalueset(RESPONDENT, codes, labels);
 <center><b>Group Exercise</b></center>
 Implement the dynamic value set for mother line number (<b>B10</b>). Only show females in the household over 12. Don’t forget to include the codes for non-resident and deceased in the value set. 
 </callout>
+
+<subheader>Cascading Questions</subheader>
+Let’s revisit question <b>B07</b>, place of birth. Rather than present a giant list of all countries in the world, it would be nice to allow the interviewer to narrow down the list first by continent and the choose from the countries in that continent. This is simple given the way that codes for place of birth are structured. The first digit is the continent (or blank for Popstan) and the next two digits are the country (or district). We can create subitems for the continent and country and drag those onto the form instead of the parent items. For the first subitem we use the following value set to allow the interviewer to choose either this country or a continent:
+
+<table 2 header>
+<cell>Continent of birth</cell><cell>Code</cell>
+<cell>Popstan</cell><cell>0</cell>
+<cell>Africa</cell><cell>1</cell>
+<cell>Asia</cell><cell>2</cell>
+<cell>Europe</cell><cell>3</cell>
+<cell>North America</cell><cell>4</cell>
+<cell>Oceania</cell><cell>5</cell>
+<cell>South America</cell><cell>6</cell>
+</table>
+
+Then in the onfocus for the second subitem, once we know the continent, we can loop through the value set for <b>PLACE_OF_BIRTH</b> that contains all the countries and create a value set containing only those countries that are in the selected continent.
+
+<logic>
+PROC COUNTRY_OR_DISTRICT_OF_BIRTH
+onfocus
+// Create value set based on continent selected in previous question
+numeric i;
+do i = 1 while i < 100
+    string label = getlabel(PLACE_OF_BIRTH, CONTINENT_OF_BIRTH * 100 + i);
+    // A blank label means that there are no more countries in the chosen
+    // continent so we can break out of the loop early.
+    if label = "" then
+        break;
+    endif;
+    codes(i) = i;
+    labels(i) = label;
+enddo;
+codes(i) = notappl;
+setvalueset(COUNTRY_OR_DISTRICT_OF_BIRTH, codes, labels);
+</logic>
 
 <subheader>Dynamic Value Sets from Checkboxes</subheader>
 Question <b>B16</b> (primary language) should only show a subset of the languages chosen in <b>B15</b> (languages spoken). We can do this using a dynamic value set as well. The trick is that since <b>B15</b> uses checkboxes it will have alpha codes (A, B, C…) while <b>B16</b> will have numeric codes (1,2,3…) so we need to convert from numeric to alpha to determine if a given language was selected. We could do this with a series of <logiccolor>if then else</logiccolor> statements but an easier approach is to use the string <b>“ABCDEFGH”</b> to convert from numeric to alpha by looking up the character at the position of the numeric code. For example, numeric code 1 would give us the character at the first position: A. Numeric code 2 would give us the character at position 2, B etc…
