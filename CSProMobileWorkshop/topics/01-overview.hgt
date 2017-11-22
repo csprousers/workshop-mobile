@@ -1,25 +1,33 @@
 ﻿<title>Session 1: Overview of CSPro, Dictionary and Forms</title>
 
 At the end of this lesson participants will be able to:
-<list><li>Identify different CSPro modules and tools and their roles in the survey workflow</li>
+<list>
+<li>Identify different CSPro modules and tools and their roles in the survey workflow</li>
 <li>Create a simple data entry application including dictionary and forms</li>
 <li>Run a data entry application on Windows</li>
 <li>Run a data entry application on mobile and retrieve the data entered</li>
 <li>View data using DataViewer</li>
-<li>Understand the differences between the new CSPro DB format and the old text format for data files</li></list>
+</list>
 
 <subheader>CSPro Overview</subheader>
 CSPro is a suite of software tools for census and survey data processing that includes modules for data collection, editing, tabulation, and dissemination. 
 
 CSPro has a long history. It was first released in 2000 and has been used in over 100 countries worldwide. It has been used for censuses all over the world as well as for many large and complex household surveys including the Demographic and Health Survey (USAID), Multiple Indicator Cluster Survey (UNICEF) and Living Standards Measurement Study (World Bank). The first Android version was released in 2014.  CSPro Android has already been used in production for household surveys and population censuses in multiple countries.
 
-CSPro is free software developed by the US Census Bureau and funded by USAID. The Census Bureau provides free email customer support. You can send questions to cspro@lists.census.gov.
+CSPro is free software developed by the US Census Bureau and funded by USAID. The Census Bureau provides free email customer support. You can send questions to cspro@lists.census.gov. There is also a user forum where you can post questions and see answers to questions posted by other users at http://www.csprousers.org/forum/.
 
 CSPro can be used for both the traditional PAPI (pencil and paper interview) workflow as well as the computer aided personal interview (CAPI) workflow. In this workshop, we will focus on data collection in CSPro using a CAPI workflow.
 
 <center><html><img src="papi_workflow.png" height=325 /></html></center>
 <center><html><img src="capi_workflow.png" height=325 /></html></center>
-<pagebreak />
+
+<subheader>Required Hardware and Software</subheader>
+To run the examples in this workshop you will need the following:
+<list>
+<li>Windows PC with CSPro Version 7.1 or later</li>
+<li>Android tablet with CSEntry Version 7.1 or later</li>
+</list>
+
 <subheader>Using CSPro Android</subheader>
 Before we learn how to build data entry applications in CSPro, let’s try doing some data collection to get comfortable with the system.
 
@@ -29,12 +37,15 @@ Split into groups of 3-4 people and use the provided tablets to interview each o
 <subheader>Creating a Data Entry Application</subheader>
 For most of the examples in this workshop, we will be creating a data entry application based on the Popstan 2020 Census questionnaire included with the workshop materials. With CAPI applications, a paper questionnaire alone is not sufficient to define a data entry application. We also a need a specification document that describes consistency checks, skip patterns, text fills, error messages and other aspects of the interactive application that are not defined on a paper questionnaire. Take a moment to review both the questionnaire and the accompanying specification document.
 
-When you launch CSPro you are given the choice of “Data Entry Application” for key from paper (PAPI) and “CAPI Data Entry Application” for electronic data collection using phones/tablets/laptops. The differences are:
+While CSPro data entry programs can be run on Android and Windows<html><sup>1</sup></html>tablets and phones, to develop a survey or census application in CSPro you will use the CSPro Designer which runs on Windows PCs. When you launch CSPro Designer you are given the choice of “Data Entry Application” for key from paper (PAPI) and “CAPI Data Entry Application” for electronic data collection using phones/tablets/laptops. The differences are:
 
 <list><li>System controlled (tightly controlled path)</li>
 <li>CAPI question text</li>
 <li>Extended controls (radio buttons, checkboxes, date picker, …)</li></list>
- 
+~!~~!~
+<html><hr/></html>
+<font 0.8><html><sup>1</sup>The mobile version of CSEntry for Windows runs only on phones and tablets running Windows 10 or later</html></font>
+<pagebreak />
 Since we are creating a CAPI application we will choose “CAPI Data Entry Application”. We will name the application “Popstan2020” and we will use the same name for the dictionary. Since we will eventually add other applications such as the listing questionnaire and the menu, we will create the following folder structure:
 
 <center><image popstan_file_layout.png /></center>
@@ -42,7 +53,7 @@ Since we are creating a CAPI application we will choose “CAPI Data Entry Appli
 <subheader>The Data Dictionary</subheader>
 The first step in creating the application is to define the data dictionary. The data dictionary lists all the data items and possible responses that will be in the application and organizes them in records and levels. The dictionary has the following hierarchy:
 
-<center><image dictionary_hierarchy.png /></center>
+<center><html><img src="dictionary_hierarchy.png" width=600 /></html></center>
 
 Before defining the record and items we first create ID-items. ID-items uniquely define each case (each questionnaire). Usually these are geographic codes. 
 
@@ -59,6 +70,7 @@ Add the id-items to the dictionary
 <li>Area type (numeric, length 1)</li>
 <li>Household number (numeric, length 3)</li></list>
 
+<pagebreak />
 Properties of dictionary items:
 <list><li><b>Label:</b> text displayed to interviewers (not the full question text, we will see where to put that in a later lesson)</li>
 <li><b>Name:</b> used to refer to variable in CSPro logic (interviewers will never see this)</li>
@@ -104,7 +116,7 @@ for the person record?
 
 Now add some fields to the person record:
 
-<list><li>Person number (numeric length 2)<html><sup>1</sup></html></li>
+<list><li>Person number (numeric length 2)<html><sup>2</sup></html></li>
 <li>Name (alpha length 30)</li>
 <li>Relationship (numeric length 1)</li>
 <li>Sex (numeric length 1)</li>
@@ -132,6 +144,11 @@ Define the value sets for some of our variables based on the response codes on t
 <li>Number of rooms (use generate value set to generate the codes 1-20)</li>
 <li>Type of main dwelling (use codes from questionnaire)</li></list>
 
+~!~~!~~!~
+<html><hr/></html>
+<font 0.8><html><sup>2</sup></html>The line number is not needed in CSPro itself as there are ways to determine the row number using logic, however, when exporting the data to other packages it is often useful to have it. We will see later how to fill this in automatically during data entry.</font>
+<pagebreak />
+
 <subheader>Dictionary Macros</subheader>
 There are some useful functions for working with dictionaries that you can access by right-clicking on the dictionary in the tree on the left side of the screen and choosing “Dictionary Macros”.  In particular you can copy/paste all value sets or all item names/labels from the dictionary to/from Excel. This can be used to create codebooks to share with people who do not have access to CSPro. It can also be used to do bulk modifications on dictionary items such as renumbering values in value sets or adding prefixes to item names.
 
@@ -141,10 +158,6 @@ Before we can enter data, we need to create data entry forms. To start, click on
 <b>Create a form for section A: Identification.</b> Drag and drop the id-items onto the form. Note that we can drag and drop individual items or entire records. By right clicking on the form in the forms tree on left side of the screen we can change the label and name of the form. Let’s make the label “A: Identification” and make the name “IDENTIFICATION_FORM”.
 
 <b>Create a form for section B: Demographics.</b> Drag drop the items from the person record. Let’s give the form label “B: Demographics” and name “DEMOGRAPHICS_FORM”. Note that when we drop the record we have the option to put the items in a roster or a repeating form. If we drop the items on the household identification form, we can only roster since the household identification isn’t repeated. For our example let’s use a roster.
-
-<html><hr/></html>
-<font 0.8><html><sup>1</sup></html>The line number is not needed in CSPro itself as there are ways to determine the row number using logic, however, when exporting the data to other packages it is often useful to have it. We will see later how to fill this in automatically during data entry.</font>
-<pagebreak />
 
 When we create the rosters, CSPro automatically gives them a name that ends in “000”, for example “PERSON000”. You can see this in the forms tree on the left side of the screen. We can change this by right clicking on the roster in the forms tree and choosing properties. Let’s name our roster “DEMOGRAPHICS_ROSTER”.
 
@@ -163,6 +176,7 @@ When you launch a CSPro data entry application you can select the data file name
 
 <table 2><cell><html><img src="data_file_types.png" width="350px" /></html></cell><cell><list><li><b>CSPro DB:</b> This is a CSPro Data Base File. It contains the data and metadata.</li><li><b>None:</b> There is no associated data file.  This is useful when building menus.</li><li><b>Text:</b> This is a UTF8 Text file.  This is what CSPro has used in previous versions and is provided for compatability.</li></list></cell></table>
 
+<pagebreak />
 <subheader>Controlling the size of the roster</subheader>
 Our program at this point has no way to stop entering household members unless we fill in all 50 rows of the roster. To limit the number of rows in the roster to the number of actual household members we can have the interviewer enter the number of household members and use that to set the size of the roster. Add a new variable, “number of household members”, to control the size of the roster. Which record should we add it to? It can’t be on the person record since we don’t want it to repeat so let’s add it to the household characteristics record but put it on the person (section B) form. Right click on the roster, choose properties and set this new field as the occurrence control field. 
 
@@ -182,14 +196,14 @@ When we copied the application to the tablet we copied the pen and the pff file.
 On Android, the list of available applications on the device is constructed by finding all the pff files in the CSEntry directory and subdirectories so a pen file without a pff will not show up in the list.
 
 <subheader>Partial Save and Case Tree</subheader>
-It can be a pain when testing a question that is on the third form of a survey to have to reenter all of the data up to the question you are testing. We can enable partial save under the data entry options so that we can exit data entry, modify the application, and come back right to where we left off. While we are in the data entry options we can also enable the case tree on both Windows and Android to make it easier to navigate around the questionnaire while we are testing. The case tree is enabled by default on Android since Android only shows one question at a time but it is off by default on Windows. Note that on Android phones, since there is not enough space to display the case tree and the questions at the same time so you need to tap on the big green “CS” in the top left corner of the screen to bring up the case tree.
+It can be a pain when testing a question that is on the third form of a survey to have to reenter all of the data up to the question you are testing. We can enable partial save under the data entry options so that we can exit data entry, modify the application, and come back right to where we left off. While we are in the data entry options we can also enable the case tree on both Windows and Android to make it easier to navigate around the questionnaire while we are testing. The case tree is enabled by default on Android since Android only shows one question at a time but it is off by default on Windows. Note that on mobile phones, since there is not enough space to display the case tree and the questions at the same time so you need to tap on the big green “CS” in the top left corner of the screen to bring up the case tree.
 
 In addition to the data entry options, there are other useful settings in the "Data Source Options" dialog. For example, here you can enable automatic partial save at regular intervals. This is important for long interviews where if there is a problem with the software or device part way through the interview you could lose data if the interview has not been partially saved.
 
 <subheader>Modifying the dictionary after collecting data</subheader>
 Add the variable <b>F02 number of bedrooms</b> to the dictionary and form right before F03 type of main dwelling. Don’t forget to modify the order in the form tree so that it is asked before F03. Run the application again and modify one of the existing cases. Why is the number of household members blank? Once data has been entered, you should avoid adding variables in the middle of a record. It is fine to add to the end of the record but adding in the middle invalidates the start positions of the existing variables. If you must add a variable in the middle of a record, you can use the reformat data tool to adjust old data files to match the new dictionary.
-
-<callout><center>Group exercise</center>
+<pagebreak />
+<callout><center><b>Group exercise</b></center>
 Add a new record to the dictionary for section E of the questionnaire (deaths). Name this record “Deaths”. How many occurrences should it have? Don’t include E01 and E02 in the new record as they do not have the same number of occurrences as the other variables in this section. Instead, add them to the housing record. Create a new form for section E and add the fields onto it to create a roster. Use E02 as an occurrence control field to the roster to limit the number of rows to the number of deaths in the household. Test the application on both Windows and on Android.
 </callout>
 
@@ -215,6 +229,7 @@ We could also use a multiply occurring item for question <b>B10</b>, disabilitie
 
 In CSPro multiple response questions are implemented as alpha variables whose length is the same as the number of options that can be selected at the same time. The value set has a value for each option which is usually a single letter. The resulting value is a string containing the values for each of the selected items. 
 
+<pagebreak />
 For disabilities we will use the following value set:
 <indent><table 2><cell>Visual</cell><cell>A</cell>
 <cell>Hearing</cell><cell>B</cell>
@@ -244,7 +259,7 @@ Let’s add the interview date to the identification section. Which record shoul
 Currently the interviewer has to fill in all the demographic information for the first person before moving on to the next person in the household. In practice, it is simpler to have them fill in just the name, age, sex and relationship of all the household members first and then fill in the remaining details only after all the basic information has been entered. To do this we need to pull just the <b>PERSON_NUMBER</b>,  <b>NAME</b>, <b>SEX</b>, <b>RELATIONSHIP</b>, <b>AGE</b> and <b>DATE_OF_BIRTH</b> into a separate roster. Delete them from the existing <b>DEMOGRAPHICS_ROSTER</b>, create a new form before the <b>DEMOGRAPHICS_FORM</b> called <b>HOUSEHOLD_MEMBERS_FORM</b> and drop <b>PERSON_NUMBER</b> onto it to make a new roster. Rename this roster “<b>HOUSEHOLD_MEMBERS_ROSTER</b>”. Drop <b>NAME</b> from the dictionary on top of the <b>HOUSEHOLD_MEMBERS_ROSTER</b> to add it to the roster. Note that when you drop an item from a repeating record on top of an existing roster it gets added to that roster but if you drop it outside the roster it creates a new roster. Drop the <b>SEX</b>, <b>RELATIONSHIP</b>, <b>AGE</b> and <b>DATE_OF_BIRTH</b> variables onto the new roster. Remove the <b>NUMBER_OF_HOUSEHOLD_MEMBERS</b> field from the <b>DEMOGRAPHICS_FORM</b> and drop it onto the NAMES_FORM. In the forms tree, move <b>NUMBER_OF_HOUSEHOLD</b> members so that it comes before the <b>NAMES_ROSTER</b>. Set the occurrence control field for <b>NAMES_ROSTER</b> to be <b>NUMBER_OF_HOUSEHOLD_MEMBERS</b>.
 
 Tip: When dragging items onto a form with an existing roster drop the items inside the roster or you will end up with a second roster for the new item.
-
+<pagebreak />
 <subheader>Exercises</subheader>
 <list ordered>
 	<li>Add the remaining fields from the housing section of the questionnaire to the dictionary and the housing form (F06 through F13). Make sure to add the appropriate value sets.</li>
@@ -255,5 +270,5 @@ Tip: When dragging items onto a form with an existing roster drop the items insi
 </list>
 
 <i>Make sure to test your application on both Windows and Android.</i>
-
+<pagebreak />
 <pagebreak />

@@ -1,11 +1,10 @@
-﻿|Mobile Data Collection with CSPro
-	01-overview.hgt
-	02-skipsandprefills.hgt
-	03-consistency-checks.hgt
-	04-consistency-checks-rosters.hgt
-	05-capi.hgt
-	06-lookup-nav-sys-ctrl.hgt
-	07-multimedia-gps.hgt
-	08-menu-programs.hgt
-	09-sync.hgt
-	10-batch-export.hgt
+﻿01-overview.hgt
+02-skipsandprefills.hgt
+03-consistency-checks.hgt
+04-consistency-checks-rosters.hgt
+05-capi.hgt
+06-lookup-nav-sys-ctrl.hgt
+07-multimedia-gps.hgt
+08-menu-programs.hgt
+09-sync.hgt
+10-batch-export.hgt
