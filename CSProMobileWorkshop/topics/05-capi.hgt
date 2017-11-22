@@ -122,6 +122,8 @@ endif;
 
 Using message numbers makes the code a bit harder to read since you need to refer to the message file to see the text of the messages. Using the literal question text makes the code easier to read, however, if you edit the English question text in the logic and forget to modify it in the message file your translation will not be displayed.
 
+You can also use a separate message file for each language. To add an additional message file use "Add files" from the files menu and the name of the message file next to "External Message File".
+
 <callout>
 <center><b>Group exercise</b></center>
 Add the French translations for the question text, labels, value sets and error messages for marital status (<b>B13</b>).
