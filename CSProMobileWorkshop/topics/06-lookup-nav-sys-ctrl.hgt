@@ -75,6 +75,9 @@ else
 endif;
 </logic>
 
+<subheader>Updating a Lookup File</subheader>
+If the data for your lookup file changes once your survey is in the field, rather than completely regenerating the lookup file you can update the existing lookup data file based on a new Excel spreadsheet. Choose the existing csdb file as the output data file and under "Case Management" choose "Modify, add cases" or "Modify, add, delete cases". Instead of erasing and regenerating the data file this will update only the cases that are new or have been modified in the Excel file. Choosing "Modify, add, delete cases" will also delete cases that are in the data file but are not in the spreadsheet. Using this approach is important if you are planning to use CSPro data synchronization to update the lookup file during data collection. If you are using data synchronization to update the file and you generate a completely new data file you will get duplicate cases when the new lookup file is downloaded to the devices. If instead, you update the existing file then data synchronization will simply update the data files on devices that download it.
+
 <subheader>Dynamic Value Set from a Lookup File</subheader>
 Another alternative is to combine the lookup file with setvalueset to create a dynamic value set for the district that includes only districts in the selected province. To do this we need to extract all the districts in the selected province from the lookup file. We can do this using the <logiccolor>forcase</logiccolor> loop which iterates over all cases in an external data file. By itself, <logiccolor>forcase</logiccolor> will loop through each case in the data file. You can also add an optional “where” clause to only go through the districts in the selected province.
 
