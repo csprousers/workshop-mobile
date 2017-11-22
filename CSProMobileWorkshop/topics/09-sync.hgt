@@ -245,4 +245,4 @@ Run your application on two devices, complete a case on one device and synchroni
 
 <subheader>Exercises</subheader>
 Modify the syncWithHeadquarters() and syncWithSupervisor() functions in the menu program to also sync the listing data file and the staff lookup file. The listing file should be uploaded to the server with the appropriate universe and the staff file should be downloaded from the server using syncdata with GET.
-
+<pagebreak />

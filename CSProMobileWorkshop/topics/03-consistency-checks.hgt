@@ -329,7 +329,7 @@ It is tempting to place consistency checks on every question in your application
 <subheader>Exercises</subheader>
 Implement the following consistency checks from the edit specifications. Test that they are correct. Make sure to test all possible cases (test matrices can help with this).
 <list ordered>
-	<li>Display an error message if the head of household is less than 15 years old.</li>
+	<li>Display an error message if the head of household is less than 12 years old.</li>
 	<li>Ensure that <b>B14</b> (age at first marriage) is less than or equal to the current age (<b>B05</b>).</li>
 	<li>Display an error message if the highest level of education (<b>C02</b>) is university or graduate but the age is less than eighteen. Make this a “soft check” so that the interviewer can ignore the error if they wish.</li>
 	<li>Add an error message if the highest level of education (<b>C02</b>) is “standard 5” or higher and the individual does not know how to read or write (<b>C03</b>). Make this a soft check.</li>
