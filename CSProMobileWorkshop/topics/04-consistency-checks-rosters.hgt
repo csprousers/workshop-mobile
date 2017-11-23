@@ -19,7 +19,6 @@ For any item that is repeated, adding a number in parentheses after it gives you
 PROC MOTHER_LINE_NUMBER
 
 // Ensure that line number of mother is line number of woman over 12
-// in section B roster.
 if not MOTHER_LINE_NUMBER in 87:88 then
 
     if SEX(MOTHER_LINE_NUMBER) = 1 then
@@ -43,6 +42,8 @@ if not MOTHER_LINE_NUMBER in 87:88 then
 endif;
 </logic>
 
+<pagebreak />
+
 <subheader>Blanks and special values</subheader>
 What happens if we refer to an occurrence of a row in the section B roster that doesn’t exist? Try entering a line number for the mother greater than the number of rows in the section B roster. Our tests for age and sex are not triggered. What are the values of <b>NAME</b>, <b>SEX</b> and <b>AGE</b> when they are empty? Let’s print them out using <logiccolor>errmsg</logiccolor> and see.
 
@@ -60,11 +61,11 @@ The alphanumeric variable <b>NAME</b> is just empty but the numeric values <b>AG
         reenter;
     endif;
 </logic>
-<pagebreak />
+
 There are other special values that are used in CSPro:
 <list>
 	<li><logiccolor>Missing</logiccolor>: can be used as an alias for no response/refused codes (9, 99, 999…). You must create an entry for it in the value set.</li>
-	<li><logiccolor>Default</logiccolor>: results from an error reading from a data file or from a calculation error (like trying to calculate notappl + 2 or n/0 (divide by zero)) or moving a field into a field that is too small to hold the value.  For example, if AGE is a two digit field, AGE = 118 will result in Default.</li>
+	<li><logiccolor>Default</logiccolor>: results from an error reading from a data file or from a calculation error (like trying to calculate notappl + 2 or dividing by zero) or moving a value into a variable that is too small to hold the value.  For example, if AGE is a two digit field, AGE = 118 will result in <logiccolor>default</logiccolor>.</li>
 </list>
 
 <subheader>Getting the size of a roster</subheader>
@@ -80,7 +81,7 @@ In our error message, it would be nice to tell the interviewer what the maximum 
 </logic>
 
 <subheader>Setting Occurrence Labels in Logic</subheader>
-If you look at the case tree in Android you will see that the roster occurrences are displayed with the name of the roster and the occurrence number “Demographics(1), Demographics(2)…” which is not useful. Using logic, we can set the occurrence labels to the names of the individuals instead. For that we use the command <logiccolor>setocclabel()</logiccolor> which takes the name of the group (roster or repeating form) and the string to set it to. For example, to set the occurrence label of each row of the demographics roster once the name is entered we can do the following in the postproc of the name field (<b>NAME</b>):
+If you look at the case tree in Android you will see that the roster occurrences are displayed with the name of the roster and the occurrence number “Demographics(1), Demographics(2)…” which is not useful. Using logic, we can set the occurrence labels to the names of the individuals instead. For that we use the command <logiccolor>setocclabel()</logiccolor> which takes the name of the group (roster or repeating form) and the string to set it to. For example, to set the occurrence label of each row of the different rosters once the name is entered we can do the following in the postproc of the name field (<b>NAME</b>):
 
 <logic>
 PROC NAME
@@ -91,6 +92,8 @@ setocclabel(FERTILITY_ROSTER, strip(NAME));
 </logic>
 
 This works fine when we are adding a new case, however we open an existing case in modify mode the occurrence labels are not set until we get to the person roster even though the occurrences already exist. In modify mode, while still on the demographics roster you can scroll the case tree to see Demographics (1), Demographics (2)… as we had before. In order to prevent this, we need to set the occurrence labels for the rosters as soon as we open the case. 
+
+<pagebreak />
 
 <subheader>More About Procs</subheader>
 What proc can we use to set the occurrence labels? We could use the preproc of the first field of the first form but there is a better option. It turns out that every element in the form tree has a PROC. Not only do variables have procs but there are procs for forms, rosters, levels and even the application itself. Everything you see in the forms tree can have both a preproc and a postproc. Understanding the order in which procs are executed is important in understanding CSPro logic. 
@@ -104,7 +107,7 @@ The general rule is that
 
 <callout>
 <center><b>Group Exercise: Proc Order</b></center>
-Form teams of three to five people. The instructor adds errmsg to the postproc and preproc of the following: <b>POPSTAN2020_FF</b> (application), <b>POPSTAN2020_QUEST</b> (level), <b>DEMOGRAPHICS_FORM</b> (form), <b>HOUSEHOLD_MEMBERS_ROSTER</b> (roster), <b>NAME</b> (variable), <b>NUMBER_OF_ROOMS</b> (variable). Each team receives slips of paper with the names of each preproc and postproc. BEFORE running the application, the teams have to put the slips in the order that the errmsgs will be shown when the application is run. Teams have three minutes to complete the exercise. Then the application is run and teams see if they have the correct results.
+Form teams of three to five people. The instructor adds errmsg to the postproc and preproc of the following: <b>POPSTAN2020_FF</b> (application), <b>POPSTAN2020_QUEST</b> (level), <b>HOUSEHOLD_MEMBERS_FORM</b> (form), <b>HOUSEHOLD_MEMBERS_ROSTER</b> (roster), <b>NAME</b> (variable), <b>NUMBER_OF_ROOMS</b> (variable). Each team receives slips of paper with the names of each preproc and postproc. BEFORE running the application, the teams have to put the slips in the order that the errmsgs will be shown when the application is run. Teams have three minutes to complete the exercise. Then the application is run and teams see if they have the correct results.
 </callout>
 
 <subheader>Setting Occurrence Labels (take 2)</subheader>
@@ -117,7 +120,7 @@ setocclabel(HOUSEHOLD_MEMBERS_ROSTER(1), strip(NAME(1)));
 setocclabel(HOUSEHOLD_MEMBERS_ROSTER(2), strip(NAME(2)));
 setocclabel(HOUSEHOLD_MEMBERS_ROSTER(3), strip(NAME(3)));
 </logic>
-<pagebreak />
+
 <subheader>Loops</subheader>
 The problem is that we want to do this for each household member, but the number of household members varies from case to case. The above works only if we know the size of the household in advance. In order to handle any size household, we need a loop. We can use a <logiccolor>do</logiccolor> loop which lets you repeat something until a certain condition is true. How many times do we loop? We use the function <logiccolor>totocc()</logiccolor> that gives us the total number of occurrences of the roster.
 
@@ -198,6 +201,8 @@ if numberOfHeads <> 1 then
 endif;
 </logic>
 
+<pagebreak />
+
 <callout>
 <center><b>Activity: Acting out a loop</b></center>
 Show a household with four members on the whiteboard/flipchart and show the code above on the screen. Pick three volunteers. One volunteer plays the role of the variable numberOfHeads, a second plays the role of the variable i and a third is the loop director. Give them each a sign so everyone knows who they are playing. The two people playing variables should show their current values by holding up the correct number of fingers. The director is responsible for walking through the code line by line and updating the variable values until the loop ends explaining what they do step by step.
@@ -237,10 +242,12 @@ if RELATIONSHIP = 1 and curocc() <> 1 then
 endif;
 </logic>
 
-This replaces our logic for counting the number of heads of household in the postproc of the roster. This is simpler and will also simplify any other checks involving the head. For example to ensure that the head of household is at least 12 years old than his/her children we can simply compare the age of the individual to the age of head. Since the head is on the first row, the age of the head will always be <logiccolor>AGE(1)</logiccolor>. Since the head is entered first, we can do this check in the proc for <b>AGE</b> instead of in the roster postproc.
+This replaces our logic for counting the number of heads of household in the postproc of the roster. This is simpler and will also simplify any other checks involving the head. For example to ensure that the head of household is at least 12 years older than his/her children we can simply compare the age of the individual to the age of head. Since the head is on the first row, the age of the head will always be <logiccolor>AGE(1)</logiccolor>. Since the head is entered first, we can do this type check in the proc for <b>AGE</b> instead of in the roster postproc.
+
+<pagebreak />
 
 <logic>
-PROG AGE
+PROC AGE
 // Compare age of child to age of the head
 if RELATIONSHIP = 3 and AGE(1) - AGE < 12 then
 	errmsg("Child %s is %d years old but head %s is %d. Parent must be at least 12 years older than child.",
@@ -251,7 +258,7 @@ if RELATIONSHIP = 3 and AGE(1) - AGE < 12 then
                 select("Correct age of " + strip(NAME), AGE,
                        "Correct age of " + strip(NAME(1)), AGE(1),
                        "Correct relationship of " + strip(NAME),
-                       RELATIONSHIP(,
+                       RELATIONSHIP,
                        "Correct relationship of " + strip(NAME(1)),
                        RELATIONSHIP(1));
     endif;
@@ -265,4 +272,5 @@ enddo;
 	<li>Show an error message if the head of household and his/her spouse are of the same gender. Make sure that your logic works with polygamous households as well as households with just one spouse.</li>
 	<li>Set the occurrence labels in the section E roster, deaths, to the names of the deceased in that section. Make sure that the labels are set correctly when resuming from partial save.</li>
 </list>
+
 <pagebreak />

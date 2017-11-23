@@ -6,13 +6,14 @@ At the end of this lesson participants will be able to:
 	<li>Add fills in question text</li>
 	<li>Use multiple languages in question text, error messages and the dictionary</li>
 	<li>Use occurrence labels and logic variables as fills in question text</li>
-	<li>Use setcaselabel to customize the case listing</li>
+	<li>Use <logiccolor>setcaselabel</logiccolor> to customize the case listing</li>
 	<li>Use dynamic value sets</li>
 </list>
 
 <subheader>Question Text</subheader>
 We can add text to each question in our survey by clicking on "CAPI Questions" in the toolbar. This allows us to enter literal question text for the questionnaire that the interviewer will read verbatim.  Additionally, we can add interviewer instructions. Let’s start with the first few questions in section B.
-For <b>RELATIONSHIP</b>, enter “What is (name’s) relationship to the head of the household?” For <b>SEX</b> enter “Is (name) a male or a female?”. Run the application on Windows and then on Android to see how the question text is displayed.
+
+For <b>RELATIONSHIP</b>, enter “What is (name’s) relationship to the head of the household?” For <b>SEX</b> enter “Is (name) a male or a female?”. Run the application on Windows and then on mobile to see how the question text is displayed.
 
 In addition to the text, we can add instructions to the interviewer. For example for <b>AGE</b> we can have:
 
@@ -27,13 +28,13 @@ To make it clear to the interviewer that this is an instruction, we use italics 
 If you have your question text in Word or Excel you can copy and paste into CSPro and it will preserve the formatting.
 
 <subheader>Help Text</subheader>
-In addition to question text, we can provide additional instructions to the interviewer as “help text”. Help text is not shown by default but can be displayed by using the F2 key on Windows or tapping the help icon next to the question text on Android.
+In addition to question text, we can provide additional instructions to the interviewer as “help text”. Help text is not shown by default but can be displayed by using the F2 key on Windows or tapping the help icon next to the question text on Mobile.
 
-Let’s add the following help text to the NAME field in section B:
+Let’s add the following help text to the <b>NAME</b> field in section B:
 
 <indent><i>Include all persons living in this house who have common arrangements for cooking and dining.</i></indent>
 
-Run the application on both Android and Windows and see how the help text is displayed.
+Run the application on both Android and mobile and see how the help text is displayed.
 
 <subheader>Fills in Question Text</subheader>
 It is possible to have the question include the values of dictionary variables. For example, for <b>SEX</b>, instead of asking “Is (name) a male or a female?” we can include the respondents name by using <b>%NAME%</b> inside the question text. At runtime, this will be replaced by the contents of the variable <b>NAME</b>.
@@ -57,31 +58,31 @@ In addition to using the occurrence numbers it possible to specify a logic expre
 It is possible to add question text, dictionary labels and error messages in multiple languages.
 
 <subheader>Multiple Languages for Question Text</subheader>
-To have multiple languages for question text you first need to define the languages.  This is done from the CAPI Options Menu.  Select <b>“Define CAPI Languages”</b>. This will bring up the “Language” dialog box.  Click on “Add” to add a language, specify the name and label to use for the language and click "OK". The labels is what the interviewer when choosing a language and the name is what will be used in logic to refer to the logic. We generally use abbreviations for the language names such as EN, FR and ES but this is just a convention.
+To have multiple languages for question text you first need to define the languages.  This is done from the CAPI Options Menu.  Select <b>“Define CAPI Languages”</b>. This will bring up the “Language” dialog box.  Click on “Add” to add a language, specify the name and label to use for the language and click "OK". The label is what the interviewer will see when choosing a language and the name is what will be used in logic to refer to the language. We generally use abbreviations for the language names such as EN, FR and ES but this is just a convention.
 
 <center><image langdialog.png /></center>
 
 When creating question text, you enter the question text for each language specified. Let’s look at the question text for the “Sex” item. There is a Drop Down menu for the languages we specified in the above steps. We select the language and then enter the question text in that language.
 
 Now that you have created the question text in the specified languages, they can be selected during data entry.
-In Windows, we can go to the “Options” Menu and select “Change Language” and a menu of the languages we defined will be displayed.  Click on the desired language and the CAPI text will be displayed in that language. On mobile devices you will find "Change Language" on the menu during data entry.
+In Windows, we can go to the “Options” Menu and select “Change Language” and a menu of the languages we defined will be displayed.  Click on the desired language and the question text will be displayed in that language. On mobile devices you will find "Change Language" on the menu during data entry.
 
 <subheader>Multiple Languages for Dictionary Items</subheader>
-To have multiple language in value sets, you first need to define the languages.  This is similar to the process done for multiple languages for CAPI questions; however, for dictionary items you define languages from the Edit menu of the dictionary. Make sure you are in the dictionary editor (you may need to click on the little blue book in the toolbar) and choose "Edit" and then "Languages". This dialog is identical to the one used for adding languages to question text. You should make sure to use the same names and labels for languages in this dialog as you entered for question text.
+To have multiple language in value sets, you first need to define the languages.  This is similar to the process we did to define multiple languages for question text; however, for dictionary items you define languages from the Edit menu of the dictionary. Make sure you are in the dictionary editor (you may need to click on the little blue book in the toolbar) and choose "Edit" and then "Languages". This dialog is identical to the one used for adding languages to question text. You should make sure to use the same names and labels for languages in this dialog as you entered for question text.
 
-Once you have added additional languages to the dictionary you will see a language dropdown on the toolbar. To add a translation for a dictionary label or value set label, choose the language in the dropdown bar and and edit the label as you normally would. This will set the label for the language you chose.
+Once you have added additional languages to the dictionary you will see a language dropdown on the toolbar. To add a translation for a dictionary label or value set label, choose the language in the dropdown and edit the label as you normally would. This will set the label for the language you chose.
 
 <subheader>Multiple Language Error Messages</subheader>
 To add translations used in program logic, such as arguments to <logiccolor>errmsg()</logiccolor>, we can provide translations in the message file. To do this we add the translated messages to the messages tab at the bottom of the logic editor.
 
-<logic>
+<html><pre>
 {Application 'POPSTAN2020' message file generated by CSPro}
 FR("Head of household must be at least 15 years old") Le chef de menage doit avoir au moins 15 ans.
 FR("Correct age") Corriger l'age
 FR("Correct relationship") Corriger le lien de parente
-</logic>
+</pre></html>
 
-On each line of the file, we put the three-digit language code followed by the English message text in parenthesis and finally the translation. Then in the logic, we use the function <logiccolor>tr()</logiccolor> to retrieve the translated text. Now when we run the application with the language set to French and encounter the error, it will show the French text.
+On each line of the file, we put the language name followed by the English message text in parenthesis and finally the translation. Then in the logic, we use the function <logiccolor>tr()</logiccolor> to retrieve the translated text. Now when we run the application with the language set to French and encounter the error, it will show the French text.
 
 <logic>
 PROC AGE
@@ -93,9 +94,9 @@ if AGE < 15 and RELATIONSHIP = 1 then
 endif;
 </logic>
 
-It is also possible to use numbers to represent messages. In the message file, instead of putting the untranslated message, simply put the number followed by the message text. Mark different languages in the file using "Language=" followed by the language code.
+It is also possible to use numbers to represent messages. In the message file, instead of putting the untranslated message, simply put the number followed by the message text. Mark different languages in the file using "Language=" followed by the language name.
 
-<logic>
+<html><pre>
 {Application 'POPSTAN2020' message file generated by CSPro}
 Language=EN
 100 Head of household must be at least 15 years old
@@ -106,7 +107,7 @@ Language=FR
 100 Le chef de menage doit avoir au moins 15 ans.
 101 Corriger l'age
 102 Corriger le lien de parente
-</logic>
+</pre></html>
 
 In the logic you can pass the message number directly to <logiccolor>errmsg()</logiccolor>. Inside the select clause, however, you will need to use <logiccolor>tr()</logiccolor> or <logiccolor>maketext()</logiccolor> around the message number.
 
@@ -122,7 +123,7 @@ endif;
 
 Using message numbers makes the code a bit harder to read since you need to refer to the message file to see the text of the messages. Using the literal question text makes the code easier to read, however, if you edit the English question text in the logic and forget to modify it in the message file your translation will not be displayed.
 
-You can also use a separate message file for each language. To add an additional message file use "Add files" from the files menu and the name of the message file next to "External Message File".
+You can also use a separate message file for each language. To add an additional message file, use "Add files" from the files menu and enter the name of the message file next to "External Message File".
 
 <callout>
 <center><b>Group exercise</b></center>
@@ -187,20 +188,17 @@ endif;
 </logic>
 
 <subheader>Case Labels</subheader>
-By default, the case listing screen shows the id-items concatenated together. This is not very easy for an interviewer to read. You can customize the case listing for a case using the <logiccolor>setcaselabel</logiccolor> command. As an example let’s set the case label to the string “province-district-ea-household number: name of head of household”. Since we need to have the name of the head of household to do this, we can add it in the postproc of <b>RELATIONSHIP</b>. In order to format the case label from the variables we can use the function <logiccolor>maketext()</logiccolor> which works like <logiccolor>errmsg()</logiccolor> but returns a string instead of displaying it on the screen.
+By default, the case listing screen shows the id-items concatenated together. This is not very easy for an interviewer to read. You can customize the case listing for a case using the <logiccolor>setcaselabel</logiccolor> command. As an example let’s set the case label to the string “province-district-ea-household number: name of head of household”. Since we need to have the name of the head of household to do this, we can add it in the postproc of <b>NAME</b>. In order to format the case label from the variables we can use the function <logiccolor>maketext()</logiccolor> which works like <logiccolor>errmsg()</logiccolor> but returns a string instead of displaying it on the screen.
 
 <logic>
-PROC RELATIONSHIP
+PROC NAME
 
-if RELATIONSHIP = 1 then
-    // Set label for case in case listing
-    // to an easier to read format.
-    // We do this in the relationship proc since
-    // that is where we first get the name of the head
-    // of household.
+if curocc() = 1 then
+    // Set label for case in case listing to an easier to read format.
+    // We do this when we first get the name of the head. 
     string caseLabel = maketext("%d-%02d-%03d-%03d: %s", 
         PROVINCE, DISTRICT, ENUMERATION_AREA, 
-        HOUSEHOLD_NUMBER, strip(NAME(curocc())));
+        HOUSEHOLD_NUMBER, strip(NAME));
     setcaselabel(POPSTAN2020_DICT, caseLabel);
 endif;
 </logic>
@@ -212,7 +210,9 @@ Now after entering a case we have a much friendlier case listing:
 Note that <logiccolor>setcaselabel</logiccolor> only works with data files of type CSPro DB.
 
 <subheader>Dynamic Value Sets</subheader>
-It is often useful to change the value set for a question from logic. This can be done using the command setvalueset. Let’s start with a simple example. Currently our value set for relationship in section B has labels like “Son/Daughter” and “Brother/Sister” to allow for both genders. However, when we show the relationship value set we already know the gender of the household member so we could show “Son” for males and “Daughter” for females. To do this we create two new value sets for relationship in the dictionary: <b>RELATIONSHIP_MALE</b> and <b>RELATIONSHIP_FEMALE</b>. Then in the onfocus of relationship we choose between the two value sets:
+It is often useful to change the value set for a question from logic. This can be done using the command <logiccolor>setvalueset</logiccolor>. Let’s start with a simple example. Currently our value set for relationship in section B has labels like “Son/Daughter” and “Brother/Sister” to allow for both genders. However, when we show the relationship value set we already know the gender of the household member so we could show “Son” for males and “Daughter” for females. To do this we create two new value sets for relationship in the dictionary: <b>RELATIONSHIP_MALE</b> and <b>RELATIONSHIP_FEMALE</b>. Then in the onfocus of relationship we choose between the two value sets:
+
+<pagebreak />
 
 <logic>
 PROC RELATIONSHIP
@@ -237,12 +237,12 @@ array string labels(100);
 array numeric codes(100);
 </logic>
 
-An array of logic variable is similar to a dictionary item with occurrences. A numeric array of length seven stores seven numbers, each of which is accessed through subscripts.
+An array logic variable is similar to a dictionary item with occurrences. A numeric array of length seven stores seven numbers, each of which is accessed through subscripts.
 
-We will fill in the two arrays of codes and labels with names and line numbers of the eligible members in the household. According the specification, only household members 12 and over can be respondents. For example, if we have the following household:
+We will fill in the arrays of codes and labels with names and line numbers of the eligible members in the household. According the specification, only household members 12 and over can be respondents. For example, if we have the following household:
 
-<center><image householdfordynvset.png /></center>
- 
+<center><html><img src="householdfordynvset.png" width=600 /></html></center>
+
 We would fill in the two arrays as follows:
 
 <table 3 header><cell>Subscript</cell><cell>Codes</cell><cell>Labels</cell>
@@ -253,6 +253,8 @@ We would fill in the two arrays as follows:
 </table>
 
 To do this in logic we need to loop through the household roster and add an entry into our arrays for each eligible household member:
+
+<pagebreak />
 
 <logic>
 PROC RESPONDENT
@@ -270,7 +272,7 @@ do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
 enddo;
 </logic>
 
-Finally, we need to terminate the array of codes with a notappl to tell CSPro not to use the whole array and then pass the array of codes and the array labels to the setvalueset command. Make sure to set the capture type of the field to Radio Button in the field properties for <b>RESPONDENT</b>.
+Finally, we need to terminate the array of codes with a <logiccolor>notappl</logiccolor> to tell CSPro not to use the whole array and then pass the array of codes and the array labels to the setvalueset command. Make sure to set the capture type of the field to "Radio Button" in the field properties for <b>RESPONDENT_LINE_NUMBER</b>.
 
 <logic>
 codes(nextEntryValueSet) = notappl;
@@ -297,6 +299,8 @@ Let’s revisit question <b>B07</b>, place of birth. Rather than present a giant
 </table>
 
 Then in the onfocus for the second subitem, once we know the continent, we can loop through the value set for <b>PLACE_OF_BIRTH</b> that contains all the countries and create a value set containing only those countries that are in the selected continent.
+
+<pagebreak />
 
 <logic>
 PROC COUNTRY_OR_DISTRICT_OF_BIRTH
@@ -368,7 +372,7 @@ endif;
 </logic>
 
 <subheader>Dynamic Checkboxes</subheader>
-Let’s implement a dynamic value set for question <b>G2</b>, “were assets purchased with a loan”. Rather than a series of yes/no question, we implement this using a single variable with checkboxes. We could have one checkbox for each of the 10 items in the assets roster but it would be better if we only displayed the checkboxes for the assets that the household actually possess. How do we know if the household possess an item? The household possess the item if its quantity is greater than zero. We need to loop through the rows of the roster and add a checkbox to the value set for each item with quantity greater than zero. The only tricky part is that since these are checkboxes so we need to use alpha values.
+Let’s implement a dynamic value set for question <b>G2</b>, “were assets purchased with a loan”. Rather than a series of yes/no questions, we implement this using a single variable with checkboxes. We could have one checkbox for each of the 10 items in the assets roster but it would be better if we only displayed the checkboxes for the assets that the household actually possesses. How do we know if the household possesses an item? The household possesses the item if its quantity is greater than zero. We need to loop through the rows of the roster and add a checkbox to the value set for each item with quantity greater than zero. The only tricky part is that these are checkboxes so we need to use alpha values.
 
 In order to create a value set with alpha values we need a code array of type string. Where do we declare it? PROC GLOBAL.
 
@@ -407,12 +411,13 @@ codesString(nextEntry) = "";
 setvalueset($, codesString, labels);
 </logic>
 
+<pagebreak />
+
 <subheader>Exercises</subheader>
 <list ordered>
 	<li>Add question text to the rest of section B. Use fills to include the name as we did in the examples.</li>
 	<li>Add a new language, the language of your choice, to the CAPI text and to the dictionary. Translate the question text, labels and value sets for section B into the new language.</li>
 	<li>Add question text for section G and use the occurrence labels to fill in the name of the possessions in the quantity and value fields.</li>
-	<li>Set the occurrence labels in section E to the names of the deceased using the setocclabel command.</li>
 	<li>In question B06 (date of birth) use a dynamic value set for the day based on the month (January: 1-31, February: 1-28, March: 1-31…) so that the interviewer cannot enter an invalid date like February 30 or April 31. Bonus if you can correctly handle leap years.</li>
 	<li>For E08 (line number of mother of deceased) use a dynamic value set to list the names of all eligible women from the household roster.</li>
 </list>

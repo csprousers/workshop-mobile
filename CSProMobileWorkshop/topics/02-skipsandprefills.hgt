@@ -57,9 +57,9 @@ if AGE < 1 then
 endif</logic>
 
 Everything on a line after <logiccolor>//</logiccolor> is considered a comment and is ignored by CSPro. You can also use <logiccolor>{}</logiccolor> for multiline comments. It is good practice to use plenty of comments to document your logic.
-<pagebreak />
+
 <callout><center><b>A note on coding style</b></center>
-When writing if statements, your code will be more readable and easier for others to understand if you indent the statements between the then and the endif. It is also helpful to use consistent capitalization. We recommend all uppercase for dictionary variables like NUMBER_OF_HOUSEHOLD_MEMBERS and all lowercase for CSPro keywords like if, then and endif. Finally, you should use comments as much as possible to help others, and your future self, better understand your code.
+When writing if statements, your code will be more readable and easier for others to understand if you indent the statements between the then and the endif. It is also helpful to use consistent capitalization. We recommend all uppercase for dictionary variables like <b>NUMBER_OF_HOUSEHOLD_MEMBERS</b> and all lowercase for CSPro keywords like <logiccolor>if</logiccolor>, <logiccolor>then</logiccolor> and <logiccolor>endif</logiccolor>. Finally, you should use comments as much as possible to help others, and your future self, better understand your code.
 </callout>
 
 <subheader>Ask if</subheader>
@@ -72,15 +72,15 @@ ask if AGE >= 1
 
 The <logiccolor>ask if</logiccolor> statement skips over the question unless the condition <logiccolor>AGE &gt;= 1</logiccolor> is true. In other words, if the age is less than 1, the question will be skipped. Note that when changing from <logiccolor>skip</logiccolor> to <logiccolor>ask if</logiccolor>, the condition was negated by switching from “&lt;” to “&gt;=”.
 
-The line <logiccolor>preproc</logiccolor> tells CSPro to execute this logic before asking the question. Our previous examples did not specify <logiccolor>preproc</logiccolor>, so by default the logic was executed in the <logiccolor>postproc</logiccolor>. Postproc logic is executed after the data are entered. Preproc logic is executed before the data are entered. For each variable, you can specify a preproc, a postproc or both. <logiccolor>Ask if</logiccolor> will always be used in the <logiccolor>preproc</logiccolor> of the field being skipped while <logiccolor>skip</logiccolor> can either be in the preproc of the field being skipped or in the postproc of the preceding field.
+The line <logiccolor>preproc</logiccolor> tells CSPro to execute this logic <i>before</i> asking the question. Our previous examples did not specify <logiccolor>preproc</logiccolor>, so by default the logic was executed in the <logiccolor>postproc</logiccolor>. Postproc logic is executed <i>after</i> the data are entered. Preproc logic is executed before the data are entered. For each variable, you can specify a preproc, a postproc or both. <logiccolor>Ask if</logiccolor> will always be used in the <logiccolor>preproc</logiccolor> of the field being skipped while <logiccolor>skip</logiccolor> can either be in the preproc of the field being skipped or in the postproc of the preceding field.
 
 <callout><center><b>Group exercise</b></center> 
-Implement the skip pattern for questions F10 (has a toilet) and F11 (type of toilet). If the answer to question F10, have toilet, is “no”, skip question F11, type of toilet. You can use either <logiccolor>skip</logiccolor> or <logiccolor>ask if</logiccolor>. Make sure to add a comment to your code and to format your code using correct indentation and capitalization.
+Implement the skip pattern for questions <b>F10</b> (has a toilet) and <b>F11</b> (type of toilet). If the answer to question F10, have toilet, is “no”, skip question <b>F11</b>, type of toilet. You can use either <logiccolor>skip</logiccolor> or <logiccolor>ask if</logiccolor>. Make sure to add a comment to your code and to format your code using correct indentation and capitalization.
 </callout>
 
 <subheader>Compound Conditions</subheader>
 As another example, we will implement the skip pattern for question <b>C01</b>. We need to skip over <b>C02</b>, highest level of education, if school attendance is “never attended” (1) or “don’t know” (9). We can implement this with two if statements:
-
+<pagebreak />
 <logic>PROC ATTENDED_SCHOOL
 
 // Skip over highest level education for those who never attended school
@@ -93,14 +93,15 @@ if ATTENDED_SCHOOL = 9 then
     skip to LITERATE;
 endif;
 </logic>
-
+~!~
 Note that in CSPro, logic statements must be separated by semicolons (;). This tells CSPro when one command ends and the next begins. Forgetting to put the semicolon at the end of a statement is a very common error that new users make. If you forget the semicolon, usually CSPro will tell you that that a semicolon was expected, although sometimes it gets confused and gives you a less informative error message.
 
 We can simplify this code by combining the two if statements using the "or" operator to create a compound condition.
 
 <logic>PROC ATTENDED_SCHOOL
 
-// Skip over highest level education for those whose attendance is "never attended" or "don't know"
+// Skip over highest level education for those whose attendance is "never attended"
+// or "don't know"
 if ATTENDED_SCHOOL = 1 or ATTENDED_SCHOOL = 9 then
     skip to LITERATE;
 endif;</logic>
@@ -115,13 +116,14 @@ In addition to “or”, CSPro supports the following logical operators:
 <cell>True if both expressions are true</cell><cell>and</cell>
 <cell>True if either expression is true</cell><cell>or</cell>
 </table>	
-<pagebreak />
+
 You can also use compound conditions with <logiccolor>ask if</logiccolor>. For example we only want to ask question <b>B14</b>, age at first marriage, for those who responded "married" or "widowed" or "divorced" for marital status.
 ~!~
 
 <logic>PROC AGE_AT_FIRST_MARRIAGE
 preproc
-// Only ask age at first marriage for those whose marital status indicates they are/were married
+// Only ask age at first marriage for those whose marital status indicates 
+// they are/were married
 ask if MARITAL_STATUS = 2 or MARITAL_STATUS = 3 or MARITAL_STATUS = 4;
 </logic>
 
@@ -131,7 +133,8 @@ We can make our expression even simpler using the "in" operator which checks if 
 
 <logic>PROC AGE_AT_FIRST_MARRIAGE
 preproc
-// Only ask age at first marriage for those whose marital status indicates they are/were married
+// Only ask age at first marriage for those whose marital status indicates 
+// they are/were married
 ask if MARITAL_STATUS in 2:4;
 </logic>
 
@@ -188,6 +191,7 @@ PERSON_NUMBER = curocc();
 </logic>
 
 The CSPro function <logiccolor>curocc()</logiccolor> gives us the current occurrence number of a repeating record or item. In other words, it gives the row number of the roster we are currently on.
+
 To avoid having to hit enter to move through this field we can use the statement <logiccolor>noinput</logiccolor> which accepts the assigned answer and automatically moves to the next field as if the interviewer had used the enter key.
 
 <logic>PROC PERSON_NUMBER
@@ -201,7 +205,7 @@ noinput;
 Alternatively, we can make the field uneditable by checking the protected box in the field properties. With <logiccolor>noinput</logiccolor> it is still possible to go back and modify the field, but protected fields cannot be modified except from logic. Be aware that if you do not set the value of a protected field in logic <i>before</i> the interviewer gets to the field, CSEntry will give you a fatal error.
 
 <callout><center><b>Group Exercise</b></center>
-In question <b>B10</b>, mother line number, automatically fill in the code 88 (deceased) if the response to <b>B09</b>, mother alive, is unknown. You may be tempted to use the skip statement for this but you should consider using the noinput statement instead.
+In question <b>B10</b>, mother line number, automatically fill in the code 88 (deceased) if the response to <b>B09</b>, mother alive, is "no". You may be tempted to use the skip statement for this but you should use the noinput statement instead.
 </callout>
 
 <subheader>Endgroup</subheader>
@@ -223,14 +227,14 @@ PROC NUMBER_OF_HOUSEHOLD_MEMBERS
 preproc
 // Set number of household members to size of person roster.
 // It is used as roster occurrence control field for later rosters.
-NUMBER_OF_HOUSEHOLD_MEMBERS = totocc(NAMES_ROSTER);
+NUMBER_OF_HOUSEHOLD_MEMBERS = totocc(HOUSEHOLD_MEMBERS_ROSTER);
 </logic>
 
 This uses the function <logiccolor>totocc()</logiccolor> which gives the total occurrences of a repeating record or item. In other words, it gives us the total number of rows of a roster.
 
 <subheader>Endlevel</subheader>
 There is also the <logiccolor>endlevel</logiccolor> command which is similar to endgroup but skips the rest of the current questionnaire (except for two level applications when in a second level node where it terminates the current node).
-
+<pagebreak />
 <subheader>Skipping Based on Checkboxes</subheader>
 We only want to ask question <b>B12</b>, sign language, if the household member is hearing disabled. We want to skip question <b>B12</b> if hearing disabled is not checked in question <b>B11</b>. How can we tell in logic if hearing disabled is checked? Hearing disabled is option B in the value set so we need to determine if the set of all checked options contains the letter B.
 
@@ -245,7 +249,7 @@ preproc
 //ask this question only if hearing disabled (option B) is checked
 ask if pos("B", DISABILITIES) > 0;
 </logic>
-<pagebreak />
+
 <subheader>Exercises</subheader>
 <list ordered>
 	<li>Skip question <b>F07</b>, monthly rent, if dwelling is not rented in <b>F06</b>.</li>
@@ -259,4 +263,5 @@ ask if pos("B", DISABILITIES) > 0;
 	<li>In question <b>G01</b>, household possessions, skip the value field if the quantity is zero.</li>
 	<li>Add variables and a form for section D: Fertility. Add the variables to the person record but create a new form with its own roster just like we did for section C. Don’t worry about the last question on the form that displays the total births. We will cover that in a later lesson. Add the skip patterns for the fertility section. Don’t forget to skip the entire section for males and females NOT between 12 and 50 years old.</li>
 </list>
+
 <pagebreak />
