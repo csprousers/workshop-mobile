@@ -11,9 +11,12 @@ At the end of this session participants will be able to:
 </list>
 
 <subheader>Value Set Images</subheader>
-In addition to showing text in a value set we can also display images. To add an image to a value set, select the variable in the dictionary editor and click on the “…” button next to the value. Browse to pick an image file. CSPro supports standard image file formats: png, jpeg, bmp… We recommend using png or jpeg as they tend have smaller file sizes. The images are not added to the pen file by default so it is a good idea to first put your images in a resources directory so that you won’t have to worry about copying them to the device.
+In addition to showing text in a value set we can also display images. To add an image to a value set, select the variable in the dictionary editor and click on the “…” button next to the value. Browse to pick an image file. CSPro supports standard image file formats: png, jpeg, bmp… We recommend using png or jpeg as they tend have smaller file sizes. The images are not added to the pen file by default so you would need to copy them to the device along with the pen file.
 
-Let’s add images for the roof types in <b>F08</b>. Copy the RoofImages folder into the application directory. Now open the value set for <b>F08</b> and add each image to its respective value. We do not have a picture for other (specify) so we will leave that one without an image. Run the application on Windows and on Android and see the images.
+Let’s add images for the roof types in <b>F08</b>. Copy the RoofImages folder into the application directory. Now open the value set for <b>F08</b> and add each image to its respective value. We do not have a picture for other (specify) so we will leave that one without an image. Run the application on Windows and on mobile and see the images. Note that on mobile we have to copy the images to the device since they are not part of the pen file by default.
+
+<subheader>The Resource Folder</subheader>
+Instead of copying the image files to the mobile device each time they are updated we can put them in the resource directory of the application. All files in the resource folder are built into the pen file and extracted on the device when the application is run. This makes it more convenient to distribute an application with additional files. Let’s create a resource folder, add it to our application and put our image files in it. To create the resource file just create a new folder in Windows explorer. We will create the folder “resources” in the household folder. Then in CSPro go to Add Files… from the File menu, choose “resource folder” and browse to the new folder. Now put the whole RoofImages folder in the resource folder and rebuild the pen file.
 
 <subheader>Launching External Applications on Windows</subheader>
 The command <logiccolor>execsystem()</logiccolor> lets you launch another application from logic. It takes the name of the application to launch. For example, using a userbar button you could bring up the Window’s calculator:
@@ -48,23 +51,17 @@ The <logiccolor>execsystem()</logiccolor> command is slightly different on Andro
 execsystem("app:com.google.android.gm"); 
 </logic>
 
-Finding the package name can be a bit tricky. The easiest way is to use your web browser to search for the application on the Google Play website (play.google.com). On the page for the application the package name will be the last part of the address in the address bar of your browser, after the “?id=”. For example, if you go the page for CSEntry on the Google Play Store the address is:
+Finding the package name can be a bit tricky. The easiest way is to use your web browser to search for the application on the Google Play website (play.google.com). On the page for the application the package name will be the last part of the address in the address bar of your browser, after the “?id=”. For example, if you go the page for CSEntry on the Google Play store the address is:
 
 <indent><i>https://play.google.com/store/apps/details?id=gov.census.cspro.csentry</i></indent>
 
 The package name is therefore “gov.census.cspro.csentry”.
 
-To launc the calculator from Android we would use: <html><sup>1</sup></html>
+To launch the calculator from Android we would use: <html><sup>1</sup></html>
  
 <logic>
 execsystem("app:com.google.android.calculator");
 </logic>
-~!~
-~!~
-
-<html><hr/></html>
-<font 0.8><html><sup>1</sup></html>On some Android devices the default calculator is replaced with a different package and the package name may need be changed.</font>
-<pagebreak />
 
 To make our code work on both Android and Windows we can use the function <logiccolor>getos()</logiccolor> which returns a number between representing the operating system:
 
@@ -100,13 +97,20 @@ execsystem("view:/mnt/sdcard/csentry/document.pdf");
 </logic>
 
 For this to work, the device must have an application installed capable of viewing the type of file specified. Android determines which application to launch to view the file based on the file extension. All Android devices have viewers for most photo, music, and video file formats, however not all have a built-in PDF viewer. If you do not have one on your device, you can always download one from Google Play.
+~!~
+~!~
+
+<html><hr/></html>
+<font 0.8><html><sup>1</sup></html>On some Android devices the default calculator is replaced with a different package and the package name may need be changed.</font>
+<pagebreak />
 
 Let’s add a userbar button to show a map of the enumeration area as a visual aid for the interviewer.
 
 <logic>
 // Display an image containing a map of the enumeration area
 function showEAMap()
-    execsystem("view:/mnt/sdcard/csentry/Popstan2020/Housing/resources/maps/EAMap.png");
+    execsystem(
+	  "view:/mnt/sdcard/csentry/Popstan2020/Housing/resources/maps/EAMap.png");
 end;
 </logic>
 
@@ -131,13 +135,13 @@ end;
 </logic>
 
 <subheader>Taking Photos on Android</subheader>
-To take a picture on Android you can use execsystem with “camera:” followed by the full path in which to save the photo:
+To take a picture on Android you can use <logiccolor>execsystem</logiccolor> with “camera:” followed by the full path in which to save the photo:
 
 <logic>
 execsystem("camera:/mnt/sdcard/csentry/photo.jpg");
 </logic>
 
-Note that photos do not get saved into the application data file. You need to save them to a folder/file on the device that will make it easy to link the photo back to the interview that it was taken for. The easiest way to do this is to make the name of the photo based on the id-items of the questionnaire:
+Note that photos do not get saved into the application data file. You need to save them to a folder/file on the device.  The filename you use should make it easy to link the photo back to the interview that it was taken for. The easiest way to do this is to make the name of the photo based on the id-items of the questionnaire:
 
 <logic>
 string photoFilename = pathname(application) + 
@@ -295,13 +299,7 @@ Build a CSPro application for the household listing questionnaire. Place your ap
 </callout>
 
 <subheader>Writing and Viewing Reports</subheader>
-With <logiccolor>execsystem()</logiccolor> on Android you can view web pages using “browse:” followed by the address:
-
-<logic>
-execsystem("browse:https://www.census.gov");
-</logic>
-
-We can use this to view web pages (HTML documents) and text documents that we write out from CSPro. To write out files from a CSEntry application we have to first declare a file variable in the PROC GLOBAL:
+With <logiccolor>execsystem()</logiccolor> on Android you can display text files on your device using "view:” followed by the filename. We can use this to show text documents that we write out from CSPro. To write out files from a CSEntry application we have to first declare a file variable in the PROC GLOBAL:
 
 <logic>
 PROC GLOBAL
@@ -348,13 +346,12 @@ function showHouseholdReport()
 end;
 </logic>
 
-On Windows we can’t use execsystem with “view:” so instead we launch Windows Explorer (explorer.exe) with the name of the file and that will open the file in notepad for a text file and in the web browser for an HTML file.
+On Windows we can’t use execsystem with “view:” so instead we launch Windows Explorer (explorer.exe) with the name of the file and that will open the file in notepad.
 
-If you are familiar with HTML you can write out HTML and have nicer formatting and pictures. CSPro has a built in templating engine to generate HTML reports using templates. See "Templated Reports" in the CSPro help for details.
+If you are familiar with HTML you can write out HTML and have nicer formatting and pictures. You can use <logiccolor>execsystem()</logiccolor> with "html:file://" followed by the filename to view html files on your device. CSPro also has a built in templating engine to generate HTML reports using templates. See "Templated Reports" in the CSPro help for details.
 
 <subheader>Exercises</subheader>
 <list ordered>
-	<li>Add a button to the userbar that opens your website (the website for your organization). Test this on Android. Bonus if you can get it to work on Windows too.</li>
 	<li>Add a button to the userbar that shows the interviewer manual. You can use the PDF interviewer manual that is on the course website (it only has a cover page but is enough for this exercise).</li>
 	<li>Add the following additional information to the summary report. a.	Total number of household members, total males, total females. b. List of household assets from section G with quantity. Do not list assets where the quantity is zero.</li>
 </list>
