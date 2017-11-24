@@ -2,9 +2,9 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Use the synchronization options dialog to add synchronization to an application.</li>
-	<li>Create advanced synchronizations using CSPro logic to synchronize data files and update applications in the field.</li>
-	<li>Create peer to peer synchronizations between devices for situations where there is no internet access.</li>
+	<li>Use the synchronization options dialog to add synchronization to an application</li>
+	<li>Create advanced synchronizations using CSPro logic to synchronize data files and update applications in the field</li>
+	<li>Create peer to peer synchronizations between devices for situations where there is no internet access</li>
 </list>
 
 <subheader>Synchronization in CSPro</subheader>
@@ -20,10 +20,10 @@ In order to use internet synchronization in CSPro you need a server accessible o
 	<li>FTP: CSPro can synchronize with any FTP (File Transfer Protocol) server accessible over the network. Best for small surveys when the skills and infrastructure for setting up CSWeb are not available and you don’t want your data on the Dropbox servers.</li>
 </list>
 
-For our examples in this workshop we will use a CSWeb server, however using Dropbox or FTP is very similar. Installing the CSWeb server is beyond the scope of this training so we will work a server that is already installed and running. The process for setting up a CSWeb server is well documented in the CSWeb users guide which is included in the CSPro documentation available from the "Help Menu".
+For our examples in this workshop we will use a CSWeb server, however using Dropbox or FTP is very similar. Installing the CSWeb server is beyond the scope of this training so we will work with a server that is already installed and running. The process for setting up a CSWeb server is well documented in the CSWeb users guide which is included in the CSPro documentation available from the "Help Menu".
 
 <subheader>Using the CSPro Web Server interface</subheader>
-Before using the CSWeb server for synchronization we need to upload the data dictionary used by the application so the CSWeb can create a database table to store the data in. This step is not needed if you are using FTP or Dropbox as the server. With those servers, the dictionary is uploaded on the first sync. To upload the dictionary, first log into the CSWeb server in a web browser.
+Before using the CSWeb server for synchronization we need to upload the data dictionary used by the application so CSWeb can create a database table to store the data in. This step is not needed if you are using FTP or Dropbox as the server. With those servers, the dictionary is uploaded on the first sync. To upload the dictionary, first log into the CSWeb server in a web browser.
  
 Next, choose “Data” from the left menu, click the “Add Data” button and browse to the dictionary to upload.
 
@@ -34,7 +34,7 @@ You should now see the dictionary listed in the table under Data. The server is 
 You can also use this web interface to add users for synchronization.
 
 <subheader>Adding Synchronization to the Data Entry Application</subheader>
-In order to use synchronization, you must first add the server information to the application to enable synchronization. In CSPro choose “Synchronization…” from the options menu. Choose the server type (CSWeb, Dropbox or FTP). For CSWeb or FTP, enter the server URL (for Dropbox no URL is required). You can use the “Test Connection…” button to verify that the URL is correct. For CSWeb, the URL to use for synchronization in CSPro will usually end /api while the URL to use to access the web interface will usually end in /ui. The former is for CSPro itself to connect to the server while the latter is for use only in the web browser.
+In order to use synchronization, you must first add the server information to the application to enable synchronization. In CSPro choose “Synchronization…” from the options menu. Choose the server type (CSWeb, Dropbox or FTP). For CSWeb or FTP, enter the server URL (for Dropbox no URL is required). You can use the “Test Connection…” button to verify that the URL is correct. For CSWeb, the URL to use for synchronization in CSPro will usually end with "/api" while the URL to use to access the web interface will usually end in "/ui". The former is for CSPro itself to connect to the server while the latter is for use only in the web browser.
 
 <center><image syncoptions.png /></center>
 
@@ -48,7 +48,7 @@ In the dropdown, you have three choices for how to synchronize the main data fil
 
 In most cases you will want to choose either the first or third option. Use the third option if you want to share cases between multiple devices in the field as this will download every case on the server onto the local device. For a survey operation with a large number of interviewers you may want to avoid this as it will cause you to download a lot of data. For our test, we will use the first option.
 
-In addition to synchronizing the data file you can also download the pen and pff files from the server. This provides a way to do remote updates to the application while interviewers are in the field. In order for this to work you must place a copy of the pen and pff files on the server. For CSWeb these must be placed in the csweb/files/ on the server. For Dropbox, they may be placed anywhere in the Dropbox folder. For FTP they must be placed in the home directory of the user that will be used to log into the server. Enter the path on the server where the files were placed under “Path to application on server”. We will place these files in the directory /Popstan2020Census on the server.
+In addition to synchronizing the data file you can also download the pen and pff files from the server. This provides a way to do remote updates to the application while interviewers are in the field. In order for this to work you must place a copy of the pen and pff files on the server. For CSWeb these must be placed in the <i>csweb/files/</i> on the server. For Dropbox, they may be placed anywhere in the Dropbox folder. For FTP they must be placed in the home directory of the user that will be used to log into the server. Enter the path on the server where the files were placed under “Path to application on server”. We will place these files in the directory <i>/Popstan2020Census</i> on the server.
 
 Once the sync settings are complete, regenerate the pen file. The sync settings are stored in the pen file so if it is not updated you won't be able to sync. Copy the pen and pff file into the Popstan2020Census directory under the files directory on the server so that it will be downloaded to the local device during sync.
 
@@ -56,7 +56,7 @@ Once the sync settings are complete, regenerate the pen file. The sync settings 
 To synchronize the application with the server, run the application in CSPro and from the case listing screen choose “Synchronize…” from the file menu on Windows or tap the synchronize icon (<image sync_icon.png />) on Android.
 
 <subheader>Downloading the Combined Data File</subheader>
-Once you have used synchronize to upload data to the server you can download the data file from server using DataViewer. This will download a single data file that combines all the data uploaded from all the devices that have synchronized with the server. Open DataViewer, choose the server type, enter the same URL you used in the synchronization options dialog, click "Connect" to download the list of data files available on the server, choose the data file, choose a place to save the downloaded file and click "Download".
+Once you have used synchronize to upload data to the server you can download the data file from the server using DataViewer. This will download a single data file that combines all the data uploaded from all the devices that have synchronized with the server. Open DataViewer, choose the server type, enter the same URL you used in the synchronization options dialog, click "Connect" to download the list of data files available on the server, choose the data file, choose a place to save the downloaded file and click "Download".
  
 <center><image dataviewerdownload.png /></center>
 
@@ -89,7 +89,7 @@ The first step in running sync from logic is to call the command <logiccolor>syn
 
 The commands <logiccolor>syncdata()</logiccolor> and <logiccolor>syncfile()</logiccolor> operate differently. <logiccolor>syncdata()</logiccolor> may only be used with data files in CSPro DB format. With <logiccolor>syncdata()</logiccolor>, CSPro keeps track of which cases in the file have already been uploaded to the server so that it avoids transferring cases that have already been synced. This reduces the amount of data transferred and keeps data costs and transfer times to a minimum. It also avoids one interviewer overriding changes made by another interviewer when they are working on different cases in the same file. <logiccolor>syncfile()</logiccolor> may be used with any type of file including text files, images and application files (pen and pff). It does not look at the file contents so it simply uploads or downloads the entire file, overwriting any existing version. When syncing data files, you should always use <logiccolor>syncdata()</logiccolor>.
 
-<logiccolor>syncdata()</logiccolor> takes two arguments: the direction and the dictionary name. The direction can be PUT (upload data to server), GET (download data from server) or BOTH (upload and download). These options correspond to the drop down in the sync options dialog. The second argument is the name of a dictionary in the application that corresponds to the data file to synchronize. Note that this dictionary must be added to the application as either the main dictionary or as an external dictionary.
+<logiccolor>syncdata()</logiccolor> takes two arguments: the direction and the dictionary name. The direction can be PUT (upload data to server), GET (download data from server) or BOTH (upload and download). These options correspond to the drop down in the sync options dialog. The second argument is the name of a dictionary in the application that corresponds to the data file to synchronize. Note that this dictionary must be added to the application as an external dictionary.
 
 In our application, we want to synchronize the household questionnaire dictionary so we need to first add it to the menu program as an external dictionary. Now we can use it in the call to <logiccolor>syncdata()</logiccolor>.
 
@@ -105,13 +105,10 @@ function syncWithHeadquarters()
 		
 		// Sync cases from household data file with server
 		syncdata(BOTH, POPSTAN2020_DICT);
-		
-		// Sync cases from listing data file with server
-		syncdata(BOTH, LISTING_DICT);
-		
+				
 		// Download latest version of menu application
-		syncfile(GET, "/Popstan2020/Menu/Menu.pen");
-		syncfile(GET, "/Popstan2020/Menu/Menu.pff");
+		syncfile(GET, "/Popstan2020/Menu/Menu.pen", "Menu.pen");
+		syncfile(GET, "/Popstan2020/Menu/Menu.pff", "Menu.pen");
 		
 		// Get latest household data entry program
 		syncfile(GET, "/Popstan2020/Household/Popstan2020.pen",
@@ -128,6 +125,8 @@ Now that we have added the synchronization logic to the menu we rebuild the pen 
 
 Now we can run the menu program and test our synchronization.
 
+<pagebreak />
+
 <callout>
 <center><b>Group exercise – Sync Race II </b></center>
 In your teams modify the sync exercise questionnaire to take a photo of the team and save it to a file. 
@@ -141,16 +140,20 @@ Run your application, enter a case and synchronize to send your photo to the ser
 It is important to ensure the security of your server and data. Computer and network security is a challenging problem and well beyond the scope of this training. Here a few security considerations to think about. For any large survey or census operation you should consult with a security expert to ensure that your data is safe.
 
 <b>Use HTTPS on the web server for data transfer</b>
+
 This encrypts the data transmission that goes over the internet. It requires purchasing and installing an SSL certificate on the server. Without SSL, server passwords are sent unencrypted and are vulnerable to hackers.
 
 <b>Use a private network</b>
+
 For censuses and large surveys you may be able to work with the telcom provider to create a private network that only your devices can access. This avoids putting your server on the public internet where it could be vulnerable to attacks. This also makes it possible to limit your devices to only be able to access your server and not other websites that you don't want your interviewers to use.
 
 <b>Use device encryption on Android devices</b>
+
 By setting a PIN code on your Android tablet or phone you enable encryption of files on the device using strong hardware encryption. This makes it very difficult for anyone without the PIN code to retrieve data on the device.
 
 <b>Consider how to manage passwords</b>
-It is more convenient to have a single password that is shared by all devices and is hardcoded in the pen file however it is more secure to use a different username/password for each interviewer and have them enter it for every sync. For a large number of enumerators managing passwords and resetting passwords for interviewers who have forgotten their passwords could be a significant management burden. You will need to find the right balance of security and convenience. If you want to hardcode the password in your pen file then you can pass the username and password in our call to <logiccolor>synconnect()</logiccolor>. If you do not provide a username and password in this call, the interviewer is prompted to enter the password the first time they sync with the device. After that the username and password are saved on the device so they do not need to be entered for synchronizations. If you don't want th password saved on the device, you can use the <logiccolor>prompt()</logiccolor> function to have the interviewer enter the password before each sync and then give the password received from the call to <logiccolor>prompt()</logiccolor> to <logiccolor>syncconnect()</logiccolor>.
+
+It is more convenient to have a single password that is shared by all devices and is hardcoded in the pen file however it is more secure to use a different username/password for each interviewer and have them enter it for every sync. For a large number of interviewers managing passwords and resetting passwords for those who have forgotten their passwords could be a significant management burden. You will need to find the right balance of security and convenience. If you want to hardcode the password in your pen file you can pass the username and password in the call to <logiccolor>syncconnect()</logiccolor>. If you do not provide a username and password in this call, the interviewer is prompted to enter the password the first time they sync with the device. After that the username and password are saved on the device so they do not need to be entered for synchronizations. If you don't want the password saved on the device, you can use the <logiccolor>prompt()</logiccolor> function to have the interviewer enter the password before each sync and then pass the password received from the call to <logiccolor>prompt()</logiccolor> to <logiccolor>syncconnect()</logiccolor>.
 
 <subheader>Synchronization with a Universe</subheader>
 The <logiccolor>syncdata()</logiccolor> command has an optional third parameter, the universe. This is a string that CSPro tries to match to the concatenated case-id items to limit the data transferred. If a universe is provided, then only cases who case-ids match the universe are synchronized. For example, to limit synchronization to only province 1, district 2 we would call:
@@ -172,7 +175,7 @@ In order to implement Bluetooth synchronization, we need to add logic on both th
 
 To extend the menu program to support peer to peer synchronization we will add a new menu option to the supervisor main menu "sync with interviewer" and a new menu option to the interviewer main menu "sync with supervisor".
 
-The logic on the interviewer’s tablet is nearly identical to the logic used for web synchronization. The only differences are the arguments to <logiccolor>syncconnect()</logiccolor>. When using Bluetooth, <logiccolor>synconnect()</logiccolor> does not need a URL, username or password.
+The logic on the interviewer’s tablet is nearly identical to the logic used for web synchronization. The only differences are the arguments to <logiccolor>syncconnect()</logiccolor>. When using Bluetooth, <logiccolor>syncconnect()</logiccolor> does not need a URL, username or password.
 
 <logic>
 syncconnect(bluetooth)
@@ -186,29 +189,26 @@ syncconnect(Bluetooth, "Supervisor03")
 
 The rest of the logic is the same as for web synchronization except that the “from” paths change to match the paths on the supervisor device.
 
-
 <logic>
 function syncWithSupervisor()
 	// Connect to the supervisor device
-    // We do not specify the device name to connect to
-    // which allows the interviewer to pick the device
-    // from a list of nearby devices.
+    // We do not specify the device name to connect to which allows the interviewer 
+	// to pick the device from a list of nearby devices.
     if syncconnect(bluetooth) then
     
         // Sync main data file.
-        syncdata(PUT, POPSTAN2020_DICT);
+        syncdata(BOTH, POPSTAN2020_DICT);
     
         // Download latest application files from the supervisor.
-        // The root file on the supervisor tablet is the
-        // "Popstan2020" folder so the from
-        // folder starts from there and we need to add "Menu"
-        // to get to the Menu programs.
+        // The root file on the supervisor tablet is in the "Popstan2020" folder 
+		// so the from folder starts from there and we need to add "Menu" to get to 
+		// the Menu programs.
         syncfile(GET, "Menu/Menu.pen", "Menu.pen");
         syncfile(GET, "Menu/Menu.pff", "Menu.pff");
         
-        // Since the current application is in the Menu folder we need
-        // to use "../Household" to go up one level and back down into
-        // Household folder for the household application files.
+        // Since the current application is in the Menu folder we need to use 
+		// "../Household" to go up one level and back down into the Household 
+		// folder for the household application files.
         syncfile(GET, "Household/Popstan2020.pen", 
                  "../Household/Popstan2020.pen");
     
@@ -217,22 +217,21 @@ function syncWithSupervisor()
 end;
 </logic>
 
-The logic for the supervisor is even simpler. We simply call the command syncserver() which runs the Bluetooth server and waits for connections.
+The logic for the supervisor is even simpler. We simply call the command <logiccolor>syncserver()</logiccolor> which runs the Bluetooth server and waits for connections.
 
 <logic>
 function syncWithInterviewer()
 
-    // Run the Bluetooth server to receive data from 
-    // interviewer.
-    // Specify ".." as the root directory to make the
-    // the "Popstan2020" folder be the starting
-    // point for all file get/put commands instead of the
-    // menu folder.
+    // Run the Bluetooth server to receive data from interviewer.
+    // Specify ".." as the root directory to make the the "Popstan2020" folder be 
+	// the starting point for all file get/put commands instead of the menu folder.
     syncserver(Bluetooth, "..");
 end;
 </logic>
 
 <logiccolor>syncserver()</logiccolor> takes an optional second parameter which is the root directory for all <logiccolor>syncfile()</logiccolor> commands. The root directory is prepended to the file path on the server. So if the root directory is “C:/myroot” and the client calls <logiccolor>syncfile(PUT, “myfile”, “files/myfile”)</logiccolor> then the destination path will be “C:/myroot/files/myfile”. By default, the root directory is the application directory of the server so adding “..” to it makes the root folder the parent directory of the application i.e. the Popstan2020 directory.
+
+<pagebreak />
 
 <callout>
 <center><b>Group exercise – Sync Race III</b></center>
@@ -244,5 +243,8 @@ Run your application on two devices, complete a case on one device and synchroni
 </callout>
 
 <subheader>Exercises</subheader>
-Modify the syncWithHeadquarters() and syncWithSupervisor() functions in the menu program to also sync the listing data file and the staff lookup file. The listing file should be uploaded to the server with the appropriate universe and the staff file should be downloaded from the server using syncdata with GET.
+<list ordered>
+<li>Modify the syncWithHeadquarters() and syncWithSupervisor() functions in the menu program to also sync the listing data file and the staff lookup file. The listing file should be synced using BOTH and the staff file should be downloaded from the server using syncdata with GET.</li>
+<li>Modify the syncWithHeadquarters() and syncWithSupervisor() functions so that only data in the geographic area assigned to the interviewer/supervisor are synced. For the interviewer this means that only households in the assigned EA are synced and for the supervisor only households in the assigned district are synced.</li>
+</list>
 <pagebreak />

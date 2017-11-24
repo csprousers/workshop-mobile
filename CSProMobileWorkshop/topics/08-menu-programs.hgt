@@ -2,9 +2,9 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Understand the how to design the screens of a menu program.</li>
-	<li>Use the command execpff() to launch one CSPro application from another.</li>
-	<li>Create a simple menu program to launch the main data entry program.</li>
+	<li>Understand the how to design the screens of a menu program</li>
+	<li>Use the command execpff() to launch one CSPro application from another</li>
+	<li>Create a simple menu program to launch the main data entry program</li>
 	<li>Create dynamic menus with dynamic value sets</li>
 </list>
 
@@ -23,12 +23,12 @@ A menu program is a CSPro data entry application that is used to manage the data
 <subheader>Designing the Screens and Flow</subheader>
 Once you decide on which functions you want your menu program to perform, the next step is to design the screens and how they link together. This is most easily done as a diagram like the one below for a fairly simple menu program.
 
-<center><html><img src="menu-screens.png" width="600" /></html></center>
+<center><html><img src="menu-screens.png" width="550" /></html></center>
 
 <subheader>Creating the Dictionary and Forms</subheader>
 Once you have the screens, the next step is to create a new data entry application for your menu program. Let’s name ours Menu and put it in the folder <i>Popstan2020/Menu</i>.
 
-Each different menu screen will be a variable in the dictionary. The value set for the variable will show the available menu choices to the enumerator on that screen. In the menu example above we will have three variables: 
+Each menu screen will be a different variable in the dictionary. The value set for the variable will show the available menu choices to the enumerator on that screen. In the menu example above we will have three variables: 
 
 <list>
 	<li>LOGIN (value set: 1 – Interviewer, 2 – Supervisor)</li>
@@ -38,7 +38,7 @@ Each different menu screen will be a variable in the dictionary. The value set f
 
 We will keep the default id-item that CSPro creates for us. The menu program dictionary doesn’t really need an id-item since we do not need to save our menu choices to the data file. However, CSPro requires that we have at least one id-item so we will keep it.
 
-Create the items in the dictionary and then create a form and drop the items onto the form.  Do not drop the id-item onto the form. Unlike typical data entry applications, menu programs tend not to have a linear flow. As a result, the order of the variables on the form is less important. We will use skips and reenters to move from one menu to another.
+Create the items in the dictionary and then create a form and drop the items onto the form.  Do not drop the id-item onto the form. We can leave it off the form since we will never actually write out a completed case from the menu program. Unlike typical data entry applications, menu programs tend not to have a linear flow. As a result, the order of the variables on the form is less important. We will use skips and reenters to move from one menu to another.
 
 <subheader>Menu Program Logic</subheader>
 The logic for processing the menu choice for each screen goes in the postproc of the variable for the menu. For example, to process the login menu field in our example we would have the following logic:
@@ -55,6 +55,7 @@ endif;
 </logic>
 
 If the user selects to login as an interviewer we skip to the interviewer main field to show the interviewer menu, otherwise we skip to the supervisor main menu field to show the supervisor menu.
+
 Handling the interviewer menu is similar. Here we will create user defined functions to launch the listing and household programs.
 
 <logic>
@@ -99,7 +100,8 @@ if $ = 1 then
     // Show report
     showCompletionReport();
 elseif $ = 9 then
-    // Logout    stop(1);
+    // Logout
+	stop(1);
 endif;
 
 // Clear previous entry
@@ -110,7 +112,7 @@ reenter;
 </logic>
 
 <subheader>Launching one CSPro Application from Another</subheader>
-Let’s fill in the function to launch the household data entry program. We can launch other CSPro programs from within our data entry program using <logiccolor>execpff()</logiccolor>. You give <logiccolor>execpff</logiccolor> the path to a pff file for a CSPro application and it will start the application using the parameters in the pff file. In addition to the filename, you can also pass execpff either the keyword <logiccolor>wait</logiccolor> or the keyword <logiccolor>stop</logiccolor>. Using <logiccolor>wait</logiccolor> will pause the menu application until the application that was launched exits, while using stop will <logiccolor>exit</logiccolor> the menu application immediately after launching the other application. On mobile devices, we will always use the stop parameter since it is not possible to run two CSEntry applications at the same time on mobile.
+Let’s fill in the function to launch the household data entry program. We can launch other CSPro programs from within our data entry program using <logiccolor>execpff()</logiccolor>. You give <logiccolor>execpff</logiccolor> the path to a pff file for a CSPro application and it will start the application using the parameters in the pff file. In addition to the filename, you can also pass execpff either the keyword <logiccolor>wait</logiccolor> or the keyword <logiccolor>stop</logiccolor>. Using <logiccolor>wait</logiccolor> will pause the menu application until the application that was launched exits, while using <logiccolor>stop</logiccolor> will exit the menu application immediately after launching the other application. On mobile devices, we will always use the stop parameter since it is not possible to run two CSEntry applications at the same time on mobile.
 
 The following logic will launch a data entry application using the pff file Popstan2020.pff in the sibling directory to the menu program directory.
 
@@ -130,9 +132,8 @@ When you copy your application to Android it is important that you preserve the 
 
 One way to simplify deployment is to use a Windows batch file to generate the pen files for both the entry application and the menu application. Copy both applications into a deployment folder that can be copied onto the device. This can greatly speed up testing of your application on Android.
 
-<logic>
+<html><pre>
 setlocal
-
 
 REM Find CSEntry.exe (path differs on 32 and 64 bit Windows)
 
@@ -175,7 +176,7 @@ REM Copy .pff files
 copy /y .\Menu\Menu.pff .\Deployment\Popstan2020\Menu
 copy /y .\Household\Popstan2020.pff .\Deployment\Popstan2020\Household
 copy /y .\Listing\Listing.pff .\Deployment\Popstan2020\Listing
-</logic>
+</pre></html>
 
 <subheader>Tidying up the Menu Program</subheader>
 Currently the menu program shows up in the applications list on Android as “Menu” instead of something like “Popstan 2020 Census”. In addition, when we tap on Menu we have to then tap “Start New Case” which doesn’t make sense for a menu. We can fix both of these problems by modifying the pff file for the menu. Right click on the Menu.pff and choose “Edit with pff editor”. Change “Start mode” to “Add” so that we won’t have to tap “Start New Case”. Enter “Popstan 2020 Census” for the description to change what shows in the case listing. While we are at it, open the Menu program in the CSPro designer and in data entry options turn off the display of the case tree since the case tree is not useful for menu programs. Finally, in the data entry options, check "Automatically advance on selection". This way the interviewer will not have to tap next to move from one field to another in the menu program.
@@ -185,7 +186,7 @@ Now that we have the menu program to launch the household data entry program, we
 <subheader>Creating a Dynamic Menu</subheader>
 When the interviewer launches the data entry application, they can currently enter any id-items but we would like to restrict them to only interviewing households that have already been listed. We can do this by displaying the households from the listing file in a dynamic value set and having the interviewer choose which one to interview.
 
-In order to read the listing file, we need to add the listing dictionary as an external dictionary in the menu application. We will also need to add a new menu item to list the households. This will be a new variable in the dictionary named <b>CHOOSE_HOUSEHOLD</b>. We will make it 10 digits long to hold the full set of id-items (province, district, EA, area type and household number). It will be an alpha field as this will be easier to work with later and will be able to support longer id-items if we add new ids later on. The interviewer menu will need to be modified to skip to this new field instead of calling launchHouseholdDataEntry().
+In order to read the listing file, we need to add the listing dictionary as an external dictionary in the menu application. We will also need to add a new menu item to list the households. This will be a new variable in the dictionary named <b>CHOOSE_HOUSEHOLD</b>. We will make it 10 digits long to hold the full set of id-items (province, district, EA, area type and household number). It will be an alpha field as this will be easier to work with later on. The interviewer menu will need to be modified to skip to this new field instead of calling launchHouseholdDataEntry().
 
 <logic>
 PROC INTERVIEWER_MAIN_MENU
@@ -233,7 +234,6 @@ forcase LISTING_DICT do
     nextEntry = nextEntry + 1;
 endfor;
 
-
 // Mark end of array    
 codesString(nextEntry) = "";
 
@@ -241,6 +241,40 @@ setvalueset($, codesString, labels);
 </logic>
 
 When we run this we should see a list of the households in the listing file as the value set for <b>CHOOSE_HOUSEHOLD</b>.
+
+While the dynamic value set works correctly when there are households that have been listed, if the listing file is empty we get and empty value set. Instead we should show an error message and return to the main menu.
+
+<logic>
+PROC CHOOSE_HOUSEHOLD
+onfocus
+
+numeric nextEntry = 1;
+
+// Loop through all cases in listing file
+// to build dynamic value set.
+forcase LISTING_DICT do
+    // Values are household ids concatenated together
+    codesString(nextEntry)=maketext("%d%02d%03d%d%03d", 
+        LI_PROVINCE, LI_DISTRICT, LI_ENUMERATION_AREA,
+        LI_AREA_TYPE, LI_HOUSEHOLD_NUMBER);
+        
+    // Labels have househould number and name of head
+    labels(nextEntry) = maketext("%03d: (%s)", LI_HOUSEHOLD_NUMBER, 
+                            strip(LI_NAME_OF_HEAD_OF_HOUSEHOLD));
+    
+    nextEntry = nextEntry + 1;
+endfor;
+
+if nextEntry = 1 then
+	errmsg("No households have been listed. Please list households first before interviewing.");
+	reenter INTERVIEWER_MAIN_MENU;
+endif;
+
+// Mark end of array    
+codesString(nextEntry) = "";
+
+setvalueset($, codesString, labels);
+</logic>
 
 <subheader>Generating the PFF File</subheader>
 The next step is to handle the menu choice in the postproc to launch the household data entry program using the id-items for the household that was chosen. In order to do this, we will need to specify the id-items as parameters in the pff file. The first step will be to change the launchHouseholdDataEntry() function to first write out the pff file before launching it so that we can customize it. We can use <logiccolor>filewrite</logiccolor> to write out the file as we did with the reports in the last lesson. An easy way to write this logic is to use open the pff file in the pff editor and enable “expert mode”. This displays an extra tab containing CSPro logic to write out the pff file. We can copy and paste this into our logic and make a few modifications.
@@ -328,7 +362,7 @@ endif;
 
 The logic for <b>DISTRICT</b>, <b>ENUMERATION_AREA</b>, <b>AREA_TYPE</b> and <b>HOUSEHOLD_NUMBER</b> is similar.
 
-Since we have not set the start mode in the pff file that we write out, after adding a first case, the next time we launch a case from the menu program, it goes to the case listing screen instead of starting the case. We can fix this by setting the <b>StartMode</b> parameter to “add” in the pff for data entry the way we did for the menu program. In order for this to work when we are modifying an existing case we need to add the case id to the <b>StartMode</b> line. In the menu program, hhe case id to use is just <b>CHOOSE_HOUSEHOLD</b>. Finally, so that after finishing a case we return to the menu program rather than returning to the case listing we add "Lock=CaseListing" to the pff file which prevents the case listing from ever being shown.
+Since we have not set the start mode in the pff file that we write out, after adding a first case, the next time we launch a case from the menu program, it goes to the case listing screen instead of starting the case. We can fix this by setting the <b>StartMode</b> parameter to “add” in the pff for the household application the way we did for the menu program. In order for this to work when we are modifying an existing case we need to add the case id to the <b>StartMode</b> line. In the menu program, the case id to use is just <b>CHOOSE_HOUSEHOLD</b>. Finally, so that after finishing a case we return to the menu program rather than returning to the case listing we add "Lock=CaseListing" to the pff file which prevents the case listing from ever being shown.
 
 <logic>
 filewrite(pffFile,"[DataEntryInit]");
@@ -372,7 +406,7 @@ endif;
 </logic>
 
 <subheader>Preserving Login when Returning to Menu</subheader>
-Currently when you launch the listing program and return to the menu, you have to enter the user code again. Let’s save the user code so that we only have to enter it once. We can do this using the commands <logiccolor>savesetting()</logiccolor> and <logiccolor>loadsetting()</logiccolor>. These commands store and retrieve values in persistent storage. Values saved in the settings are available even after CSEntry is closed and restarted, and they are available in all CSPro applications on the same device. We will save the login code in the login postproc after validating it:
+Currently when you launch the listing program and return to the menu, you have to enter the user code again. Let’s save the login code so that you only have to enter it once. We can do this using the commands <logiccolor>savesetting()</logiccolor> and <logiccolor>loadsetting()</logiccolor>. These commands store and retrieve values in persistent storage. Values saved in the settings are available even after CSEntry is closed and restarted, and they are available in all CSPro applications on the same device. We will save the login code in the login postproc after validating it:
 
 <logic>
 PROC LOGIN
@@ -509,10 +543,12 @@ function showCompletionReport()
 end;
 </logic>
 
+<pagebreak />
+
 <subheader>Exercises</subheader>
 <list ordered>
 	<li>Modify the launchHouseholdDataEntry() function to write the staff code as a parameter in the pff file used to launch the household application. Modify the household application to prefill the interviewer code (<b>A9</b>) with the staff code from the pff file.</li>
-	<li>Implement the function launchHouseholdListing() in the menu program. It should write out and launch a pff file to run the listing program. Write the province, district, enumeration area and staff code from the staff file as parameters in the pff file and prefill those items in the listing program. Make sure that the listing program returns the menu program on exit.</li>
+	<li>Implement the function launchHouseholdListing() in the menu program. It should write out and launch a pff file to run the listing program. Write the province, district, enumeration area and staff code from the staff file as parameters in the pff file and prefill those items in the listing program. Make sure that the listing program returns to the menu program on exit.</li>
 	<li>Modify the logic in the onfocus and postproc of <b>CHOOSE_HOUSEHOLD</b> to add an extra option to the end of the list labelled “Back” that will move back to the interviewer main menu.</li>
 	<li>Modify the dynamic value set we create in the onfocus proc of <b>CHOOSE_HOUSEHOLD</b> to show the interview status (<b>A10</b> in the household questionnaire) in addition to the household number and the head’s name. To do this you will need to use loadcase on the household questionnaire dictionary to find the case from the household data file.</li>
 	<li>Create a new menu called “Summary Reports” that has options for the completion report (the one we implemented already) and a new “Total Population Report” that you will implement. This new menu should also have an option to go back to the main menu. The “Summary Reports” menu should be accessed from the Supervisor Main Menu. The new “Total Population Report” should look like:
