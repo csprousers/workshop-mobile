@@ -257,7 +257,7 @@ ask if pos("B", DISABILITIES) > 0;
 	<li>In section E, deaths, implement the skip pattern for question <b>E09</b>, died while pregnant.</li>
 	<li>In section E, deaths, skip questions <b>E09</b> and <b>E10</b> for household members who are NOT women aged 12-50.</li>
 	<li>In section E, use logic to pre-fill the line number field <b>E03</b>. Make sure that the line number is protected.</li>
-	<li>Add an additional question to <b>F12</b> to determine if the respondent wants to give the distance to water in minutes or kilometers. If they choose kilometers then skip the distance in minutes question otherwise skip the distance in km question.</li>
+	<li>Add an additional question to <b>F13</b> to determine if the respondent wants to give the distance to water in minutes or kilometers. If they choose kilometers then skip the distance in minutes question otherwise skip the distance in km question.</li>
 	<li>Add the other(specify) field and skip pattern for <b>F08</b>, wall material.</li>
 	<li>Add the other(specify) field for <b>B19</b>, languages spoken.</li>
 	<li>In question <b>G01</b>, household possessions, skip the value field if the quantity is zero.</li>
