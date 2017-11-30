@@ -84,7 +84,7 @@ forcase DI_DICT where DI_PROVINCE_CODE = PROVINCE do
     codes(nextEntry) = DI_DISTRICT_CODE;
     labels(nextEntry) = DI_DISTRICT_NAME;
     nextEntry = nextEntry + 1;
-enddo;
+endfor;
 codes(nextEntry) = notappl;
 setvalueset(DISTRICT, codes, labels);
 </logic>
