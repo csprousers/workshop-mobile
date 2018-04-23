@@ -136,7 +136,7 @@ Define the value sets for some of our variables based on the response codes on t
 
 <list><li>Area type (1- Urban, 2- Peri-urban, 3- rural)</li>
 <li>Province (copy/paste from Excel)</li>
-<li>Person number (range: 1-30)</li>
+<li>Person number (range: 1-30, use "1-30" as the label for the range)</li>
 <li>Name (no value set)</li>
 <li>Sex (1- Male, 2-Female)</li>
 <li>Relationship (see questionnaire)</li>
@@ -195,23 +195,26 @@ When we copied the application to the tablet we copied the pen and the pff file.
 
 On Android, the list of available applications on the device is constructed by finding all the pff files in the CSEntry directory and subdirectories so a pen file without a pff will not show up in the list.
 
+<subheader>DataViewer</subheader>
+Double-clicking on the file household.csdb opens the file in the DataViewer tool. DataViewer provides a simple way to view the data that was entered.
+
 <subheader>Partial Save and Case Tree</subheader>
 It can be a pain when testing a question that is on the third form of a survey to have to reenter all of the data up to the question you are testing. We can enable partial save under the data entry options so that we can exit data entry, modify the application, and come back right to where we left off. While we are in the data entry options we can also enable the case tree on both Windows and Android to make it easier to navigate around the questionnaire while we are testing. The case tree is enabled by default on Android since Android only shows one question at a time but it is off by default on Windows. Note that on mobile phones, since there is not enough space to display the case tree and the questions at the same time so you need to tap on the big green “CS” in the top left corner of the screen to bring up the case tree.
 
 In addition to the data entry options, there are other useful settings in the "Data Source Options" dialog. For example, here you can enable automatic partial save at regular intervals. This is important for long interviews where if there is a problem with the software or device part way through the interview you could lose data if the interview has not been partially saved.
-
+<pagebreak />
 <subheader>Modifying the dictionary after collecting data</subheader>
 Add the variable <b>F02 number of bedrooms</b> to the dictionary and form right before F03 type of main dwelling. Don’t forget to modify the order in the form tree so that it is asked before F03. Run the application again and modify one of the existing cases. Why is the number of household members blank? Once data has been entered, you should avoid adding variables in the middle of a record. It is fine to add to the end of the record but adding in the middle invalidates the start positions of the existing variables. If you must add a variable in the middle of a record, you can use the reformat data tool to adjust old data files to match the new dictionary.
-<pagebreak />
-<callout><center><b>Group exercise</b></center>
-Add a new record to the dictionary for section E of the questionnaire (deaths). Name this record “Deaths”. How many occurrences should it have? Don’t include E01 and E02 in the new record as they do not have the same number of occurrences as the other variables in this section. Instead, add them to the housing record. Create a new form for section E and add the fields onto it to create a roster. Use E02 as an occurrence control field to the roster to limit the number of rows to the number of deaths in the household. Test the application on both Windows and on Android.
-</callout>
 
 <subheader>Subitems</subheader>
 Let’s add the <b>Date of Birth (B06)</b> to the application. In order to be able to look at both the date as an 8-digit number and look at the day, month and year individually we can create an item with subitems. Subitems are items that are made up of a subset of the digits of their parent item. Add the item for interview date and the following subitems:
 <list><li>year of birth (length 4)</li>
 <li>month of birth (length 2)</li>
 <li>day of birth (length 2)</li></list>
+
+<callout><center><b>Group exercise</b></center>
+Add a new record to the dictionary for section E of the questionnaire (deaths). Name this record “Deaths”. How many occurrences should it have? Don’t include E01 and E02 in the new record as they do not have the same number of occurrences as the other variables in this section. Instead, add them to the housing record. Create a new form for section E and add the fields onto it to create a roster. Use E02 as an occurrence control field to the roster to limit the number of rows to the number of deaths in the household. Test the application on both Windows and on Android.
+</callout>
 
 We are putting year first then month and day because this format will work better with other CSPro features that we will see later. Click on <b>Layout</b> in the toolbar to ensure that the item and subitem overlap. Add the subitems to the form, add the value sets for each subitem and test the application. Note that when we add the subitems to the form we do not need keep the same order that we have in the dictionary. On the form we can put the day, month then the year.
 
@@ -229,7 +232,6 @@ We could also use a multiply occurring item for question <b>B10</b>, disabilitie
 
 In CSPro multiple response questions are implemented as alpha variables whose length is the same as the number of options that can be selected at the same time. The value set has a value for each option which is usually a single letter. The resulting value is a string containing the values for each of the selected items. 
 
-<pagebreak />
 For disabilities we will use the following value set:
 <indent><table 2><cell>Visual</cell><cell>A</cell>
 <cell>Hearing</cell><cell>B</cell>

@@ -149,10 +149,9 @@ ask if ROOFING_MATERIAL = 5;
 </logic>
 
 <subheader>Skip to next</subheader>
-Now let’s add the skip between sign language (<b>B12</b>) and marital status (<b>B13</b>) to skip to the next person for household members under 10 years old. In this case, what do we skip to? We can’t skip to <b>B01</b> (line number) since that will try to send us backwards to the line number for the current row. Instead, we use <logiccolor>skip to next</logiccolor> which automatically skips to the first field in the next row of the roster. We will put this skip in the preproc of <b>MARITAL_STATUS</b>. It could go in the postproc of the previous field, however, later on we will will skip the <b>SIGN_LANGUAGE</b> question entirely for those who do not have difficulty hearing, in which case we will skip over the skip.
+Now let’s add the skip between sign language (<b>B12</b>) and marital status (<b>B13</b>) to skip to the next person for household members under 10 years old. In this case, what do we skip to? We can’t skip to <b>B01</b> (line number) since that will try to send us backwards to the line number for the current row. Instead, we use <logiccolor>skip to next</logiccolor> which automatically skips to the first field in the next row of the roster. We will put this skip in the postproc of <b>SIGN_LANGUAGE</b>.
 
-<logic>PROC MARITAL_STATUS
-preproc
+<logic>PROC SIGN_LANGUAGE
 // Skip to next person for household members under 10 years of age
 if AGE < 10 then
     skip to next;
@@ -250,16 +249,42 @@ preproc
 ask if pos("B", DISABILITIES) > 0;
 </logic>
 
+Note that since we are adding a preproc to a variable that already has a postproc we need to explicitly add the <logiccolor>postproc</logiccolor>.
+
+<logic>
+PROC SIGN_LANGUAGE
+
+preproc
+//ask this question only if hearing disabled (option B) is checked
+ask if pos("B", DISABILITIES) > 0;
+
+postproc
+// Skip to next person for household members under 10 years of age
+if AGE < 10 then
+    skip to next;
+endif;
+</logic>
+
+While this works, it creates a problem with the <logiccolor>skip to next</logiccolor> in the postproc. If we enter an individual with age less than 10 who has no difficulty hearing we no longer skip the marital status question. This is because the <logiccolor>ask if</logiccolor> in the preproc skips over the variable and the postproc is not run. Where can we put the <logiccolor>skip to next</logiccolor> so that it will work for those who have no difficulty hearing? We can move it to the preproc of <b>MARITAL_STATUS</b>.
+
+<logic>PROC MARITAL_STATUS
+preproc
+// Skip to next person for household members under 10 years of age
+if AGE < 10 then
+    skip to next;
+endif;
+</logic>
+
 <subheader>Exercises</subheader>
 <list ordered>
 	<li>Skip question <b>F07</b>, monthly rent, if dwelling is not rented in <b>F06</b>.</li>
 	<li>In section E, deaths, implement the skip pattern for question <b>E01</b>, any deaths.</li>
 	<li>In section E, deaths, implement the skip pattern for question <b>E09</b>, died while pregnant.</li>
-	<li>In section E, deaths, skip questions <b>E09</b> and <b>E10</b> for household members who are NOT women aged 12-50.</li>
+	<li>In section E, deaths, skip questions <b>E09</b> and <b>E10</b> for deceased household members who are NOT women aged 12-50.</li>
 	<li>In section E, use logic to pre-fill the line number field <b>E03</b>. Make sure that the line number is protected.</li>
 	<li>Add an additional question to <b>F13</b> to determine if the respondent wants to give the distance to water in minutes or kilometers. If they choose kilometers then skip the distance in minutes question otherwise skip the distance in km question.</li>
 	<li>Add the other(specify) field and skip pattern for <b>F08</b>, wall material.</li>
-	<li>Add the other(specify) field for <b>B19</b>, languages spoken.</li>
+	<li>Add the other(specify) field for <b>B15</b>, languages spoken.</li>
 	<li>In question <b>G01</b>, household possessions, skip the value field if the quantity is zero.</li>
 	<li>Add variables and a form for section D: Fertility. Add the variables to the person record but create a new form with its own roster just like we did for section C. Don’t worry about the last question on the form that displays the total births. We will cover that in a later lesson. Add the skip patterns for the fertility section. Don’t forget to skip the entire section for males and females NOT between 12 and 50 years old.</li>
 </list>

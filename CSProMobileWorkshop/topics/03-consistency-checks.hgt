@@ -107,7 +107,7 @@ PROC MARITAL_STATUS
 // Ensure that spouse is not single
 if MARITAL_STATUS in 1,3,4 and RELATIONSHIP = 2 then
     errmsg("%s has relationship spouse and marital status %d. Spouse cannot be single, divorced or widowed.", 
-           NAME(curocc()), MARITAL_STATUS);
+           NAME, MARITAL_STATUS);
     reenter;
 endif;
 </logic>
@@ -121,7 +121,7 @@ PROC MARITAL_STATUS
 // Ensure that spouse is not single
 if MARITAL_STATUS in 1,3,4 and RELATIONSHIP = 2 then
     errmsg("%s has relationship spouse and marital status %d. Spouse cannot be single, divorced or widowed.", 
-           strip(NAME(curocc())), MARITAL_STATUS);
+           strip(NAME), MARITAL_STATUS);
     reenter;
 endif;
 </logic>
@@ -134,7 +134,7 @@ PROC MARITAL_STATUS
 // Ensure that spouse is not single
 if MARITAL_STATUS in 1,3,4 and RELATIONSHIP = 2 then
     errmsg("%s has relationship spouse and marital status %s. Spouse cannot be single, divorced or widowed.", 
-           strip(NAME(curocc())), getlabel(MARITAL_STATUS, MARITAL_STATUS));
+           strip(NAME), getlabel(MARITAL_STATUS, MARITAL_STATUS));
     reenter;
 endif;
 </logic>
@@ -228,11 +228,11 @@ In question <b>D02</b> the respondent gives the number of boys living in the hou
 
 <logic>
 if BOYS_IN_HOUSEHOLD + GIRLS_IN_HOUSEHOLD <> CHILDREN_IN_HOUSEHOLD then
-    errmsg("Boys (%d) plus girls (%d) does not match total (%d).",
-           BOYS_IN_HOUSEHOLD, GIRLS_IN_HOUSEHOLD, CHILDREN_IN_HOUSEHOLD )
-        select("Correct boys", BOYS_IN_HOUSEHOLD,
-               "Correct girls", GIRLS_IN_HOUSEHOLD, 
-               "Correct total", CHILDREN_IN_HOUSEHOLD);
+    errmsg("Total number of children (%d) must equal the sum of the number of boys (%d) and the number of girls (%d).",
+           CHILDREN_IN_HOUSEHOLD, BOYS_IN_HOUSEHOLD, GIRLS_IN_HOUSEHOLD)
+        select("Correct total", CHILDREN_IN_HOUSEHOLD,
+		       "Correct boys", BOYS_IN_HOUSEHOLD,
+               "Correct girls", GIRLS_IN_HOUSEHOLD);
 endif;
 </logic>
 
@@ -270,7 +270,7 @@ PROC DAY_OF_BIRTH
 // Ensure that age matches date of birth
 if datediff(DATE_OF_BIRTH(curocc()), DATE_OF_INTERVIEW, "y") <> AGE then
     errmsg("Age (%d) doesn't match date of birth (%d). Based on date of birth age should be %d", 
-        AGE, DATE_OF_BIRTH(curocc()), datediff(DATE_OF_BIRTH(curocc()),
+        AGE, DATE_OF_BIRTH, datediff(DATE_OF_BIRTH,
 		DATE_OF_INTERVIEW, "y"))
         select("Correct Age", AGE, "Correct date of birth", YEAR_OF_BIRTH);
 endif;
@@ -285,8 +285,8 @@ PROC DAY_OF_BIRTH
 if AGE <> 999 and DATE_OF_BIRTH(curocc()) <> 99999999 then
     if datediff(DATE_OF_BIRTH(curocc()), DATE_OF_INTERVIEW, "y") <> AGE then
         errmsg("Age (%d) doesn't match date of birth (%d). Based on date of birth age should be %d", 
-            AGE, DATE_OF_BIRTH(curocc()), 
-            datediff(DATE_OF_BIRTH(curocc()), DATE_OF_INTERVIEW, "y"))
+            AGE, DATE_OF_BIRTH, 
+            datediff(DATE_OF_BIRTH, DATE_OF_INTERVIEW, "y"))
             select("Correct Age", AGE, "Correct date of birth", 
                    YEAR_OF_BIRTH);
     endif;
@@ -344,7 +344,7 @@ Implement the following consistency checks from the edit specifications. Test th
 	<li>Ensure that <b>B14</b> (age at first marriage) is less than or equal to the current age (<b>B05</b>).</li>
 	<li>Display an error message if the highest level of education (<b>C02</b>) is university or graduate but the age is less than eighteen. Make this a “soft check” so that the interviewer can ignore the error if they wish.</li>
 	<li>Add an error message if the highest level of education (<b>C02</b>) is “standard 5” or higher and the individual does not know how to read or write (<b>C03</b>). Make this a soft check.</li>
-	<li>Add a consistency check in section F that displays an error message if the household has a flush toilet in question <b>F10</b> and does NOT also specify piped water inside house for question <b>F12</b>. Use a select clause to allow them to correct either <b>F10</b> or <b>F12</b>.</li>
+	<li>Add a consistency check in section F that displays an error message if the household has a flush toilet in question <b>F11</b> and does NOT also specify piped water inside house for question <b>F12</b>. Use a select clause to allow them to correct either <b>F11</b> or <b>F12</b>.</li>
 	<li>Ensure that the total number of children in <b>D03</b> is equal to the sum of the boys and the girls. Do the same for question <b>D04</b>.</li>
 	<li>Check that the date that the death occurred in question <b>E05</b> is within the last five years, since the section should only include deaths occurring in that period. Use the interview date to calculate the number of years since the death occurred. For example, if the interview date is 2016-10-05 and the date of death is 2016-09 then you should show an error message. You can use datediff to calculate the difference between the interview date and the date of death as we did for the age and date of birth check, however you will need to construct a full date from just the month and year of death. Since no day is given, use 1 as the day (assume first day of the month). Note that datediff rounds to the nearest year so to do the check correctly you will need to get the difference in months and compare it to 60 (5 years times 12 months).</li>
 </list>
