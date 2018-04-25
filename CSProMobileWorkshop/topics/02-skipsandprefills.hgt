@@ -274,17 +274,20 @@ if AGE < 10 then
     skip to next;
 endif;
 </logic>
-
+<pagebreak />
 <subheader>Exercises</subheader>
 <list ordered>
 	<li>Skip question <b>F07</b>, monthly rent, if dwelling is not rented in <b>F06</b>.</li>
 	<li>In section E, deaths, implement the skip pattern for question <b>E01</b>, any deaths.</li>
+	<li>In section E, deaths, implement the skip pattern for question <b>E08</b>, mother of deceased, based on the age at time of death <b>E07</b>.</li>
 	<li>In section E, deaths, implement the skip pattern for question <b>E09</b>, died while pregnant.</li>
 	<li>In section E, deaths, skip questions <b>E09</b> and <b>E10</b> for deceased household members who are NOT women aged 12-50.</li>
 	<li>In section E, use logic to pre-fill the line number field <b>E03</b>. Make sure that the line number is protected.</li>
+	<li>Skip all of section C for persons under 3 years of age.</li>
 	<li>Add an additional question to <b>F13</b> to determine if the respondent wants to give the distance to water in minutes or kilometers. If they choose kilometers then skip the distance in minutes question otherwise skip the distance in km question.</li>
 	<li>Add the other(specify) field and skip pattern for <b>F08</b>, wall material.</li>
 	<li>Add the other(specify) field for <b>B15</b>, languages spoken.</li>
+	<li>Automatically fill in the  the possession code in question <b>G01</b>.</li>
 	<li>In question <b>G01</b>, household possessions, skip the value field if the quantity is zero.</li>
 	<li>Add variables and a form for section D: Fertility. Add the variables to the person record but create a new form with its own roster just like we did for section C. Don’t worry about the last question on the form that displays the total births. We will cover that in a later lesson. Add the skip patterns for the fertility section. Don’t forget to skip the entire section for males and females NOT between 12 and 50 years old.</li>
 </list>
