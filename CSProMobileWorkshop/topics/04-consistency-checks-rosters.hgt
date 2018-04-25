@@ -278,12 +278,12 @@ numeric childLineNumber = seek(MOTHER_LINE_NUMBER = womanLineNumber);
 if childLineNumber > 0 and HAVE_CHILDREN_IN_HOUSEHOLD = 2 then
 	warning("There are children in the household who have listed %s as their mother", STRIP(NAME))
 	select("Correct have children in household", HAVE_CHILDREN_IN_HOUSEHOLD,
-	       "Correct household roster", MOTHER_LINE_NUMBER(childLineNumber),
+	       "Correct mother line number", MOTHER_LINE_NUMBER(childLineNumber),
 	       "Ignore error", continue);
 elseif childLineNumber = 0 and HAVE_CHILDREN_IN_HOUSEHOLD = 1 then
 	warning("There are no children in the household who have listed %s as their mother", STRIP(NAME))
 	select("Correct have children in household", HAVE_CHILDREN_IN_HOUSEHOLD,
-	       "Correct household roster", DEMOGRAPHICS_ROSTER,
+	       "Correct mother line number", MOTHER_LINE_NUMBER(1),
 	       "Ignore error", continue);
 endif;
 </logic>
