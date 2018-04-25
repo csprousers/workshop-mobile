@@ -85,9 +85,10 @@ If you look at the case tree in Android you will see that the roster occurrences
 
 <logic>
 PROC NAME
-setocclabel(HOUSEHOLD_MEMBERS_ROSTER, strip(NAME));
-setocclabel(DEMOGRAPHICS_ROSTER, strip(NAME));
-setocclabel(EDUCATION_ROSTER, strip(NAME));
+setocclabel(HOUSEHOLD_MEMBERS_ROSTER(curocc()), strip(NAME));
+setocclabel(DEMOGRAPHICS_ROSTER(curocc()), strip(NAME));
+setocclabel(EDUCATION_ROSTER(curocc()), strip(NAME));
+setocclabel(FERTILITY_ROSTER(curocc()), strip(NAME));
 setocclabel(FERTILITY_ROSTER, strip(NAME));
 </logic>
 
@@ -258,11 +259,33 @@ if RELATIONSHIP = 3 and AGE(1) - AGE < 12 then
                 select("Correct age of " + strip(NAME), AGE,
                        "Correct age of " + strip(NAME(1)), AGE(1),
                        "Correct relationship of " + strip(NAME),
-                       RELATIONSHIP,
-                       "Correct relationship of " + strip(NAME(1)),
-                       RELATIONSHIP(1));
+                       RELATIONSHIP);
     endif;
 enddo;
+</logic>
+
+<subheader>Seek</subheader>
+Question <b>D02</b> in the fertility section asks if a women in the household has any children that are living with her in the household. If she answers "yes", then there should be at least one household member in who has listed her as their mother by specifying her line number for <b>B10</b>, mother line number. We can use the <logiccolor>seek</logiccolor> function to find the line number of a child whose mother line number matches the line number of the woman on the current line. If no such child exists then <logiccolor>seek</logiccolor> will return zero.
+
+<logic>
+PROC HAVE_CHILDREN_IN_HOUSEHOLD
+
+// Check household roster to make sure that number of children
+// in household roster based on mother line number is consistent
+// with this answer.
+numeric womanLineNumber = curocc();
+numeric childLineNumber = seek(MOTHER_LINE_NUMBER = womanLineNumber);
+if childLineNumber > 0 and HAVE_CHILDREN_IN_HOUSEHOLD = 2 then
+	warning("There are children in the household who have listed %s as their mother", STRIP(NAME))
+	select("Correct have children in household", HAVE_CHILDREN_IN_HOUSEHOLD,
+	       "Correct household roster", MOTHER_LINE_NUMBER(childLineNumber),
+	       "Ignore error", continue);
+elseif childLineNumber = 0 and HAVE_CHILDREN_IN_HOUSEHOLD = 1 then
+	warning("There are no children in the household who have listed %s as their mother", STRIP(NAME))
+	select("Correct have children in household", HAVE_CHILDREN_IN_HOUSEHOLD,
+	       "Correct household roster", DEMOGRAPHICS_ROSTER,
+	       "Ignore error", continue);
+endif;
 </logic>
 
 <subheader>Exercises</subheader>
@@ -270,7 +293,7 @@ enddo;
 	<li>Ensure that the age difference between the head of household and the grandchild should not be less than 24 years. If age of head is X years and the age of the child is Y years, then X-Y ≥ 24.</li>
 	<li>Show an error message if the head of household has at least one spouse in the household and the marital of status of the head of household is not married.</li>
 	<li>Show an error message if the head of household and his/her spouse are of the same gender. Make sure that your logic works with polygamous households as well as households with just one spouse.</li>
-	<li>Set the occurrence labels in the section E roster, deaths, to the names of the deceased in that section. Make sure that the labels are set correctly when resuming from partial save.</li>
+	<li>Set the occurrence labels in the section E roster, deaths, to the names of the deceased, <b>E04</b>, in that section. Make sure that the labels are set correctly when resuming from partial save.</li>
 </list>
 
 <pagebreak />
