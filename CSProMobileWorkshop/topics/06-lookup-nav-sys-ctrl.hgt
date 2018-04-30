@@ -1,4 +1,4 @@
-﻿<title>Session 6: Lookup files, Navigation & System Control</title>
+﻿<title>Session 6: Functions, Lookup files, Navigation & System Control</title>
 
 At the end of this session participants will be able to:
 <list>
@@ -21,7 +21,7 @@ We must make sure that the lengths and zero-fill settings of the id-items exactl
 
 <center><html><img src="excel2csprodata.png" width="600" /></html></center>
 
-Once we have the dictionary we need to convert the Excel spreadsheet into a CSPro data file. We can use the first tab of the Excel2CSPro tool to do this. Select the QuestionnaireAnnexes.xlsx file again along with the Districts dictionary that we just created. Specify a new output data file to write the lookup file to. Under “Record to Worksheet Mapping” choose the second worksheet “ANN 2-District Codes”. Under the “Item to Column Mapping” link the dictionary variables to the appropriate columns in the Excel spreadsheet: DI_PROVINCE_CODE to “Column B: Province Code”, DI_DISTRICT_CODE to “Column D: District Code”, etc… Finally, click “Create CSPro Data File” to generate the file. Verify the file in DataViewer to make it sure it was converted correctly. 
+Once we have the dictionary we need to convert the Excel spreadsheet into a CSPro data file. We can use the first tab of the Excel2CSPro tool to do this. Select the QuestionnaireAnnexes.xlsx file again along with the Districts dictionary that we just created. Specify a new output data file to write the lookup file to. Under “Record to Worksheet Mapping” choose the second worksheet “ANN 2-District Codes”. Under the “Item to Column Mapping” link the dictionary variables to the appropriate columns in the Excel spreadsheet: DI_PROVINCE_CODE to “Column B: Province Code”, DI_DISTRICT_CODE to “Column D: District Code”, etc… Finally, click “Create CSPro Data File” to generate the file. Save it in the Data folder. Verify the file in DataViewer to make it sure it was converted correctly. 
  
 Finally, in the district proc use the <logiccolor>loadcase()</logiccolor> command to lookup the province and district codes in the file. Loadcase takes the name of the dictionary (<b>DISTRICTS_DICT</b>) and the values to use as keys (id-items) for the lookup. For example, to lookup province 3, district 6 we would do:
 
@@ -224,6 +224,47 @@ setvalueset($, codes, labels);
 
 <pagebreak />
 
+<subheader>Functions in Question Text</subheader>
+Another use for user defined functions is for fills in question that require some calculation. For example, for question <b>D05</b> we want to double check that the total of the children living with the women, living elsewhere and deceased equals the number of total births. We do this by asking the question:
+
+<indent>Just to make sure that I have this right, (name) has had in total (total number) births during her life. Is this correct?</indent>
+
+We can use the question text for this but we don’t have a dictionary variable for total births. We only have the yes/no variable <b>IS_TOTAL_BIRTHS_CORRECT</b>. We could create an additional dictionary variable but instead we can simply create function to compute the total births and use that as the fill value.
+
+<logic>
+// Compute totalBirths to display in question text in fertility section
+function totalBirths()
+	totalBirths = CHILDREN_IN_HOUSEHOLD + CHILDREN_ELSEWHERE + CHILDREN_DECEASED
+end;           
+</logic>
+
+In the question text we can simply add the function call surrounded by %:
+
+<indent>Just to make sure that I have this right, %NAME% has had in total %totalBirths()% births during her life. Is this correct?</indent>
+
+What happens when one of the fields in this calculation is skipped? The value becomes <logiccolor>notappl</logiccolor> which messes up the entire calculation. We need to be a little smarter in calculating our total to exclude the skipped values.
+
+<logic>
+// Compute totalBirths to display in question text in fertility section
+function totalBirths()
+
+	numeric total = 0;
+	
+	if CHILDREN_IN_HOUSEHOLD <> notappl then
+		total = total + CHILDREN_IN_HOUSEHOLD;
+	endif;
+	
+	if CHILDREN_ELSEWHERE <> notappl then
+		total = total + CHILDREN_ELSEWHERE;
+	endif;
+	
+	if CHILDREN_DECEASED <> notappl then
+		total = total + CHILDREN_DECEASED;
+	endif;
+	totalBirths = total;
+end;
+</logic>
+
 <subheader>The Userbar</subheader>
 From logic we can add buttons to the CSEntry user interface that call user-defined functions. Here is how to add a userbar button that will create an errmsg dialog that says “hello”. First we define the function hello in the PROC GLOBAL:
 
@@ -242,8 +283,9 @@ userbar(clear);
 userbar(add button, "Hello", hello);
 userbar(show);
 </logic>
-
+<pagebreak />
 When adding a button in the preproc of the application it is important to call clear first, otherwise we can end up with two or three copies of the same button if we start the application multiple times. We added the button in the preproc of the application but you can add or remove buttons in any proc so you can, for example, only a show button within a certain field or a certain roster.
+
 
 Let’s try a more interesting example. Let’s add a “Go To…” button that will let the user navigate directly to a particular section of the questionnaire.
 
@@ -379,7 +421,7 @@ You can see which fields are “on path” by looking at the background color of
 </list>
 
 Note that the field coloring scheme is different in operator controlled mode.
-
+<pagebreak />
 Fortunately, we can get the value of fields that are “off path” using the function <logiccolor>visualvalue()</logiccolor>. It returns whatever value is currently visible in the field whether or not it has been skipped or is ahead of the current field. Using this for relationship and sex in our function we get:
 
 <logic>
@@ -494,10 +536,11 @@ endif;
 
 <subheader>Exercises</subheader>
 <list ordered>
+	<li>Modify the question text for <b>E01</b> to say "Has any member of this household passed away in the past years, that is since (year)?" where year is replaced by the year of the interview minus 5. For example, if the year of the interview is 2018 it should read "Has any member of this household passed away in the past years, that is since 2013?". Use the the interview date from question <b>A6</b> to compute the value to insert.</li>
 	<li>Extend the goto() function to include the remaining sections of the questionnaire (D through G).</li>
 	<li>Add a button to the userbar called “household summary” that when clicked uses the errmsg function to display a message that shows the name of the head of household, and the number of household members by sex. For example: “Head of Household: John Brown, Total Members: 5, Women: 2, Men: 3”. Bonus if you can get this to work when you click the button from section A. Hint: count and seek will not work with visualvalue so you will need to use a loop to find the number of males of and females.</li>
 	<li>Implement a check on the minimum and maximum per unit possession values in question G01. Use the spreadsheet in annex 4 to create a lookup file containing the asset code, minimum value and maximum value. Use the loadcase command with this lookup file to find the minimum and maximum values for the selected asset and show an error message if the per unit asset value entered in the roster is below the minimum value or above the maximum value. This should be a soft check.</li>
 	<li>Fill in the interview start and end date automatically using the sysdate() command and make the interview start and end date fields protected.</li>
-	<li>For question A10, interview status, we want to fill in the question at the start of the interview if the response is code 2 (non-contact), 3 (vacant) or 4 (refused) and then immediately end the questionnaire without going into any of the subsequent questions. However, if there is a respondent willing to give the interview, then the interview status should be set 5 (partially complete) until the entire questionnaire is complete at which point it should be set to 1 (complete). To implement this, keep the question in its current position in the questionnaire but use a dynamic value set to limit the options so that the interview cannot be set as completed until the entire question has been completed. The first time the field is entered (before any value has been entered) the value set should be: 2 Non-contact, 3 Vacant, 4 Refused, 5 Continue interview. If the interviewer chooses 2, 3 or 4, end the interview, otherwise, if they choose 5, continue to the next field. At the end of the interview (postproc of the level), if the value is currently 5, set it to 1 (complete). If the interviewer returns to A9 after the field has been set to 1 (complete) then display the value set as it is on the questionnaire.</li>
+	<li>Add question A10, interview status to the dictionary and form. We want to fill in this question at the start of the interview if the response is code 2 (non-contact), 3 (vacant) or 4 (refused) and then immediately end the questionnaire without going into any of the subsequent questions. However, if there is a respondent willing to give the interview, then the interview status should be set 5 (partially complete) until the entire questionnaire is complete at which point it should be set to 1 (complete). To implement this, keep the question in its current position in the questionnaire but use a dynamic value set to limit the options so that the interview cannot be set as completed until the entire questionnaire has been completed. The first time the field is entered (before any value has been entered) the value set should be: 2 Non-contact, 3 Vacant, 4 Refused, 5 Continue interview. If the interviewer chooses 2, 3 or 4, end the interview, otherwise, if they choose 5, continue to the next field. At the end of the interview (postproc of the level), if the value is currently 5, set it to 1 (complete). If the interviewer returns to A9 after the field has been set to 1 (complete) then display the value set as it is on the questionnaire.</li>
 </list>
 <pagebreak />

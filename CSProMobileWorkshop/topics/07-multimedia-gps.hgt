@@ -11,7 +11,7 @@ At the end of this session participants will be able to:
 </list>
 
 <subheader>Value Set Images</subheader>
-In addition to showing text in a value set we can also display images. To add an image to a value set, select the variable in the dictionary editor and click on the “…” button next to the value. Browse to pick an image file. CSPro supports standard image file formats: png, jpeg, bmp… We recommend using png or jpeg as they tend have smaller file sizes. The images are not added to the pen file by default so you would need to copy them to the device along with the pen file.
+In addition to showing text in a value set we can also display images. To add an image to a value set, select the variable in the dictionary editor and click on the “…” button next to the value. Browse to pick an image file. CSPro supports standard image file formats: png, jpeg, bmp… We recommend using jpeg as it tends to have smaller file sizes. The images are not added to the pen file by default so you would need to copy them to the device along with the pen file.
 
 Let’s add images for the roof types in <b>F08</b>. Copy the RoofImages folder into the application directory. Now open the value set for <b>F08</b> and add each image to its respective value. We do not have a picture for other (specify) so we will leave that one without an image. Run the application on Windows and on mobile and see the images. Note that on mobile we have to copy the images to the device since they are not part of the pen file by default.
 

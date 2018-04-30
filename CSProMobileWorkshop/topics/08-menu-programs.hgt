@@ -77,17 +77,15 @@ endif;
 // Show interviewer menu again
 reenter;
 </logic>
-
+<pagebreak />
 It is important to make sure that after the postproc of the menu field we do not let CSEntry continue to the next field, otherwise after the interviewer launches the household listing they would end up in the next field, which, in this case is the supervisor menu. To prevent this, we put a reenter at the end of the postproc so that we go back into the same menu field again.
 
-It looks kind of strange that when we go back into a menu, the previous choice is still selected. We can prevent this by clearing the choice in the postproc of the field before the reenter.
+It looks kind of strange that when we go back into a menu, the previous choice is still selected. We can prevent this by clearing the choice in the onfocus of the field.
 
 <logic>
-// Clear previous entry
+onfocus
+// Clear previous choice
 $ = notappl;
-
-// Show interviewer menu again
-reenter;
 </logic>
 
 The supervisor menu is similar to the interviewer menu:
@@ -95,6 +93,11 @@ The supervisor menu is similar to the interviewer menu:
 <logic>
 PROC SUPERVISOR_MAIN_MENU
 
+onfocus
+// Clear previous entry
+$ = notappl;
+
+postproc
 // Handle the menu choice
 if $ = 1 then
     // Show report
@@ -103,9 +106,6 @@ elseif $ = 9 then
     // Logout
 	stop(1);
 endif;
-
-// Clear previous entry
-$ = notappl;
 
 // Show supervisor menu again
 reenter;
@@ -127,56 +127,18 @@ This will start the data entry application and immediately exit the menu. The �
 <subheader>Making the Entry Program Return to the Menu Program</subheader>
 When we exit the main questionnaire, we want to return to the menu but the menu program stopped when we launched the main questionnaire. To get it to restart we can add a parameter to the pff file to tell it start the menu program when it exits. Right click on the Popstan2020.pff and choose “Edit”. This will bring up the pff file editor. You can then use the options menu to Add a new <b>On Exit Pff</b> entry. Use the browse button in that entry to locate the Menu.pff and fill in the path to it.
 
-<subheader>Deploying multiple applications on Android</subheader>
-When you copy your application to Android it is important that you preserve the same folder structure as you have on the PC. In our case we must create a separate menu folder to contain the pen and pff files for the menu and this menu folder must be in the same parent directory as the Household folder so that when we use "../Household/" from the menu application it points to the folder containing the entry application we are launching.
+<subheader>Deploying multiple applications on Mobile</subheader>
+When you copy your application to your phone or tablet it is important that you preserve the same folder structure as you have on the PC. In our case we must create a separate menu folder to contain the pen and pff files for the menu and this menu folder must be in the same parent directory as the Household folder so that when we use "../Household/" from the menu application it points to the folder containing the entry application we are launching. When you have multiple applications like we do, it can be time consuming to create the .pen files for each application and then copy only the .pen and .pff files to the mobile device.
 
-One way to simplify deployment is to use a Windows batch file to generate the pen files for both the entry application and the menu application. Copy both applications into a deployment folder that can be copied onto the device. This can greatly speed up testing of your application on Android.
+To simplify deployment use the Deploy Applications tool from the Tools menu. This tool automates the process of publishing and deployment. Drag the whole Popstan2020 folder to the Files window. The tool will add the entry applications (.ent files) and .pff files found in the folder and its subfolders to the list of files to deploy. By default it does not add data files since data files are often just used for testing. However, for our application we need to add the lookup files for the districts and possession limits. We can do this by dragging the individual files onto the files window.
 
-<html><pre>
-setlocal
+Once the files have been added, enter the name and an optional description for the application. Under <i>Deploy To</i> choose <i>Local Folder</i> and click on "..." to choose the folder to deploy to. Click the <i>Deploy</i> button. This will automatically create .pen files for each data entry application and copy them, along with any other files from the Files window, into the deployment folder chosen. The deployment folder can then be copied directly to the mobile device. The folder structure of the deployment folder will match the folder structure we are using for development and testing on the desktop so there will be no problems with paths.
 
-REM Find CSEntry.exe (path differs on 32 and 64 bit Windows)
+<center><html><img src="deploy-to-folder.png" width="400" /></html></center>
 
-SET CSEntry="%ProgramFiles(x86)%\CSPro 7.1\CSEntry.exe"
-if exist %CSEntry% goto :gotcspro
-SET CSEntry="%ProgramFiles%\CSPro 7.1\CSEntry.exe"
-if exist %CSEntry% goto :gotcspro
-echo "Can't find CSEntry version 7.1. Is it installed?"
-goto :eof
-:gotcspro
+Once you have set up the deployment the first time you can save the deployment specification file to simplify the process for future deployments.
 
-
-REM Create deployment directory
-rmdir /q /s Deployment
-mkdir Deployment
-cd Deployment
-mkdir Popstan2020
-cd Popstan2020
-mkdir Menu
-mkdir Household
-mkdir Listing
-cd ..
-cd ..
-
-REM Create .pen files
-cd Menu
-%CSEntry% /pen %CD%\Menu.ent
-cd ..\Household
-%CSEntry% /pen %CD%\Popstan2020.ent
-cd ..\Listing
-%CSEntry% /pen %CD%\Listing.ent
-cd ..
-
-REM Copy applications to deployment
-move /y .\Menu\Menu.pen .\Deployment\Popstan2020\Menu
-move /y .\Household\Popstan2020.pen .\Deployment\Popstan2020\Household
-move /y .\Listing\Listing.pen .\Deployment\Popstan2020\Listing
-
-REM Copy .pff files
-copy /y .\Menu\Menu.pff .\Deployment\Popstan2020\Menu
-copy /y .\Household\Popstan2020.pff .\Deployment\Popstan2020\Household
-copy /y .\Listing\Listing.pff .\Deployment\Popstan2020\Listing
-</pre></html>
+In the next session we will learn how to use this tool to deploy applications to a server for deployment over the internet.
 
 <subheader>Tidying up the Menu Program</subheader>
 Currently the menu program shows up in the applications list on Android as “Menu” instead of something like “Popstan 2020 Census”. In addition, when we tap on Menu we have to then tap “Start New Case” which doesn’t make sense for a menu. We can fix both of these problems by modifying the pff file for the menu. Right click on the Menu.pff and choose “Edit with pff editor”. Change “Start mode” to “Add” so that we won’t have to tap “Start New Case”. Enter “Popstan 2020 Census” for the description to change what shows in the case listing. While we are at it, open the Menu program in the CSPro designer and in data entry options turn off the display of the case tree since the case tree is not useful for menu programs. Finally, in the data entry options, check "Automatically advance on selection". This way the interviewer will not have to tap next to move from one field to another in the menu program.
@@ -203,9 +165,6 @@ elseif $ = 9 then
     // Logout
     stop(1);
 endif;
-
-// Clear previous entry
-$ = notappl;
 
 // Show interviewer menu again
 reenter;
@@ -277,9 +236,13 @@ setvalueset($, codesString, labels);
 </logic>
 
 <subheader>Generating the PFF File</subheader>
-The next step is to handle the menu choice in the postproc to launch the household data entry program using the id-items for the household that was chosen. In order to do this, we will need to specify the id-items as parameters in the pff file. The first step will be to change the launchHouseholdDataEntry() function to first write out the pff file before launching it so that we can customize it. We can use <logiccolor>filewrite</logiccolor> to write out the file as we did with the reports in the last lesson. An easy way to write this logic is to use open the pff file in the pff editor and enable “expert mode”. This displays an extra tab containing CSPro logic to write out the pff file. We can copy and paste this into our logic and make a few modifications.
+The next step is to handle the menu choice in the postproc to launch the household data entry program using the id-items for the household that was chosen. In order to do this, we will need to specify the id-items as parameters in the pff file. We will write the values of the id-items for the chosen household to the pff file. The menu program will then read these values from the pff once it is launched.
 
-First we change paths to the data entry application and the data file to be based on the path to the application using the <logiccolor>pathname</logiccolor> command. <logiccolor>pathname(Application)</logiccolor> returns the path to the current application, which in this case is the menu program. By adding “..” we go up one level to the Popstan2020 directory and from there we can get to the application and data files.
+<center><html><img src="pass-ids-from-menu-to-household.png" width="500" /></html></center>
+
+The first step is to change the launchHouseholdDataEntry() function to first write out the pff file before launching it so that we can customize it. We can use <logiccolor>filewrite</logiccolor> to write out the file as we did with the reports in the last lesson. An easy way to write this logic is to use open the pff file in the pff editor and enable “expert mode”. This displays an extra tab containing CSPro logic to write out the pff file. We can copy and paste this into our logic and make a few modifications.
+
+We want to write the pff file to the same folder as the household application. To do that we change the function we copied from the pff editor to figure out the path to the pff file based on the path to the application using the <logiccolor>pathname</logiccolor> command. <logiccolor>pathname(Application)</logiccolor> returns the path to the current application, which in this case is the menu program. By adding “..” we go up one level to the Popstan2020 directory and from there we can get to the household directory where the household application is.
 
 <logic>
 // Launch household questionnaire data entry application
@@ -299,29 +262,18 @@ function launchHouseholdDataEntry()
     filewrite(pffFile,"[DataEntryInit]");
 	
     filewrite(pffFile,"[Files]");
-    filewrite(pffFile,"Application=" + pathname(Application) + 
-                      "../Household/Popstan2020.ent");
-    filewrite(pffFile,"InputData=" + pathname(Application) + 
-                      "../Data/Popstan2020.csdb");
+	filewrite(pffFile,"Application=%s","./Popstan2020.ent");
+	filewrite(pffFile,"InputData=%s","../Data/Popstan2020.csdb");
 
-    filewrite(pffFile,"[ExternalFiles]");
-    filewrite(pffFile,"DISTRICTS_DICT=" + pathname(Application) + 
-                      "../Household/Resources/Districts.csdb");
-    filewrite(pffFile,"HOUSEHOLDPOSSESSIONVALUE_DICT=" + 
-                      pathname(Application) + 
-                     "../Household/Resources/HouseholdPossessionValues.dat");
+	filewrite(pffFile,"[ExternalFiles]");
+	filewrite(pffFile,"DISTRICT_DICT=%s","../Data/Districts.csdb");
+	filewrite(pffFile,"POSSESSION_LIMITS_DICT=%s","../Data/PossessionLimits.csdb");
  
     filewrite(pffFile,"[UserFiles]");
     filewrite(pffFile,"TEMPFILE=%s","");
 
     filewrite(pffFile,"[Parameters]");
-    filewrite(pffFile,"OnExit=%s",pathname(Application) + 
-                         "Menu/Menu.pff");
-    filewrite(pffFile,"PROVINCE=%s", CHOOSE_HOUSEHOLD[1:1]);
-    filewrite(pffFile,"DISTRICT=%s", CHOOSE_HOUSEHOLD[2:2]);
-    filewrite(pffFile,"ENUMERATION_AREA=%s", CHOOSE_HOUSEHOLD[4:3]);
-    filewrite(pffFile,"AREA_TYPE=%s", CHOOSE_HOUSEHOLD[7:1]);
-    filewrite(pffFile,"HOUSEHOLD_NUMBER=%s", CHOOSE_HOUSEHOLD[8:3]);
+	filewrite(pffFile,"OnExit=../Menu/Popstan2020Menu.pff");
 
     close(pffFile);
     
@@ -329,9 +281,16 @@ function launchHouseholdDataEntry()
 end;
 </logic>
 
-We also extract the id-items from the <b>CHOOSE_HOUSEHOLD</b> field and pass them as parameters in the pff file so that they can be retrieved by the household data entry application.
+Next we need to write the household ids from the menu program into the pff file. We write these to the <b>[Parameters]</b> section of the file. We need to extract them from the appropriate positions of the variable CHOOSE_HOUSEHOLD which contains the entire case id string. By using "[]" we can extract substrings from CHOOSE_HOUSEHOLD for each of the id-items.
 
-<subheader>Pre-filling the Household Id-items</subheader>
+<logic>
+    filewrite(pffFile,"PROVINCE=%s", CHOOSE_HOUSEHOLD[1:1]);
+    filewrite(pffFile,"DISTRICT=%s", CHOOSE_HOUSEHOLD[2:2]);
+    filewrite(pffFile,"ENUMERATION_AREA=%s", CHOOSE_HOUSEHOLD[4:3]);
+    filewrite(pffFile,"AREA_TYPE=%s", CHOOSE_HOUSEHOLD[7:1]);
+    filewrite(pffFile,"HOUSEHOLD_NUMBER=%s", CHOOSE_HOUSEHOLD[8:3]);
+</logic>
+
 The last step is to modify the household data entry application to prefill the id-items using the parameters in the pff file. This can be using the <logiccolor>sysparm()</logiccolor> command which retrieves a parameter by name from the pff file. We can do this in the preproc of each of the id-items in the household application. <logiccolor>sysparm</logiccolor> always returns the result as a string so we need to convert it to a number.
 
 <logic>
@@ -404,6 +363,8 @@ else
     skip to SUPERVISOR_MAIN_MENU;
 endif;
 </logic>
+
+When we deploy our application we need to remember to add the staff data file to our deployment specification, otherwise we will not be able to login.
 
 <subheader>Preserving Login when Returning to Menu</subheader>
 Currently when you launch the listing program and return to the menu, you have to enter the user code again. Let’s save the login code so that you only have to enter it once. We can do this using the commands <logiccolor>savesetting()</logiccolor> and <logiccolor>loadsetting()</logiccolor>. These commands store and retrieve values in persistent storage. Values saved in the settings are available even after CSEntry is closed and restarted, and they are available in all CSPro applications on the same device. We will save the login code in the login postproc after validating it:
@@ -549,8 +510,8 @@ end;
 <list ordered>
 	<li>Modify the launchHouseholdDataEntry() function to write the staff code as a parameter in the pff file used to launch the household application. Modify the household application to prefill the interviewer code (<b>A9</b>) with the staff code from the pff file.</li>
 	<li>Implement the function launchHouseholdListing() in the menu program. It should write out and launch a pff file to run the listing program. Write the province, district, enumeration area and staff code from the staff file as parameters in the pff file and prefill those items in the listing program. Make sure that the listing program returns to the menu program on exit.</li>
-	<li>Modify the logic in the onfocus and postproc of <b>CHOOSE_HOUSEHOLD</b> to add an extra option to the end of the list labelled “Back” that will move back to the interviewer main menu.</li>
-	<li>Modify the dynamic value set we create in the onfocus proc of <b>CHOOSE_HOUSEHOLD</b> to show the interview status (<b>A10</b> in the household questionnaire) in addition to the household number and the head’s name. To do this you will need to use loadcase on the household questionnaire dictionary to find the case from the household data file.</li>
+	<li>Modify the logic in the onfocus and postproc of <b>CHOOSE_HOUSEHOLD</b> to add an extra option to the end of the list labeled “Back” that will move back to the interviewer main menu.</li>
+	<li>Modify the dynamic value set we create in the onfocus proc of <b>CHOOSE_HOUSEHOLD</b> to show the interview status (<b>A10</b> in the household questionnaire) in addition to the household number and the head’s name. To do this you will need to use loadcase on the household questionnaire dictionary to find the case from the household data file. You will also need to handle the case where the household does not yet exist in the household data file.</li>
 	<li>Create a new menu called “Summary Reports” that has options for the completion report (the one we implemented already) and a new “Total Population Report” that you will implement. This new menu should also have an option to go back to the main menu. The “Summary Reports” menu should be accessed from the Supervisor Main Menu. The new “Total Population Report” should look like:
 	~!~~!~<font monospace><indent>Total Population Report~!~-----------------------~!~Province: 01 District: 02~!~Male: 1020~!~Female: 1025~!~Total: 2045</indent></font>
 </li>

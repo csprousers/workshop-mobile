@@ -17,11 +17,11 @@ For <b>RELATIONSHIP</b>, enter “What is (name’s) relationship to the head of
 
 In addition to the text, we can add instructions to the interviewer. For example for <b>AGE</b> we can have:
 
-<indent>How old is (name) in completed years?</indent>
+<indent>How old is (name)?</indent>
 	
 Followed by the instruction:
 
-<indent><i>Enter age in completed years (“000” for children less than one year old)</i></indent>
+<indent><i>Enter age in completed years (“0” for children less than one year old)</i></indent>
 
 To make it clear to the interviewer that this is an instruction, we use italics to distinguish it from the question. We can also use different colors and fonts as well. You can use whatever scheme you like as long as it is consistent throughout the application.
 
@@ -40,7 +40,7 @@ Run the application on both Android and mobile and see how the help text is disp
 It is possible to have the question include the values of dictionary variables. For example, for <b>SEX</b>, instead of asking “Is (name) a male or a female?” we can include the respondents name by using <b>%NAME%</b> inside the question text. At runtime, this will be replaced by the contents of the variable <b>NAME</b>.
 
 Let’s change the text for <b>RELATIONSHIP</b>, <b>SEX</b> and <b>AGE</b> to use <b>%NAME%</b> in place of “(name)”.
-
+<pagebreak />
 <subheader>Conditional Question Text</subheader>
 Sometimes, the question text will be completely different depending on other factors and using fill variables is not sufficient to implement the differences. For example, the question text for the NAME field should really be:
 
@@ -63,6 +63,16 @@ To have multiple languages for question text you first need to define the langua
 <center><image langdialog.png /></center>
 
 When creating question text, you enter the question text for each language specified. Let’s look at the question text for the “Sex” item. There is a Drop Down menu for the languages we specified in the above steps. We select the language and then enter the question text in that language.
+
+For example, to add French translations for the sex, relationship and age questions we would enter:
+
+<indent>Est-ce que %NAME% est masculin ou feminin?</indent>
+
+<indent>Quel est le lien de parenté de %NAME% avec le chef de ménage?</indent>
+
+<indent>Quel est l'âge de %NAME%?</indent>
+
+<indent><i>Entrez l'âge en années révolues (entrez 0 pour les enfants âgés de moins de 1 an)</i>. Si inconnu entrez 999.</indent>
 
 Now that you have created the question text in the specified languages, they can be selected during data entry.
 In Windows, we can go to the “Options” Menu and select “Change Language” and a menu of the languages we defined will be displayed.  Click on the desired language and the question text will be displayed in that language. On mobile devices you will find "Change Language" on the menu during data entry.
@@ -127,7 +137,7 @@ You can also use a separate message file for each language. To add an additional
 
 <callout>
 <center><b>Group exercise</b></center>
-Add the French translations for the question text, labels, value sets and error messages for marital status (<b>B13</b>).
+Add the question text and the French translations for the question text, labels, value sets and error messages for marital status (<b>B13</b>).
 </callout>
 
 <subheader>Using Occurrence Labels in Question Text</subheader>
@@ -146,47 +156,6 @@ We can use these occurrence labels in the question text for <b>F05</b>:
 
 Anytime you use <b>%getocclabel%</b> in question text it is replaced by the occurrence label of the current occurrence. With the above, the question text for the first occurrence will be “How many traditional round hut units are in this household?” and the text for the second occurrence will be “How many detached house units are in this household?” …
 
-<subheader>Using Logic Variables in Question Text</subheader>
-In addition to dictionary variables, and occurrence labels it is also possible to use logic variables in question text.
-
-For question <b>D05</b> we want to double check that the total of the children living with the women, living elsewhere and deceased equals the number of total births. We do this by asking the question:
-
-<indent>Just to make sure that I have this right, (name) has had in total (total number) births during her life. Is this correct?</indent>
-
-We can use the question text for this but we don’t have a dictionary variable for total births. We only have the yes/no variable <b>IS_TOTAL_BIRTHS_CORRECT</b>. We could create an additional dictionary variable but instead we can simply create a logic variable in the program for <b>totalBirths</b> and use that as the fill value.
-
-We will declare it in the PROC global section so that it is available everywhere. If you declare a logic variable inside the PROC of a dictionary variable or group, it is only available inside that PROC. Anything in the PROC global is available in all the PROCs and in the question text.
-
-To view the proc GLOBAL, in the logic view, click on the first item in the form tree. This shows all of the program logic at once: the proc GLOBAL plus all the other procs. Clicking on any other item in the form tree shows just the procs for that item.
-
-We need to assign a value to <b>totalBirths</b>. Which proc do we do that in? We do that in the onfocus of <b>NUMBER_BIRTHS_CORRECT</b> since we need to use it when we are in that field. The onfocus is called every time the field is entered. We cannot do this in the preproc since the preproc is not triggered when moving backwards through the questions.
-
-<logic>
-PROC IS_TOTAL_BIRTHS_CORRECT
-onfocus
-// Compute total births to be used as fill in question text
-totalBirths = CHILDREN_IN_HOUSEHOLD + CHILDREN_ELSEWHERE + CHILDREN_DECEASED;                      
-</logic>
-
-What happens when one of the fields in this calculation is skipped? The value becomes <logiccolor>notappl</logiccolor> which messes up the entire calculation. We need to be a little smarter in calculating our total to exclude the skipped values.
-
-<logic>
-PROC IS_TOTAL_BIRTHS_CORRECT
-onfocus
-
-// Compute total births to be used as fill in question text
-totalBirths = 0;
-if CHILDREN_IN_HOUSEHOLD <> notappl then
-    totalBirths = totalBirths + CHILDREN_IN_HOUSEHOLD;
-endif;
-if CHILDREN_ELSEWHERE <> notappl then
-    totalBirths = totalBirths + CHILDREN_ELSEWHERE;
-endif;
-if CHILDREN_DECEASED <> notappl then
-    totalBirths = totalBirths + CHILDREN_DECEASED;
-endif;
-</logic>
-
 <subheader>Case Labels</subheader>
 By default, the case listing screen shows the id-items concatenated together. This is not very easy for an interviewer to read. You can customize the case listing for a case using the <logiccolor>setcaselabel</logiccolor> command. As an example let’s set the case label to the string “province-district-ea-household number: name of head of household”. Since we need to have the name of the head of household to do this, we can add it in the postproc of <b>NAME</b>. In order to format the case label from the variables we can use the function <logiccolor>maketext()</logiccolor> which works like <logiccolor>errmsg()</logiccolor> but returns a string instead of displaying it on the screen.
 
@@ -202,7 +171,7 @@ if curocc() = 1 then
     setcaselabel(POPSTAN2020_DICT, caseLabel);
 endif;
 </logic>
-
+<pagebreak />
 Now after entering a case we have a much friendlier case listing:
 
 <center><image caselabels.png /></center>
@@ -210,9 +179,7 @@ Now after entering a case we have a much friendlier case listing:
 Note that <logiccolor>setcaselabel</logiccolor> only works with data files of type CSPro DB.
 
 <subheader>Dynamic Value Sets</subheader>
-It is often useful to change the value set for a question from logic. This can be done using the command <logiccolor>setvalueset</logiccolor>. Let’s start with a simple example. Currently our value set for relationship in section B has labels like “Son/Daughter” and “Brother/Sister” to allow for both genders. However, when we show the relationship value set we already know the gender of the household member so we could show “Son” for males and “Daughter” for females. To do this we create two new value sets for relationship in the dictionary: <b>RELATIONSHIP_MALE</b> and <b>RELATIONSHIP_FEMALE</b>. Then in the onfocus of relationship we choose between the two value sets:
-
-<pagebreak />
+It is often useful to change the value set for a question from logic. This can be done using the command <logiccolor>setvalueset</logiccolor>. Let’s start with a simple example. Currently our value set for relationship in section B has labels like “Son/Daughter” and “Brother/Sister” to allow for both genders. However, when we show the relationship value set we already know the gender of the household member so we could show “Son” for males and “Daughter” for females. To do this we create two new value sets for relationship in the dictionary: <b>RELATIONSHIP_MALE</b> and <b>RELATIONSHIP_FEMALE</b>. Then we can use logic to choose between the value sets depending on the value of <b>SEX</b>. Which proc do we do that in? We do that in the onfocus of <b>RELATIONSHIP</b> since we need to use it when we are in that field. The onfocus is called every time the field is entered. We cannot do this in the preproc since the preproc is not triggered when moving backwards through the questions.
 
 <logic>
 PROC RELATIONSHIP
@@ -228,11 +195,14 @@ endif;
 <subheader>Dynamic Value Sets from a Roster</subheader>
 For question <b>A11</b>, line number of respondent, we would like to create a value set from the names and line numbers of the eligible household members. For this to work correctly we will need to ask <b>A11</b> after entering the names and ages in the household members rosters. Create a new numeric variable in the dictionary for <b>A11</b> and place it on the household members form after the roster.
 
-To create the value set from the household roster we need the second form of setvalueset that takes an array of codes and an array of labels. This will allow us to create the list of names in logic instead of in the dictionary. First, we need to declare the two arrays in the PROC global.
+To create the value set from the household roster we need the second form of setvalueset that takes an array of codes and an array of labels. This will allow us to create the list of names in logic instead of in the dictionary.
+
+First, we need to declare the two arrays. We will declare them in the PROC global section so that it is available everywhere. If you declare a logic variable inside the PROC of a dictionary variable or group, it is only available inside that PROC. Anything in the PROC global is available in all the PROCs and in the question text.
+
+To view the proc GLOBAL, in the logic view, click on the first item in the form tree. This shows all of the program logic at once: the proc GLOBAL plus all the other procs. Clicking on any other item in the form tree shows just the procs for that item.
 
 <logic>
 PROC GLOBAL
-numeric totalBirths;
 array string labels(100);
 array numeric codes(100);
 </logic>
@@ -254,8 +224,6 @@ We would fill in the two arrays as follows:
 
 To do this in logic we need to loop through the household roster and add an entry into our arrays for each eligible household member:
 
-<pagebreak />
-
 <logic>
 PROC RESPONDENT
 onfocus
@@ -263,7 +231,6 @@ onfocus
 numeric indexRoster;
 numeric nextEntryValueSet = 1;
 do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
-
     if AGE(indexRoster) >= 12 then
         labels(nextEntryValueSet) = NAME(indexRoster);
         codes(nextEntryValueSet) = indexRoster;
@@ -279,46 +246,37 @@ codes(nextEntryValueSet) = notappl;
 setvalueset(RESPONDENT, codes, labels);
 </logic>
 
-<callout>
-<center><b>Group Exercise</b></center>
-Implement the dynamic value set for mother line number (<b>B10</b>). Only show females in the household over 12. Don’t forget to include the codes for non-resident and deceased in the value set. 
-</callout>
-
-<subheader>Cascading Questions</subheader>
-Let’s revisit question <b>B07</b>, place of birth. Rather than present a giant list of all countries in the world, it would be nice to allow the interviewer to narrow down the list first by continent and the choose from the countries in that continent. This is simple given the way that codes for place of birth are structured. The first digit is the continent (or blank for Popstan) and the next two digits are the country (or district). We can create subitems for the continent and country and drag those onto the form instead of the parent items. For the first subitem we use the following value set to allow the interviewer to choose either this country or a continent:
-
-<table 2 header>
-<cell>Continent of birth</cell><cell>Code</cell>
-<cell>Popstan</cell><cell>0</cell>
-<cell>Africa</cell><cell>1</cell>
-<cell>Asia</cell><cell>2</cell>
-<cell>Europe</cell><cell>3</cell>
-<cell>North America</cell><cell>4</cell>
-<cell>Oceania</cell><cell>5</cell>
-<cell>South America</cell><cell>6</cell>
-</table>
-
-Then in the onfocus for the second subitem, once we know the continent, we can loop through the value set for <b>PLACE_OF_BIRTH</b> that contains all the countries and create a value set containing only those countries that are in the selected continent.
-
-<pagebreak />
+As a second example we will implement the dynamic value set for mother line number (<b>B10</b>). For this value set we only show females in the household over 12 and don't allow a woman to be her own mother. 
 
 <logic>
-PROC COUNTRY_OR_DISTRICT_OF_BIRTH
-onfocus
-// Create value set based on continent selected in previous question
-numeric i;
-do i = 1 while i < 100
-    string label = getlabel(PLACE_OF_BIRTH, CONTINENT_OF_BIRTH * 100 + i);
-    // A blank label means that there are no more countries in the chosen
-    // continent so we can break out of the loop early.
-    if label = "" then
-        break;
-    endif;
-    codes(i) = i;
-    labels(i) = label;
+// Create value set from women over 12 in household roster
+numeric indexRoster;
+numeric nextEntryValueSet = 1;
+do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
+	if SEX(indexRoster) = 2 and AGE(indexRoster) > 12 and indexRoster <> curocc() then
+		codes(nextEntryValueSet) = indexRoster;
+		labels(nextEntryValueSet) = NAME(indexRoster);
+		nextEntryValueSet = nextEntryValueSet + 1;
+	endif;
 enddo;
-codes(i) = notappl;
-setvalueset(COUNTRY_OR_DISTRICT_OF_BIRTH, codes, labels);
+</logic>
+
+We also need to include the codes for non-resident and deceased in the value set.
+
+<logic>
+codes(nextEntryValueSet) = 87;
+labels(nextEntryValueSet) = "Non-resident";
+nextEntryValueSet = nextEntryValueSet + 1;
+codes(nextEntryValueSet) = 88;
+labels(nextEntryValueSet) = "Deceased";
+nextEntryValueSet = nextEntryValueSet + 1;
+</logic>
+
+Finally we mark the end of the value set.
+
+<logic>
+codes(nextEntryValueSet) = notappl;
+setvalueset(MOTHER_LINE_NUMBER, codes, labels);
 </logic>
 
 <subheader>Dynamic Value Sets from Checkboxes</subheader>
@@ -378,7 +336,6 @@ In order to create a value set with alpha values we need a code array of type st
 
 <logic>
 PROC GLOBAL
-numeric totalBirths;
 array string labels(100);
 array codes (100);
 array string codesString(100);
@@ -415,8 +372,8 @@ setvalueset($, codesString, labels);
 
 <subheader>Exercises</subheader>
 <list ordered>
-	<li>Add question text to the rest of section B. Use fills to include the name as we did in the examples.</li>
-	<li>Add a new language, the language of your choice, to the CAPI text and to the dictionary. Translate the question text, labels and value sets for section B into the new language.</li>
+	<li>Add question text to questions B06 through B8. Use fills to include the name as we did in the examples.</li>
+	<li>Add a new language, the language of your choice, to the CAPI text and to the dictionary. Translate the question text, labels and value sets questions B06-B08 into the new language.</li>
 	<li>Add question text for section G and use the occurrence labels to fill in the name of the possessions in the quantity and value fields.</li>
 	<li>In question B06 (date of birth) use a dynamic value set for the day based on the month (January: 1-31, February: 1-28, March: 1-31…) so that the interviewer cannot enter an invalid date like February 30 or April 31. Bonus if you can correctly handle leap years.</li>
 	<li>For E08 (line number of mother of deceased) use a dynamic value set to list the names of all eligible women from the household roster.</li>
