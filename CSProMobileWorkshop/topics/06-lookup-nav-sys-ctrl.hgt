@@ -462,7 +462,7 @@ preproc
 INTERVIEW_START_TIME = systime("HHMM");
 </logic>
 
-This works the first time we visit the field but what happens we come back to the question a minute or two later? We only want to record this value the first time the interviewer enters the field and once it is set we don’t want it to change. We can do this by comparing the value of <b>INTERVIEW_START_TIME</b> to blank (<logiccolor>notappl</logiccolor>) in the preproc and only setting the value to systime if it is blank.
+This works the first time we visit the field but what happens when we come back to the question a minute or two later? We only want to record this value the first time the interviewer enters the field and once it is set we don’t want it to change. We can do this by comparing the value of <b>INTERVIEW_START_TIME</b> to blank (<logiccolor>notappl</logiccolor>) in the preproc and only setting the value to systime if it is blank.
 
 <logic>
 PROC INTERVIEW_START_HOURS
@@ -496,7 +496,7 @@ if INTERVIEW_END_TIME = notappl then
 endif;
 </logic>
 
-We should make this field protected, however if we do that we get an error when we don't fill it in while in section A of the questionnaire. While we don't normally want to allow a field to be left blank, in this case we need to make an exception. We can do that using the <logiccolor>setproperty()</logiccolor> command. <logiccolor>setproperty</logiccolor> allows you to modify properties of fields and of the application from within CSPro logic. To allow entry of blanks in a field we need to set the "CanEnterNotAppl" property to "NoConfirm". We can do this in the preproc of the application so that it is done once when the application first starts.
+We should make this field protected. However, if we do that we get an error when we don't fill it in while in section A of the questionnaire. While we don't normally want to allow a field to be left blank, in this case we need to make an exception. We can do that using the <logiccolor>setproperty()</logiccolor> command. <logiccolor>setproperty</logiccolor> allows you to modify properties of fields and of the application from within CSPro logic. To allow entry of blanks in a field we need to set the "CanEnterNotAppl" property to "NoConfirm". We can do this in the preproc of the application so that it is done once when the application first starts.
 
 <logic>
 PROC POPSTAN2020_FF
@@ -505,13 +505,12 @@ setproperty(INTERVIEW_END_TIME_HOURS, "CanEnterNotAppl", "NoConfirm");
 setproperty(INTERVIEW_END_TIME_MINUTES, "CanEnterNotAppl", "NoConfirm");
 </logic>
 
-Having captured the interview start and end times as hours and minutes we can calculate the total interview time by subtracting the start time from the end time, however this calculation is tricky because we have to handle the case where the end minutes are less than the start minutes. It would be easier if instead of using <logiccolor>systime()</logiccolor> we used the function <logiccolor>timestamp()</logiccolor> which gives the time in total seconds since January 1, 1970. If we subtract the start timestamp from the end timestamp we get thte total interview time in seconds. Let's add new protected variables for start timestamp, end timestamp and interview duration and fill them in.
+Having captured the interview start and end time as hours and minutes we can calculate the total interview time by subtracting the start time from the end time. However, this calculation is tricky because we have to handle the case where the end minutes are less than the start minutes. It would be easier if instead of using <logiccolor>systime()</logiccolor> we used the function <logiccolor>timestamp()</logiccolor> which gives the time in total seconds since January 1, 1970. If we subtract the start timestamp from the end timestamp we get the total interview time in seconds. Let's add new protected variables for start timestamp, end timestamp and interview duration and fill them in.
 
 <logic>
 PROC POPSTAN2020_FF
 preproc 
-setproperty(INTERVIEW_END_TIME_HOURS, "CanEnterNotAppl", "NoConfirm");
-setproperty(INTERVIEW_END_TIME_MINUTES, "CanEnterNotAppl", "NoConfirm");
+setproperty(INTERVIEW_START_TIMESTAMP, "CanEnterNotAppl", "NoConfirm");
 setproperty(INTERVIEW_END_TIMESTAMP, "CanEnterNotAppl", "NoConfirm");
 setproperty(INTERVIEW_DURATION_MINUTES, "CanEnterNotAppl", "NoConfirm");
 
