@@ -2,7 +2,7 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Understand the how to design the screens of a menu program</li>
+	<li>Understand how to design the screens of a menu program</li>
 	<li>Use the command execpff() to launch one CSPro application from another</li>
 	<li>Create a simple menu program to launch the main data entry program</li>
 	<li>Create dynamic menus with dynamic value sets</li>
@@ -15,7 +15,7 @@ A menu program is a CSPro data entry application that is used to manage the data
 <list>
 	<li>Launches other CSPro applications to do data collection (often pre-filling id items)</li>
 	<li>Show reports on progress, summary statistics</li>
-	<li>Manage user access through userid/passwords</li>
+	<li>Manage user access through usernames/passwords</li>
 	<li>Manage household listing and interview assignments</li>
 	<li>Launch synchronization</li>
 </list>
@@ -31,9 +31,9 @@ Once you have the screens, the next step is to create a new data entry applicati
 Each menu screen will be a different variable in the dictionary. The value set for the variable will show the available menu choices to the enumerator on that screen. In the menu example above we will have three variables: 
 
 <list>
-	<li>LOGIN (value set: 1 – Interviewer, 2 – Supervisor)</li>
-	<li>INTERVIEWER_MAIN_MENU (value set: List Households - 1, Interview Household – 2, Logout -9)</li>
-	<li>SUPERVISOR_MAIN_MENU (value set: Completion report – 1, Logout – 9).</li>
+	<li>LOGIN (value set: Interviewer - 1, Supervisor - 2)</li>
+	<li>INTERVIEWER_MAIN_MENU (value set: List Households - 1, Interview Household - 2, Logout - 9)</li>
+	<li>SUPERVISOR_MAIN_MENU (value set: Completion report - 1, Logout - 9).</li>
 </list>
 
 We will keep the default id-item that CSPro creates for us. The menu program dictionary doesn’t really need an id-item since we do not need to save our menu choices to the data file. However, CSPro requires that we have at least one id-item so we will keep it.
@@ -54,48 +54,12 @@ else
 endif;
 </logic>
 
-If the user selects to login as an interviewer we skip to the interviewer main field to show the interviewer menu, otherwise we skip to the supervisor main menu field to show the supervisor menu.
+If the user selects to login as a supervisor we skip to the supervisor main menu field to show the supervisor menu, otherwise we skip to the interviewer main menu field to show the interviewer menu.
 
-Handling the interviewer menu is similar. Here we will create user defined functions to launch the listing and household programs.
-
-<logic>
-PROC INTERVIEWER_MAIN_MENU
-postproc
-
-// Handle the menu choice
-if $ = 1 then
-    // List households
-    launchHouseholdListing();
-elseif $ = 2 then
-    // Household questionnaire
-    launchHouseholdDataEntry();
-elseif $ = 9 then
-    // Logout
-    stop(1);
-endif;
-
-// Show interviewer menu again
-reenter;
-</logic>
-<pagebreak />
-It is important to make sure that after the postproc of the menu field we do not let CSEntry continue to the next field, otherwise after the interviewer launches the household listing they would end up in the next field, which, in this case is the supervisor menu. To prevent this, we put a reenter at the end of the postproc so that we go back into the same menu field again.
-
-It looks kind of strange that when we go back into a menu, the previous choice is still selected. We can prevent this by clearing the choice in the onfocus of the field.
-
-<logic>
-onfocus
-// Clear previous choice
-$ = notappl;
-</logic>
-
-The supervisor menu is similar to the interviewer menu:
+Handling the supervisor menu is similar. Here we will create a user defined function to show the completion report.
 
 <logic>
 PROC SUPERVISOR_MAIN_MENU
-
-onfocus
-// Clear previous entry
-$ = notappl;
 
 postproc
 // Handle the menu choice
@@ -109,6 +73,40 @@ endif;
 
 // Show supervisor menu again
 reenter;
+</logic>
+
+It is important to make sure that after the postproc of the menu field we do not let CSEntry continue to the next field, otherwise after the supervisor launches the report they would end up on another menu. To prevent this, we put a reenter at the end of the postproc so that we go back into the same menu field again.
+<pagebreak />
+
+It looks kind of strange that when we go back into a menu, the previous choice is still selected. We can prevent this by clearing the choice in the onfocus of the field.
+
+<logic>
+onfocus
+// Clear previous choice
+$ = notappl;
+</logic>
+
+The interviewer menu is similar to the supervisor menu:
+
+<logic>
+PROC INTERVIEWER_MAIN_MENU
+
+onfocus
+// Clear previous entry
+$ = notappl;
+
+postproc
+// Handle the menu choice
+if $ = 1 then
+    // List households
+    launchHouseholdListing();
+elseif $ = 2 then
+    // Household questionnaire
+    launchHouseholdDataEntry();
+elseif $ = 9 then
+    // Logout
+    stop(1);
+endif;
 </logic>
 
 <subheader>Launching one CSPro Application from Another</subheader>
@@ -141,7 +139,7 @@ Once you have set up the deployment the first time you can save the deployment s
 In the next session we will learn how to use this tool to deploy applications to a server for deployment over the internet.
 
 <subheader>Tidying up the Menu Program</subheader>
-Currently the menu program shows up in the applications list on Android as “Menu” instead of something like “Popstan 2020 Census”. In addition, when we tap on Menu we have to then tap “Start New Case” which doesn’t make sense for a menu. We can fix both of these problems by modifying the pff file for the menu. Right click on the Menu.pff and choose “Edit with pff editor”. Change “Start mode” to “Add” so that we won’t have to tap “Start New Case”. Enter “Popstan 2020 Census” for the description to change what shows in the case listing. While we are at it, open the Menu program in the CSPro designer and in data entry options turn off the display of the case tree since the case tree is not useful for menu programs. Finally, in the data entry options, check "Automatically advance on selection". This way the interviewer will not have to tap next to move from one field to another in the menu program.
+Currently the menu program shows up in the applications list on Android as “Menu” instead of something like “Popstan 2020 Census”. In addition, when we tap on Menu we have to then tap “Start New Case” which doesn’t make sense for a menu. We can fix both of these problems by modifying the pff file for the menu. Right click on the Menu.pff and choose “Edit with pff editor”. Change “Start mode” to “Add” so that we won’t have to tap “Start New Case”. Enter “Popstan 2020 Census” for the description to change what shows in the application listing. While we are at it, open the Menu program in the CSPro designer and in data entry options turn off the display of the case tree since the case tree is not useful for menu programs. Finally, in the data entry options, check "Automatically advance on selection". This way the interviewer will not have to tap next to move from one field to another in the menu program.
 
 Now that we have the menu program to launch the household data entry program, we don't want the household application to appear in the list of applications on the mobile device. By default, CSPro creates the list of applications from all of the pff files in the CSEntry directory on the device. To prevent an application from being listed you can edit the pff file in the pff editor and choose "Hidden by Default" or "Never" for "Show in Application Listing".
 
@@ -334,7 +332,7 @@ Rather than have the user choose their role, lets assign each interviewer and su
 
 <table 6>
 	<cell>Staff code</cell><cell>Name</cell><cell>Role (1=interviewer, 2=supervisor)</cell><cell>Province</cell><cell>District</cell><cell>EA</cell>
-<cell>001</cell><cell>Shemika Rothenberger</cell><cell>2</cell><cell>1</cell><cell>1</cell><cell>1</cell>
+<cell>001</cell><cell>Shemika Rothenberger</cell><cell>2</cell><cell>1</cell><cell>1</cell><cell></cell>
 <cell>002</cell><cell>Andrew Benninger</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>1</cell>
 <cell>003</cell><cell>Angelica Swenson</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>2</cell>
 <cell>004</cell><cell>Zelma Hawke</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>3</cell>
