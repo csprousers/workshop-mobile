@@ -129,7 +129,7 @@ Our code is currently limited to a single enumeration area. We could improve it 
 <logic>
 // Display an image containing a map of the enumeration area
 function showEAMap()
-    execsystem(maketext("view:%sresources/maps/EAMap%03d.png", 
+    execsystem(maketext("view:%sresources/maps/EAMap%v.png", 
                          pathname(Application), ENUMERATION_AREA));
 end;
 </logic>
@@ -145,10 +145,10 @@ Note that photos do not get saved into the application data file. You need to sa
 
 <logic>
 string photoFilename = pathname(application) + 
-                maketext("../Data/HouseholdPhotos/photo%d%02d%03d%d%03d.jpg", 
+                maketext("../Data/HouseholdPhotos/photo%v%v%v%v%v.jpg", 
                                 PROVINCE, DISTRICT, ENUMERATION_AREA,   
                                 AREA_TYPE, HOUSEHOLD_NUMBER);
-execsystem(maketext("camera:/mnt/sdcard/csentry/%s", photoFilename));
+execsystem(maketext("camera:%s", photoFilename));
 </logic>
 
 Note that we are putting the photo in a subdirectory of the data directory named HouseholdPhotos. We will need to create this folder on the tablet for this to work.
@@ -161,7 +161,7 @@ PROC PHOTO
 if PHOTO = 1 then
     // Take photo
     string photoFilename = pathname(application) + 
-               maketext("../Data/HouseholdPhotos/photo%d%02d%03d%d%03d.jpg", 
+               maketext("../Data/HouseholdPhotos/photo%v%v%v%v%v.jpg", 
                                 PROVINCE, DISTRICT, ENUMERATION_AREA,   
                                 AREA_TYPE, HOUSEHOLD_NUMBER);
     execsystem(maketext("camera:%s", photoFilename));
@@ -176,7 +176,7 @@ This works the first time through the questionnaire but if we go back through th
 PROC PHOTO
 
 string photoFilename = pathname(application) + 
-               maketext("../Data/HouseholdPhotos /photo%d%02d%03d%d%03d.jpg", 
+               maketext("../Data/HouseholdPhotos /photo%v%v%v%v%v.jpg", 
                                 PROVINCE, DISTRICT, ENUMERATION_AREA,   
                                 AREA_TYPE, HOUSEHOLD_NUMBER);
 
@@ -207,7 +207,7 @@ This works except that it is possible for the interviewer to select “Keep phot
 PROC PHOTO
 onfocus
 string photoFilename = pathname(application) + 
-               maketext("../Data/HouseholdPhotos/photo%d%02d%03d%d%03d.jpg", 
+               maketext("../Data/HouseholdPhotos/photo%v%v%v%v%v.jpg", 
                                 PROVINCE, DISTRICT, ENUMERATION_AREA,   
                                 AREA_TYPE, HOUSEHOLD_NUMBER);
 
