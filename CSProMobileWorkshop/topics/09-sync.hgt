@@ -2,14 +2,14 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Deploy applications to mobild devices over the internet</li>
+	<li>Deploy applications to mobile devices over the internet</li>
 	<li>Use the synchronization options dialog to add synchronization to an application</li>
 	<li>Create advanced synchronizations using CSPro logic to synchronize data files and update applications in the field</li>
 	<li>Create peer to peer synchronizations between devices for situations where there is no internet access</li>
 </list>
 
 <subheader>Synchronization in CSPro</subheader>
-After collecting data in the field, you need to get the data from the interviewer’s devices back to headquarters to create a combined data file. While this can be done manually by connecting each device to a laptop, copying the individual data files and combining them using the Concatenate Data tool, this is rather inconvenient for large surveys. Instead, it is possible to send the data from each tablet over the internet to a central server that will combine the data into a single data file to be used for further processing. In CSPro this is called synchronization.
+After collecting data in the field, you need to get the data from the interviewer’s devices back to headquarters to create a combined data file. While this can be done manually by connecting each device to a laptop, copying the individual data files and combining them using the Concatenate Data tool, this is rather inconvenient for large surveys. Instead, it is possible to send the data from each device over the internet to a central server that will combine the data into a single data file to be used for further processing. In CSPro this is called synchronization.
 
 <center><html><img src="directsync.png" width="600" /></html></center>
 
@@ -45,7 +45,7 @@ In the dropdown, you have three choices for how to synchronize the main data fil
 
 In most cases you will want to choose either the first or third option. Use the third option if you want to share cases between multiple devices in the field as this will download every case on the server onto the local device. For a survey operation with a large number of interviewers you may want to avoid this as it will cause you to download a lot of data. For our test, we will use the first option.
 
-In addition to synchronizing the data file you can also download the pen and pff files from the server. This provides a way to do remote updates to the application while interviewers are in the field. In order for this to work you must place a copy of the pen and pff files on the server. For CSWeb these must be placed in the <i>csweb/files/</i> on the server. For Dropbox, they may be placed anywhere in the Dropbox folder. For FTP they must be placed in the home directory of the user that will be used to log into the server. Enter the path on the server where the files were placed under “Path to application on server”. We will place these files in the directory <i>/Popstan2020Census</i> on the server. Note that this an alternative to using the Deploy Applications tool and Add Application to update the application. The advantage of this approach is that it combines the data synchronization with the application update in a single operation. The disadvantage is that you have to copy the .pen and .pff files to the server manually instead of using the Deploy Applications tool.
+In addition to synchronizing the data file you can also download the pen and pff files from the server. This provides a way to do remote updates to the application while interviewers are in the field. In order for this to work you must place a copy of the pen and pff files on the server. For CSWeb these must be placed in the <i>csweb/files/</i> on the server. For Dropbox, they may be placed anywhere in the Dropbox folder. For FTP they must be placed in the home directory of the user that will be used to log into the server. Enter the path on the server where the files were placed under “Path to application on server”. We will place these files in the directory <i>/Popstan2020Census</i> on the server. Note that this is an alternative to using the Deploy Applications tool and Add Application to update the application. The advantage of this approach is that it combines the data synchronization with the application update in a single operation. The disadvantage is that you have to copy the .pen and .pff files to the server manually instead of using the Deploy Applications tool.
 
 Once the sync settings are complete, regenerate the pen file. The sync settings are stored in the pen file so if it is not updated you won't be able to sync. Copy the pen and pff file into the Popstan2020Census directory under the files directory on the server so that it will be downloaded to the local device during sync.
 
@@ -53,7 +53,7 @@ Once the sync settings are complete, regenerate the pen file. The sync settings 
 To synchronize the application with the server, run the application in CSPro and from the case listing screen choose “Synchronize…” from the file menu on the PC or tap the synchronize icon (<image sync_icon.png />) on mobile.
 
 <subheader>Downloading the Combined Data File</subheader>
-Once you have used synchronize to upload data to the server you can download the data file from the server using DataViewer. This will download a single data file that combines all the data uploaded from all the devices that have synchronized with the server. Open DataViewer, choose the server type, enter the same URL you used in the synchronization options dialog, click "Connect" to download the list of data files available on the server, choose the data file, choose a place to save the downloaded file and click "Download".
+Once you have used synchronize to upload data to the server you can download the data file from the server using the Data Viewer tool. This will download a single data file that combines all the data uploaded from all the devices that have synchronized with the server. Open Data Viewer, choose the server type, enter the same URL you used in the synchronization options dialog, click "Connect" to download the list of data files available on the server, choose the data file, choose a place to save the downloaded file and click "Download".
 
 <center><image dataviewerdownload.png /></center>
 
@@ -62,13 +62,13 @@ The CSWeb server has a web interface that you can access through a browser. The 
 
 <center><html><img src="cswebui.png" width="600" /></html></center>
 
-If you are using CSWeb, you can avoid filling out the download dialog by clicking on the "Download" icon in the CSWeb interface in the browser. This will download a pff file. When you open the downloaded pff file, it will automatically open DataViewer and begin downloading the combined data. Once you have downloaded the data file the first time, you can use the “synchronize” function in DataViewer to only download the newly updated data rather downloading the entire file a second time. If you are using Dropbox or FTP, CSPro will automatically create a pff file named <i>DownloadData-&lt;your dictionary name&gt;.pff</i> in your Dropbox or on your FTP server that will launch DataViewer to download the data.
+If you are using CSWeb, you can avoid filling out the download dialog by clicking on the "Download" icon in the CSWeb interface in the browser. This will download a pff file. When you open the downloaded pff file, it will automatically open Data Viewer and begin downloading the combined data. Once you have downloaded the data file the first time, you can use the “synchronize” function in Data Viewer to only download the newly updated data rather downloading the entire file a second time. If you are using Dropbox or FTP, CSPro will automatically create a pff file named <i>DownloadData-&lt;your dictionary name&gt;.pff</i> in your Dropbox or on your FTP server that will launch Data Viewer to download the data.
 
 <callout>
 <center><b>Group exercise – Sync Race</b></center>
 Split into groups of 3-4 people and create a small CSPro application for the following questionnaire:
 <center><html><img src="syncracequestionnaire.png" width="400" /></html></center>
-~!~Make sure to name your the dictionary for your application based on the name of your team. If two teams use the same dictionary name they will both sync to the same data file on the server and we would like to avoid that.
+~!~Each team should use their team name as the name for their application's dictionary. If two teams use the same dictionary name they will both sync to the same data file on the server and we would like to avoid that.
 Deploy your application to the following server:
 <indent>URL: http://csweb.teleyah.com/api
 Admin username: test
@@ -83,7 +83,7 @@ Run your application, complete a case and synchronize to send your data to the s
 <subheader>Synchronization from Logic</subheader>
 Sometimes we need more control over the synchronization than the sync options dialog provides. For example, if there are external dictionaries in an application, if you want to sync with a universe or if there are multiple applications to sync at once. CSPro provides logic functions to run synchronizations from within an application that allow more complex synchronizations.
 
-Let’s add synchronization to our menu application that will upload the main data file and download the latest version of the pen and pff files for the menu application and for the listing and household questionnaires. We will add a new entry in the supervisor main menu called “Synchronize with Headquarters”.
+~!~Let’s add synchronization to our menu application that will upload the main data file and download the latest version of the pen and pff files for the menu application and for the listing and household questionnaires. We will add a new entry in the supervisor main menu called “Synchronize with Headquarters”.
 
 The first step in running sync from logic is to call the command <logiccolor>syncconnect()</logiccolor> and pass it the server information. If this function succeeds then we are connected to the server and we can make calls to the commands <logiccolor>syncdata()</logiccolor> and <logiccolor>syncfile()</logiccolor> to synchronize data files and non-data files respectively. Finally we call <logiccolor>syncdisconnect()</logiccolor> to end the session.
 
@@ -93,7 +93,7 @@ The commands <logiccolor>syncdata()</logiccolor> and <logiccolor>syncfile()</log
 
 In our application, we want to synchronize the household questionnaire dictionary so we need to first add it to the menu program as an external dictionary. Now we can use it in the call to <logiccolor>syncdata()</logiccolor>.
 
-We will also add calls to <logiccolor>syncfile()</logiccolor> to download the latest versions of the application programs from the server. This function takes the direction (PUT or GET), the “from” directory and the “to” directory. In the case of GET the “from” directory is the local directory on the device and the “to” directory is the path on the server.
+We will also add calls to <logiccolor>syncfile()</logiccolor> to download the latest versions of the application programs from the server. This function takes the direction (PUT or GET), the “from” directory and the “to” directory. In the case of GET the “from” directory is the path on the server and the “to” directory is the local directory on the device.
 
 <logic>
 // Upload cases to web server at headquarters
@@ -107,8 +107,8 @@ function syncWithHeadquarters()
 		syncdata(BOTH, POPSTAN2020_DICT);
 				
 		// Download latest version of menu application
-		syncfile(GET, "/Popstan2020/Menu/Menu.pen", "Menu.pen");
-		syncfile(GET, "/Popstan2020/Menu/Menu.pff", "Menu.pen");
+		syncfile(GET, "/Popstan2020/Menu/Menu.pen", "./Menu.pen");
+		syncfile(GET, "/Popstan2020/Menu/Menu.pff", "./Menu.pen");
 		
 		// Get latest household data entry program
 		syncfile(GET, "/Popstan2020/Household/Popstan2020.pen",
@@ -121,10 +121,8 @@ function syncWithHeadquarters()
 end;
 </logic>
 <pagebreak />
-Now that we have added the synchronization logic to the menu we rebuild the pen files and copy them to the files directory on the server.
-
-Now we can run the menu program and test our synchronization.
-
+Now that we have added the synchronization logic to the menu we rebuild the pen files and copy them to the files directory on the server. This will allow us to run the menu program and test our synchronization.
+~!~
 <callout>
 <center><b>Group exercise – Sync Race II </b></center>
 In your teams modify the sync exercise questionnaire to take a photo of the team and save it to a file. 
@@ -171,7 +169,7 @@ In some places, interviewers do not have reliable internet access and cannot syn
 <pagebreak />
 In order to implement Bluetooth synchronization, we need to add logic on both the supervisor device and on the interviewer device. One device acts like the web server, processing synchronization requests from the client device, and the other device, the client, sends <logiccolor>syncfile</logiccolor> and <logiccolor>syncdata</logiccolor> commands the same way that it would to a web server. For our example let’s make the supervisor device be the server and the interviewer device be the client. This is arbitrary, we could easily reverse the roles.
 
-To extend the menu program to support peer to peer synchronization we will add a new menu option to the supervisor main menu "sync with interviewer" and a new menu option to the interviewer main menu "sync with supervisor".
+~!~To extend the menu program to support peer to peer synchronization we will add a new menu option to the supervisor main menu "sync with interviewer" and a new menu option to the interviewer main menu "sync with supervisor".
 
 The logic on the interviewer’s tablet is nearly identical to the logic used for web synchronization. The only differences are the arguments to <logiccolor>syncconnect()</logiccolor>. When using Bluetooth, <logiccolor>syncconnect()</logiccolor> does not need a URL, username or password.
 
@@ -201,13 +199,13 @@ function syncWithSupervisor()
         // The root file on the supervisor tablet is in the "Popstan2020" folder 
 		// so the from folder starts from there and we need to add "Menu" to get to 
 		// the Menu programs.
-        syncfile(GET, "Menu/Menu.pen", "Menu.pen");
-        syncfile(GET, "Menu/Menu.pff", "Menu.pff");
+        syncfile(GET, "./Menu.pen", "./Menu.pen");
+        syncfile(GET, "./Menu.pff", "./Menu.pff");
         
         // Since the current application is in the Menu folder we need to use 
 		// "../Household" to go up one level and back down into the Household 
 		// folder for the household application files.
-        syncfile(GET, "Household/Popstan2020.pen", 
+        syncfile(GET, "../Household/Popstan2020.pen", 
                  "../Household/Popstan2020.pen");
     
         syncdisconnect();
@@ -221,13 +219,11 @@ The logic for the supervisor is even simpler. We simply call the command <logicc
 function syncWithInterviewer()
 
     // Run the Bluetooth server to receive data from interviewer.
-    // Specify ".." as the root directory to make the the "Popstan2020" folder be 
-	// the starting point for all file get/put commands instead of the menu folder.
-    syncserver(Bluetooth, "..");
+    syncserver(Bluetooth);
 end;
 </logic>
 
-<logiccolor>syncserver()</logiccolor> takes an optional second parameter which is the root directory for all <logiccolor>syncfile()</logiccolor> commands. The root directory is prepended to the file path on the server. So if the root directory is “C:/myroot” and the client calls <logiccolor>syncfile(PUT, “myfile”, “files/myfile”)</logiccolor> then the destination path will be “C:/myroot/files/myfile”. By default, the root directory is the application directory of the server so adding “..” to it makes the root folder the parent directory of the application i.e. the Popstan2020 directory.
+By default, the root directory is the application directory on the server.  
 
 <callout>
 <center><b>Group exercise – Sync Race III</b></center>
