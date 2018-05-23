@@ -54,46 +54,12 @@ else
 endif;
 </logic>
 
-If the user selects to login as a supervisor we skip to the supervisor main menu field to show the supervisor menu, otherwise we skip to the interviewer main menu field to show the interviewer menu.
+If the user selects to login as an interviewer we skip to the interviewer main menu field to show the interviewer menu, otherwise we skip to the supervisor main menu field to show the supervisor menu.
 
-Handling the supervisor menu is similar. Here we will create a user defined function to show the completion report.
-
-<logic>
-PROC SUPERVISOR_MAIN_MENU
-
-postproc
-// Handle the menu choice
-if $ = 1 then
-    // Show report
-    showCompletionReport();
-elseif $ = 9 then
-    // Logout
-	stop(1);
-endif;
-
-// Show supervisor menu again
-reenter;
-</logic>
-
-It is important to make sure that after the postproc of the menu field we do not let CSEntry continue to the next field, otherwise after the supervisor launches the report they would end up on another menu. To prevent this, we put a reenter at the end of the postproc so that we go back into the same menu field again.
-<pagebreak />
-
-It looks kind of strange that when we go back into a menu, the previous choice is still selected. We can prevent this by clearing the choice in the onfocus of the field.
-
-<logic>
-onfocus
-// Clear previous choice
-$ = notappl;
-</logic>
-
-The interviewer menu is similar to the supervisor menu:
+Handling the interviewer menu is similar. Here we will create user defined functions to launch the listing and household programs.
 
 <logic>
 PROC INTERVIEWER_MAIN_MENU
-
-onfocus
-// Clear previous entry
-$ = notappl;
 
 postproc
 // Handle the menu choice
@@ -107,6 +73,43 @@ elseif $ = 9 then
     // Logout
     stop(1);
 endif;
+
+// Show interviewer menu again
+reenter;
+</logic>
+<pagebreak />
+
+It is important to make sure that after the postproc of the menu field we do not let CSEntry continue to the next field, otherwise after the interviewer launches the household listing they would end up in the next field, which, in this case is the supervisor menu. To prevent this, we put a reenter at the end of the postproc so that we go back into the same menu field again.
+
+It looks kind of strange that when we go back into a menu, the previous choice is still selected. We can prevent this by clearing the choice in the onfocus of the field.
+
+<logic>
+onfocus
+// Clear previous choice
+$ = notappl;
+</logic>
+
+The supervisor menu is similar to the interviewer menu:
+
+<logic>
+PROC SUPERVISOR_MAIN_MENU
+
+onfocus
+// Clear previous choice
+$ = notappl;
+
+postproc
+// Handle the menu choice
+if $ = 1 then
+    // Show report
+    showCompletionReport();
+elseif $ = 9 then
+    // Logout
+	stop(1);
+endif;
+
+// Show supervisor menu again
+reenter;
 </logic>
 
 <subheader>Launching one CSPro Application from Another</subheader>
@@ -180,12 +183,12 @@ numeric nextEntry = 1;
 // to build dynamic value set.
 forcase LISTING_DICT do
     // Values are household ids concatenated together
-    codesString(nextEntry)=maketext("%d%02d%03d%d%03d", 
+    codesString(nextEntry)=maketext("%v%v%v%v%v", 
         LI_PROVINCE, LI_DISTRICT, LI_ENUMERATION_AREA,
         LI_AREA_TYPE, LI_HOUSEHOLD_NUMBER);
         
     // Labels have househould number and name of head
-    labels(nextEntry) = maketext("%03d: (%s)", LI_HOUSEHOLD_NUMBER, 
+    labels(nextEntry) = maketext("%v: (%v)", LI_HOUSEHOLD_NUMBER, 
                             strip(LI_NAME_OF_HEAD_OF_HOUSEHOLD));
     
     nextEntry = nextEntry + 1;
@@ -211,12 +214,12 @@ numeric nextEntry = 1;
 // to build dynamic value set.
 forcase LISTING_DICT do
     // Values are household ids concatenated together
-    codesString(nextEntry)=maketext("%d%02d%03d%d%03d", 
+    codesString(nextEntry)=maketext("v%v%v%v%v", 
         LI_PROVINCE, LI_DISTRICT, LI_ENUMERATION_AREA,
         LI_AREA_TYPE, LI_HOUSEHOLD_NUMBER);
         
     // Labels have househould number and name of head
-    labels(nextEntry) = maketext("%03d: (%s)", LI_HOUSEHOLD_NUMBER, 
+    labels(nextEntry) = maketext("%v: (%v)", LI_HOUSEHOLD_NUMBER, 
                             strip(LI_NAME_OF_HEAD_OF_HOUSEHOLD));
     
     nextEntry = nextEntry + 1;
@@ -377,7 +380,7 @@ if loadcase(STAFF_DICT, LOGIN) = 0 then
 endif;
 
 // Save login so we do not have to enter it again
-savesetting("login", maketext("%d", LOGIN));
+savesetting("login", maketext("%v", LOGIN));
 
 // Go to the appropriate menu for the role chosen
 if STAFF_ROLE = 1 then
