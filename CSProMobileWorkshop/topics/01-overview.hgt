@@ -1,4 +1,4 @@
-﻿<title>Session 1: Overview of CSPro, Dictionary and Forms</title>
+﻿<title>Session 01: Overview of CSPro, Dictionary and Forms</title>
 
 At the end of this lesson participants will be able to:
 <list>
@@ -24,8 +24,8 @@ CSPro can be used for both the traditional PAPI (pencil and paper interview) wor
 <subheader>Required Hardware and Software</subheader>
 To run the examples in this workshop you will need the following:
 <list>
-<li>Windows PC with CSPro Version 7.1 or later</li>
-<li>Android tablet with CSEntry Version 7.1 or later</li>
+<li>Windows PC with CSPro version <definition version /> or later</li>
+<li>Android tablet with CSEntry version <definition version /> or later</li>
 </list>
 
 <subheader>Using CSPro Android</subheader>

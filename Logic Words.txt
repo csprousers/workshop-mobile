@@ -1,4 +1,10 @@
-﻿# CSPro 7.1
+﻿# CSPro 7.2
+DIRDELETE			dirdelete_function.hgt
+ENSURE				ensure_statement.hgt
+GETBLUETOOTHNAME	getbluetoothname_function.hgt
+REGEXMATCH			regexmatch_function.hgt
+
+# CSPro 7.1
 COUNTCASES			countcases_function.hgt
 GETPROPERTY			getproperty_function.hgt
 LOGTEXT				logtext_function.hgt
@@ -8,6 +14,7 @@ SETPROPERTY			setproperty_function.hgt
 SETREPORTDATA		setreportdata_function.hgt
 SQL					sqlquery_function.hgt
 SQLQUERY			sqlquery_function.hgt
+TIMESTRING			timestring_function.hgt
 TR					tr_function.hgt
 WARNING				warning_function.hgt
 
@@ -218,6 +225,7 @@ CASE
 CASE_ID
 CELL
 COLUMN
+CONTINUE			errmsg_function.hgt
 CROSSTAB
 DECLARE
 DEFAULT				special_values.hgt
@@ -327,10 +335,8 @@ WRITEFORM			deprecated_features.hgt
 # Other Words
 CONFIRM
 DENOM
-EXPLICIT
 FORMAT
 GLOBAL				cspro_program_structure.hgt
-IMPLICIT
 NOCONFIRM
 OUTOFRANGE
 PROC				proc_statement.hgt

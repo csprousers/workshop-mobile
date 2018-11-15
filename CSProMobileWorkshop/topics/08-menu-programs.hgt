@@ -1,4 +1,4 @@
-﻿<title>Session 8: Menu Programs</title>
+﻿<title>Session 08: Menu Programs</title>
 
 At the end of this session participants will be able to:
 <list>
@@ -256,7 +256,7 @@ function launchHouseholdDataEntry()
     endif;
     
     filewrite(pffFile,"[Run Information]");
-    filewrite(pffFile,"Version=CSPro 7.1");
+    filewrite(pffFile,"Version=CSPro <definition version />");
     filewrite(pffFile,"AppType=Entry");
 	filewrite(pffFile,"Description=Popstan 2020 Census");
 	
