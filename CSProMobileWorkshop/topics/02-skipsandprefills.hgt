@@ -25,9 +25,9 @@ endif
 
 The <logiccolor>if</logiccolor> statement only executes the code between the <logiccolor>then</logiccolor> and the <logiccolor>endif</logiccolor> if the condition (<logiccolor>OTHER_HOUSING_UNITS = 2</logiccolor>) is true, otherwise it goes straight to the first command after the <logiccolor>endif</logiccolor>.
 
-This will skip directly to TENURE for individuals who answer “no” to OTHER_HOUSING_UNITS, skipping over the HOUSING_UNITS roster.
+This will skip directly to TENURE for individuals who answer "no" to OTHER_HOUSING_UNITS, skipping over the HOUSING_UNITS roster.
 
-In addition to “=” to check if two values are equal, you can use the following operators:
+In addition to "=" to check if two values are equal, you can use the following operators:
 
 <indent><table 2>
 <cell><b>Operation</b></cell><cell><b>Symbol</b></cell>
@@ -46,7 +46,7 @@ if AGE < 1 then
     skip to MOTHER_ALIVE;
 endif</logic>
 
-Note that once we have skipped the field <b>RESIDENCE_ONE_YEAR_AGO</b>, we can’t get to it by clicking on it or going back from the following field. CSEntry keeps track of the fact that this field was skipped and won’t let us back in until we change the value of <b>AGE</b>. This is an important difference between system controlled and operator controlled data entry mode.
+Note that once we have skipped the field <b>RESIDENCE_ONE_YEAR_AGO</b>, we can't get to it by clicking on it or going back from the following field. CSEntry keeps track of the fact that this field was skipped and won't let us back in until we change the value of <b>AGE</b>. This is an important difference between system controlled and operator controlled data entry mode.
 
 We should add a comment to other readers of our logic so that they will understand what we are trying to do. This will not only help others understand our logic but it will help us when come back to it after a few months.
 
@@ -70,16 +70,16 @@ preproc
 ask if AGE >= 1
 </logic>
 
-The <logiccolor>ask if</logiccolor> statement skips over the question unless the condition <logiccolor>AGE &gt;= 1</logiccolor> is true. In other words, if the age is less than 1, the question will be skipped. Note that when changing from <logiccolor>skip</logiccolor> to <logiccolor>ask if</logiccolor>, the condition was negated by switching from “&lt;” to “&gt;=”.
+The <logiccolor>ask if</logiccolor> statement skips over the question unless the condition <logiccolor>AGE &gt;= 1</logiccolor> is true. In other words, if the age is less than 1, the question will be skipped. Note that when changing from <logiccolor>skip</logiccolor> to <logiccolor>ask if</logiccolor>, the condition was negated by switching from "&lt;" to "&gt;=".
 
 The line <logiccolor>preproc</logiccolor> tells CSPro to execute this logic <i>before</i> asking the question. Our previous examples did not specify <logiccolor>preproc</logiccolor>, so by default the logic was executed in the <logiccolor>postproc</logiccolor>. Postproc logic is executed <i>after</i> the data are entered. Preproc logic is executed before the data are entered. For each variable, you can specify a preproc, a postproc or both. <logiccolor>Ask if</logiccolor> will always be used in the <logiccolor>preproc</logiccolor> of the field being skipped while <logiccolor>skip</logiccolor> can either be in the preproc of the field being skipped or in the postproc of the preceding field.
 
 <callout><center><b>Group exercise</b></center> 
-Implement the skip pattern for questions <b>F10</b> (has a toilet) and <b>F11</b> (type of toilet). If the answer to question F10, have toilet, is “no”, skip question <b>F11</b>, type of toilet. You can use either <logiccolor>skip</logiccolor> or <logiccolor>ask if</logiccolor>. Make sure to add a comment to your code and to format your code using correct indentation and capitalization.
+Implement the skip pattern for questions <b>F10</b> (has a toilet) and <b>F11</b> (type of toilet). If the answer to question F10, have toilet, is "no", skip question <b>F11</b>, type of toilet. You can use either <logiccolor>skip</logiccolor> or <logiccolor>ask if</logiccolor>. Make sure to add a comment to your code and to format your code using correct indentation and capitalization.
 </callout>
 
 <subheader>Compound Conditions</subheader>
-As another example, we will implement the skip pattern for question <b>C01</b>. We need to skip over <b>C02</b>, highest level of education, if school attendance is “never attended” (1) or “don’t know” (9). We can implement this with two if statements:
+As another example, we will implement the skip pattern for question <b>C01</b>. We need to skip over <b>C02</b>, highest level of education, if school attendance is "never attended" (1) or "don't know" (9). We can implement this with two if statements:
 <pagebreak />
 <logic>PROC ATTENDED_SCHOOL
 
@@ -108,7 +108,7 @@ endif;</logic>
 
 In addition to the "or" operator you can also make compound conditions using the "and" operator. A compound statement linked by "or" is true if either one of the conditions are true but a compound statement using "and" is only true if both conditions are true.
 
-In addition to “or”, CSPro supports the following logical operators:
+In addition to "or", CSPro supports the following logical operators:
 
 <table 2>
 <cell><b>Operation</b></cell><cell><b>Keyword</b></cell>
@@ -127,7 +127,7 @@ preproc
 ask if MARITAL_STATUS = 2 or MARITAL_STATUS = 3 or MARITAL_STATUS = 4;
 </logic>
 
-An “or” expression is true when either the left or right expressions are true so the question will only be asked if the MARITAL_STATUS is either 2, 3 or 4.
+An "or" expression is true when either the left or right expressions are true so the question will only be asked if the MARITAL_STATUS is either 2, 3 or 4.
 
 We can make our expression even simpler using the "in" operator which checks if a value is in a range:
 
@@ -139,7 +139,7 @@ ask if MARITAL_STATUS in 2:4;
 </logic>
 
 <subheader>Other (specify) fields</subheader>
-A common pattern in CSPro is to use the <logiccolor>ask if</logiccolor> statement to implement other (specify) fields. Let’s implement the other (specify) field for question <b>F08</b>, roofing material. First we add a new alpha field to the dictionary to capture the "other" value. We can call it <b>ROOFING_MATERIAL_OTHER</b> and drop it onto the form so that it comes right after <b>ROOFING_MATERIAL</b>. We only want to ask for the "other" value if they selected "other" (code 5) for ROOFING_MATERIAL, otherwise we want to skip it. We can do that using ask if in the preproc for ROOFING_MATERIAL_OTHER.
+A common pattern in CSPro is to use the <logiccolor>ask if</logiccolor> statement to implement other (specify) fields. Let's implement the other (specify) field for question <b>F08</b>, roofing material. First we add a new alpha field to the dictionary to capture the "other" value. We can call it <b>ROOFING_MATERIAL_OTHER</b> and drop it onto the form so that it comes right after <b>ROOFING_MATERIAL</b>. We only want to ask for the "other" value if they selected "other" (code 5) for ROOFING_MATERIAL, otherwise we want to skip it. We can do that using ask if in the preproc for ROOFING_MATERIAL_OTHER.
 
 <logic>PROC ROOFING_MATERIAL_OTHER
 preproc 
@@ -149,7 +149,7 @@ ask if ROOFING_MATERIAL = 5;
 </logic>
 
 <subheader>Skip to next</subheader>
-Now let’s add the skip between sign language (<b>B12</b>) and marital status (<b>B13</b>) to skip to the next person for household members under 10 years old. In this case, what do we skip to? We can’t skip to <b>B01</b> (line number) since that will try to send us backwards to the line number for the current row. Instead, we use <logiccolor>skip to next</logiccolor> which automatically skips to the first field in the next row of the roster. We will put this skip in the postproc of <b>SIGN_LANGUAGE</b>.
+Now let's add the skip between sign language (<b>B12</b>) and marital status (<b>B13</b>) to skip to the next person for household members under 10 years old. In this case, what do we skip to? We can't skip to <b>B01</b> (line number) since that will try to send us backwards to the line number for the current row. Instead, we use <logiccolor>skip to next</logiccolor> which automatically skips to the first field in the next row of the roster. We will put this skip in the postproc of <b>SIGN_LANGUAGE</b>.
 
 <logic>PROC SIGN_LANGUAGE
 // Skip to next person for household members under 10 years of age
@@ -160,7 +160,7 @@ endif;
 
 Let's add the skip in section C, education, for those under 3 years of age. We are only supposed to fill in the education section for those aged three years and above. We can use <logiccolor>skip to next</logiccolor> to skip over the education questions if the age is less than three. We need to do this in the preproc of <b>C01</b>, the first field in the education roster, <b>ATTENDED_SCHOOL</b>. 
 
-Note that since this field already has a <logiccolor>postproc</logiccolor> we need to add the <logiccolor>preproc</logiccolor> first and then add the word <logiccolor>“postproc”</logiccolor> so that the original <logiccolor>postproc</logiccolor> logic does not become part of the <logiccolor>preproc</logiccolor>.
+Note that since this field already has a <logiccolor>postproc</logiccolor> we need to add the <logiccolor>preproc</logiccolor> first and then add the word <logiccolor>"postproc"</logiccolor> so that the original <logiccolor>postproc</logiccolor> logic does not become part of the <logiccolor>preproc</logiccolor>.
 
 <logic>
 PROC ATTENDED_SCHOOL
@@ -179,7 +179,7 @@ endif;
 </logic>
 
 <subheader>Prefills</subheader>
-Let’s fill in the line number automatically so that the interviewer doesn’t have to enter it. We can do this in the preproc of <b>PERSON_NUMBER</b>:
+Let's fill in the line number automatically so that the interviewer doesn't have to enter it. We can do this in the preproc of <b>PERSON_NUMBER</b>:
 
 <logic>
 PROC PERSON_NUMBER
@@ -208,7 +208,7 @@ In question <b>B10</b>, mother line number, automatically fill in the code 88 (d
 </callout>
 
 <subheader>Endgroup</subheader>
-Instead of using the occurrence control field in the roster, we could ask the user if they want to terminate the roster. To do that, we first add a new field to the dictionary and it to the roster. Let’s call it <b>MORE_PEOPLE</b> and give it the value set Yes - 1, No – 2. We will put it at the end of the names roster. If the interviewer picks “no” then we use the command <logiccolor>endgroup</logiccolor> which terminates entry of the current roster or repeating form.
+Instead of using the occurrence control field in the roster, we could ask the user if they want to terminate the roster. To do that, we first add a new field to the dictionary and it to the roster. Let's call it <b>MORE_PEOPLE</b> and give it the value set Yes - 1, No – 2. We will put it at the end of the names roster. If the interviewer picks "no" then we use the command <logiccolor>endgroup</logiccolor> which terminates entry of the current roster or repeating form.
 
 <logic>
 PROC MORE_PEOPLE
@@ -237,7 +237,7 @@ There is also the <logiccolor>endlevel</logiccolor> command which is similar to 
 <subheader>Skipping Based on Checkboxes</subheader>
 We only want to ask question <b>B12</b>, sign language, if the household member is hearing disabled. We want to skip question <b>B12</b> if hearing disabled is not checked in question <b>B11</b>. How can we tell in logic if hearing disabled is checked? Hearing disabled is option B in the value set so we need to determine if the set of all checked options contains the letter B.
 
-In CSPro logic we can use the function <logiccolor>pos()</logiccolor> which returns the position of one string within another. For example <logiccolor>pos(“C”, “CSPro”)</logiccolor> will be one, <logiccolor>pos(“P”, “CSPro”)</logiccolor> will be three and <logiccolor>pos(“o”, “CSPro”</logiccolor>) will be five. If the search string is not found, <logiccolor>pos()</logiccolor> will return zero. In our case, the letter B is not always at the same position in the string. If the interviewer chooses just option B then B will be the first character in the string but if the interviewer chooses A and B then the result will be “AB” and B will be in position two. However, all we care about is whether or not B is in the result string at all. For this we can check the result of <logiccolor>pos()</logiccolor>. If the result of <logiccolor>pos()</logiccolor> is nonzero then B is in the string and if the result is zero, B is not in the string.
+In CSPro logic we can use the function <logiccolor>pos()</logiccolor> which returns the position of one string within another. For example <logiccolor>pos("C", "CSPro")</logiccolor> will be one, <logiccolor>pos("P", "CSPro")</logiccolor> will be three and <logiccolor>pos("o", "CSPro"</logiccolor>) will be five. If the search string is not found, <logiccolor>pos()</logiccolor> will return zero. In our case, the letter B is not always at the same position in the string. If the interviewer chooses just option B then B will be the first character in the string but if the interviewer chooses A and B then the result will be "AB" and B will be in position two. However, all we care about is whether or not B is in the result string at all. For this we can check the result of <logiccolor>pos()</logiccolor>. If the result of <logiccolor>pos()</logiccolor> is nonzero then B is in the string and if the result is zero, B is not in the string.
 
 Using <logiccolor>pos()</logiccolor> the logic for skipping sign language if hearing is not checked is:
 
@@ -289,7 +289,7 @@ endif;
 	<li>Add the other(specify) field for <b>B15</b>, languages spoken.</li>
 	<li>Automatically fill in the  the possession code in question <b>G01</b>.</li>
 	<li>In question <b>G01</b>, household possessions, skip the value field if the quantity is zero.</li>
-	<li>Add variables and a form for section D: Fertility. Add the variables to the person record but create a new form with its own roster just like we did for section C. Don’t worry about the last question on the form that displays the total births. We will cover that in a later lesson. Add the skip patterns for the fertility section. Don’t forget to skip the entire section for males and females NOT between 12 and 50 years old.</li>
+	<li>Add variables and a form for section D: Fertility. Add the variables to the person record but create a new form with its own roster just like we did for section C. Don't worry about the last question on the form that displays the total births. We will cover that in a later lesson. Add the skip patterns for the fertility section. Don't forget to skip the entire section for males and females NOT between 12 and 50 years old.</li>
 </list>
 
 <pagebreak />

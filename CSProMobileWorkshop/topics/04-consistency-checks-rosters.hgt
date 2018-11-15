@@ -6,12 +6,12 @@ At the end of this lesson participants will be able to:
 	<li>Understand the order of PROCs and where to place edit checks</li>
 	<li>Use subscripts, <logiccolor>totocc()</logiccolor>, <logiccolor>count()</logiccolor>, <logiccolor>seek()</logiccolor> and <logiccolor>curocc()</logiccolor> to work with rosters</li>
 	<li>Use loops (<logiccolor>do while</logiccolor>) to implement edit checks on repeating records/items (rosters)</li>
-	<li>Understand and use “special values” (<logiccolor>notappl</logiccolor>, <logiccolor>missing</logiccolor> and <logiccolor>default</logiccolor>) in logic</li>
+	<li>Understand and use "special values" (<logiccolor>notappl</logiccolor>, <logiccolor>missing</logiccolor> and <logiccolor>default</logiccolor>) in logic</li>
 	<li>Set occurrence labels on rosters from logic</li>
 </list>
 
 <subheader>Groups and Subscripts</subheader>
-Let’s add a check to the line number of mother to ensure that the line number entered corresponds to a woman 12 or over in the household. To do this we need to link the line number entered in <b>B10</b> back to the corresponding row of the roster in section B. This is done through subscripts to get the age and sex of the mother based on the line number.
+Let's add a check to the line number of mother to ensure that the line number entered corresponds to a woman 12 or over in the household. To do this we need to link the line number entered in <b>B10</b> back to the corresponding row of the roster in section B. This is done through subscripts to get the age and sex of the mother based on the line number.
 
 For any item that is repeated, adding a number in parentheses after it gives you the value of a particular occurrence of the variable. For example, <logiccolor>AGE(1)</logiccolor> will be the age of the first household member, <logiccolor>AGE(2)</logiccolor> the age of the second member… If we omit the subscript when executing logic in a proc of a roster CSPro will assume that we want the one for the current row of the current roster. However, in this case we don't want the sex and age of the person in the current row, we want the age and sex in the row specified by <b>MOTHER_LINE_NUMBER</b>. To get that we need to use <logiccolor>AGE(MOTHER_LINE_NUMBER)</logiccolor> and <logiccolor>SEX(MOTHER_LINE_NUMBER)</logiccolor>.
 
@@ -45,7 +45,7 @@ endif;
 <pagebreak />
 
 <subheader>Blanks and special values</subheader>
-What happens if we refer to an occurrence of a row in the section B roster that doesn’t exist? Try entering a line number for the mother greater than the number of rows in the section B roster. Our tests for age and sex are not triggered. What are the values of <b>NAME</b>, <b>SEX</b> and <b>AGE</b> when they are empty? Let’s print them out using <logiccolor>errmsg</logiccolor> and see.
+What happens if we refer to an occurrence of a row in the section B roster that doesn't exist? Try entering a line number for the mother greater than the number of rows in the section B roster. Our tests for age and sex are not triggered. What are the values of <b>NAME</b>, <b>SEX</b> and <b>AGE</b> when they are empty? Let's print them out using <logiccolor>errmsg</logiccolor> and see.
 
 <logic>
 errmsg("NAME = %s, AGE=%d, SEX=%d", strip(NAME(MOTHER_LINE_NUMBER)), 
@@ -81,7 +81,7 @@ In our error message, it would be nice to tell the interviewer what the maximum 
 </logic>
 
 <subheader>Setting Occurrence Labels in Logic</subheader>
-If you look at the case tree in Android you will see that the roster occurrences are displayed with the name of the roster and the occurrence number “Demographics(1), Demographics(2)…” which is not useful. Using logic, we can set the occurrence labels to the names of the individuals instead. For that we use the command <logiccolor>setocclabel()</logiccolor> which takes the name of the group (roster or repeating form) and the string to set it to. For example, to set the occurrence label of each row of the different rosters once the name is entered we can do the following in the postproc of the name field (<b>NAME</b>):
+If you look at the case tree in Android you will see that the roster occurrences are displayed with the name of the roster and the occurrence number "Demographics(1), Demographics(2)…" which is not useful. Using logic, we can set the occurrence labels to the names of the individuals instead. For that we use the command <logiccolor>setocclabel()</logiccolor> which takes the name of the group (roster or repeating form) and the string to set it to. For example, to set the occurrence label of each row of the different rosters once the name is entered we can do the following in the postproc of the name field (<b>NAME</b>):
 
 <logic>
 PROC NAME
@@ -209,7 +209,7 @@ endif;
 Show a household with four members on the whiteboard/flipchart and show the code above on the screen. Pick three volunteers. One volunteer plays the role of the variable numberOfHeads, a second plays the role of the variable i and a third is the loop director. Give them each a sign so everyone knows who they are playing. The two people playing variables should show their current values by holding up the correct number of fingers. The director is responsible for walking through the code line by line and updating the variable values until the loop ends explaining what they do step by step.
 </callout>
 
-Now that we all understand loops let’s see how we can simplify our code by using the function <logiccolor>count()</logiccolor> instead of a loop.
+Now that we all understand loops let's see how we can simplify our code by using the function <logiccolor>count()</logiccolor> instead of a loop.
 
 <logic>
 PROC HOUSEHOLD_MEMBERS_ROSTER

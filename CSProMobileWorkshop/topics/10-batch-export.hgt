@@ -16,7 +16,7 @@ To create a batch edit application you choose File->New from CSPro and choose Ba
 The user interface for working with batch applications is similar to the one for working with data entry applications except that there are no forms. Instead there is a tab in the tree one left side of the window for edits. Just like in data entry, you add logic to PROCS. Instead of running interactively, all the error messages are written out to a log file for review after the whole program has run.
 
 <subheader>Checking for Errors</subheader>
-To add consistency checks we proceed just as we did in our data entry application by adding logic to the appropriate PROC. Let’s start with a simple check that the age of first marriage is not greater than the age.
+To add consistency checks we proceed just as we did in our data entry application by adding logic to the appropriate PROC. Let's start with a simple check that the age of first marriage is not greater than the age.
 
 <logic>
 PROC AGE_AT_FIRST_MARRIAGE
@@ -104,7 +104,7 @@ CSPRO Executor Normal End
 </pre></html>
 
 <subheader>Correcting Errors</subheader>
-In addition to using batch edit to find errors you can also use it to correct problems by modifying variables in your logic. Let’s simply cap the age at first marriage to never be greater than the age.
+In addition to using batch edit to find errors you can also use it to correct problems by modifying variables in your logic. Let's simply cap the age at first marriage to never be greater than the age.
 
 <logic>
 // Check for age at first marriage less than current age
@@ -114,9 +114,9 @@ if AGE_AT_FIRST_MARRIAGE > AGE then
 endif;
 </logic>
 
-When we run this time we will specify an output file: Popstan2020Edited.csdat. The changes we make will only be made to the output file. We can then rerun the batch application on the output file and make sure that we don’t have any error messages.
+When we run this time we will specify an output file: Popstan2020Edited.csdat. The changes we make will only be made to the output file. We can then rerun the batch application on the output file and make sure that we don't have any error messages.
 
-Instead of just assigning the value of AGE_FIRST_MARRIAGE we can use the <logiccolor>impute</logiccolor> command which does the assignment just like “=” but also generates a nice report showing the values that were imputed.
+Instead of just assigning the value of AGE_FIRST_MARRIAGE we can use the <logiccolor>impute</logiccolor> command which does the assignment just like "=" but also generates a nice report showing the values that were imputed.
 
 <logic>
 // Check for age at first marriage less than current age
@@ -126,7 +126,7 @@ if AGE_AT_FIRST_MARRIAGE > AGE then
 endif;
 </logic>
 
-The imputation report will be opened in TextViewer after you run the batch application but to see it you will need to go to the Window menu and choose the file that ends in “.frq.lst”.
+The imputation report will be opened in TextViewer after you run the batch application but to see it you will need to go to the Window menu and choose the file that ends in ".frq.lst".
 
 <html><pre>
                            IMPUTE FREQUENCIES                           Page   1
@@ -142,7 +142,7 @@ _______________________________ _____________________________ _____________
 </pre></html>
 
 <subheader>Adding Calculated Variables</subheader>
-It is often useful to add additional variables to your data file after data collection that are computed from the collected variables. For example, let’s add a yes/no/don't know variable to the household record that determines if the household is headed by a child. First we add the new variable <b>CHILD_HEADED_HOUSEHOLD</b> to the dictionary (at the end of the housing record so that we do not mess up our existing data). Then we add logic to the PROC of our new variable to impute the value. A household is headed by a child if the age of the head is less than 18.
+It is often useful to add additional variables to your data file after data collection that are computed from the collected variables. For example, let's add a yes/no/don't know variable to the household record that determines if the household is headed by a child. First we add the new variable <b>CHILD_HEADED_HOUSEHOLD</b> to the dictionary (at the end of the housing record so that we do not mess up our existing data). Then we add logic to the PROC of our new variable to impute the value. A household is headed by a child if the age of the head is less than 18.
 
 <logic>
 PROC CHILD_HEADED_HOUSEHOLD
@@ -195,12 +195,12 @@ endif;
 The remaining languages follow the same pattern.
 
 <subheader>The Export Data Tool</subheader>
-The CSPro export data tool is available from the Tools menu. When you first start Export Data you are prompted to provide a data dictionary. Choose the Popstan2020 dictionary. From the main export screen, you can choose which records/variables to export using the checkboxes next to each one. To start with let’s just pick the id items and the first few fields from section F. At the bottom of the export window you can choose the file format to export to. For this exercise we will choose CSV which can be easily opened in Excel. To run the export, click on the traffic light. You are prompted to choose the data file. We will use the Popstan2020Edited.csdb data file. Finally, you are prompted for the name(s) of the exported files. Once the export completes the exported files are displayed in Text Viewer. Let’s open them in Excel and see what we have. Note that each household is saved in a separate line in the Excel file. 
+The CSPro export data tool is available from the Tools menu. When you first start Export Data you are prompted to provide a data dictionary. Choose the Popstan2020 dictionary. From the main export screen, you can choose which records/variables to export using the checkboxes next to each one. To start with let's just pick the id items and the first few fields from section F. At the bottom of the export window you can choose the file format to export to. For this exercise we will choose CSV which can be easily opened in Excel. To run the export, click on the traffic light. You are prompted to choose the data file. We will use the Popstan2020Edited.csdb data file. Finally, you are prompted for the name(s) of the exported files. Once the export completes the exported files are displayed in Text Viewer. Let's open them in Excel and see what we have. Note that each household is saved in a separate line in the Excel file. 
 
 <center><html><img src="export-id-housing.png" width="600" /></html></center>
 
 <subheader>Exporting Repeating Records</subheader>
-Let’s try exporting a few fields from section B: line number, name and sex. Notice for each variable we exported we get 50 columns. Why is that? We are getting one column for each record occurrence. CSPro is still exporting each household on a single row and since there are up to 50 people in the household it generates 50 columns for each variable. Even empty occurrences are still generating columns in the spreadsheet.
+Let's try exporting a few fields from section B: line number, name and sex. Notice for each variable we exported we get 50 columns. Why is that? We are getting one column for each record occurrence. CSPro is still exporting each household on a single row and since there are up to 50 people in the household it generates 50 columns for each variable. Even empty occurrences are still generating columns in the spreadsheet.
 
 <center><html><img src="export-repeating-all-one-row.png" width="600" /></html></center>
 
@@ -209,7 +209,7 @@ Having a column for each occurrence can complicate working with the data. For ex
 <center><html><img src="export-repeating-separate-rows.png" width="600" /></html></center>
 
 <subheader>Exporting Multiple Record Types</subheader>
-Now let’s try exporting the first few items from both the person record (B) and the deaths record (E). With our current settings, Export Data warns us that only items from the first record will be exported. Why? The problem is that if you put each record in its own row then some rows would have household members on them and others would have deaths on them but then the columns would not match.
+Now let's try exporting the first few items from both the person record (B) and the deaths record (E). With our current settings, Export Data warns us that only items from the first record will be exported. Why? The problem is that if you put each record in its own row then some rows would have household members on them and others would have deaths on them but then the columns would not match.
 
 The solution is to export each record in a separate file by selecting <i>Multiple Files (one for each record type)</i> under Number of Files Created. Doing this generates two files: PERSON.csv which contains the household members and DEATHS.csv which contains the deaths.
 
@@ -226,7 +226,7 @@ It is not possible to join multiple records to other multiple records from expor
 Note that in some cases it may be easier to do the export of the single and multiple records without joining and then do the join in the software that you have imported the data into.
 
 <subheader>Importing Data into SAS, SPSS, Stata and R</subheader>
-When exporting data to statistical packages, CSPro generates both a data file and script to run inside the statistical software itself to run the import. For details in how to run this script for each package see the online help for Export Data and look under “How to…”.
+When exporting data to statistical packages, CSPro generates both a data file and script to run inside the statistical software itself to run the import. For details in how to run this script for each package see the online help for Export Data and look under "How to…".
 
 <subheader>Saving your Export Specification</subheader>
 You can save your export settings as CSPro export specification file (.exf). You can later double click on this file or open it from the Export Data Tool to retrieve all the selections that were made.

@@ -15,7 +15,7 @@ At the end of this lesson participants will be able to:
 
 Up to now, we have been able to limit the responses for each variable to only a set of valid responses using value sets. What if we want to check for consistency between two different variables?
 
-For example, let’s prevent the interviewer from entering more bedrooms than there are rooms in the house. Click on the <b>NUMBER_OF_BEDROOMS</b> field in the forms tree and then click on Logic in the toolbar to open the logic editor. Add the following code in the procedure for <b>NUMBER_OF_BEDROOMS</b>:
+For example, let's prevent the interviewer from entering more bedrooms than there are rooms in the house. Click on the <b>NUMBER_OF_BEDROOMS</b> field in the forms tree and then click on Logic in the toolbar to open the logic editor. Add the following code in the procedure for <b>NUMBER_OF_BEDROOMS</b>:
 
 <logic>
 PROC NUMBER_OF_BEDROOMS
@@ -31,7 +31,7 @@ The <logiccolor>if</logiccolor> statement only executes the code between the <lo
 
 Note that we put our logic in the proc for <b>NUMBER_OF_BEDROOMS</b> and not in the proc for <b>NUMBER_OF_ROOMS</b>. This is because when we are in the proc for <b>NUMBER_OF_ROOMS</b>, the value for <b>NUMBER_OF_BEDROOMS</b> has not yet been entered. When creating consistency checks we always put the logic for the check in the proc for the last field involved in the check.
 
-Let’s take a look at another example, the edit specifications call for the following control:
+Let's take a look at another example, the edit specifications call for the following control:
 
 <indent>•	If <b>RELATIONSHIP</b> is spouse, then <b>MARITAL_STATUS</b> should not be coded 1 (never married), 2 (divorced) or 3 (widowed).</indent>
 
@@ -50,7 +50,7 @@ endif;
 
 Note that when combining multiple "and" and "or" expressions, "and" expressions are evaluated first and then "or" expressions are evaluated which can sometimes lead to unexpected results. You can use parentheses to force the order of evaluation you want like we do above. What happens to the above expression without the parentheses if the relationship is not 2 and the marital status is 3?
 
-Of course there are a couple of simpler ways to write this check without using "or". We can use the not equals operator (“&lt;&gt;”):
+Of course there are a couple of simpler ways to write this check without using "or". We can use the not equals operator ("&lt;&gt;"):
 
 <logic>
 // Ensure that spouse is not single
@@ -73,7 +73,7 @@ endif;
 The in operator will be true if the value matches any of the numbers in the comma separated list. It also supports ranges by separating the start and end of the range with a colon (:). For example <logiccolor>BEDROOMS in 1:4</logiccolor> will be true if <b>BEDROOMS</b> is 1,2,3 or 4.
 
 <subheader>Better Error Messages</subheader>
-We can improve our error message by adding parameters to the string. Let’s go back to the check on the number of bedrooms and display the number of rooms and the number of bedrooms in the message:
+We can improve our error message by adding parameters to the string. Let's go back to the check on the number of bedrooms and display the number of rooms and the number of bedrooms in the message:
 
 <logic>
 PROC NUMBER_OF_BEDROOMS
@@ -86,9 +86,9 @@ if NUMBER_OF_BEDROOMS > NUMBER_OF_ROOMS then
 endif;
 </logic>
 
-The “%d”s in the message are replaced by the values of the variables that follow in the order that they are listed. 
+The "%d"s in the message are replaced by the values of the variables that follow in the order that they are listed. 
 
-Let’s do the same for the check on marital status and relationship:
+Let's do the same for the check on marital status and relationship:
 
 <logic>
 // Ensure that spouse is not single
@@ -159,7 +159,7 @@ With the select we no longer need the <logiccolor>reenter</logiccolor> since CSE
 Note that the <logiccolor>select</logiccolor> clause is part of the <logiccolor>errmsg</logiccolor> statement so there is no semicolon in between the <logiccolor>select</logiccolor> and the <logiccolor>errmsg</logiccolor>.
 
 <pagebreak />
-Let’s add a select to the relationship-marital status check too:
+Let's add a select to the relationship-marital status check too:
 
 <logic>
 // Ensure that spouse is not single
@@ -187,9 +187,9 @@ if NUMBER_OF_BEDROOMS > NUMBER_OF_ROOMS then
 endif;
 </logic>
 
-Now the message dialog will have a third button labelled “ignore” that, when clicked, will move to the next field, in this case to type of main dwelling.
+Now the message dialog will have a third button labelled "ignore" that, when clicked, will move to the next field, in this case to type of main dwelling.
 
-This is commonly referred to as a “soft edit check” as opposed to the previous “hard edit check” that does not allow the interviewer to move on until the inconsistency is fixed. The advantage of a soft edit check is that the interviewer won’t get stuck, however, data quality may suffer. In a CAPI census soft edit checks are generally preferred in order to prevent interviewers from getting stuck and to keep interview times to a minimum.
+This is commonly referred to as a "soft edit check" as opposed to the previous "hard edit check" that does not allow the interviewer to move on until the inconsistency is fixed. The advantage of a soft edit check is that the interviewer won't get stuck, however, data quality may suffer. In a CAPI census soft edit checks are generally preferred in order to prevent interviewers from getting stuck and to keep interview times to a minimum.
 
 For soft edit checks, CSPro provides a warning function, which is identical to errmsg except that if you have already ignored the message once, when you navigate through the field by clicking on the case tree or resuming from partial save, the message is not shown a second time. To make the rooms/bedrooms a soft check, in addition to adding the ignore option, we would use <logiccolor>warning</logiccolor> instead of <logiccolor>errmsg</logiccolor>.
 
@@ -224,7 +224,7 @@ Using this matrix, you can test each of the 8 possible combinations and make sur
 By combining the test matrices from all the consistency checks in the application, you can create a test plan for the survey/census application to verify the application works correctly when changes are made. Often times changes to one part of the questionnaire can have unintended effects on skips and consistency checks in other parts of the questionnaire so it is important to have a test plan that is used after every set of changes to ensure that no problems are introduced.
 
 <subheader>Calculations</subheader>
-In question <b>D02</b> the respondent gives the number of boys living in the household, girls living in the household and the total number of children living in the household. Let’s check that the sum of the girls and the boys is equal to the total. 
+In question <b>D02</b> the respondent gives the number of boys living in the household, girls living in the household and the total number of children living in the household. Let's check that the sum of the girls and the boys is equal to the total. 
 
 <logic>
 if BOYS_IN_HOUSEHOLD + GIRLS_IN_HOUSEHOLD <> CHILDREN_IN_HOUSEHOLD then
@@ -248,7 +248,7 @@ CSPro logic supports the following mathematical operators:
 </table>
 
 <subheader>Checking Dates</subheader>
-Let’s add a consistency check between the date of birth and the age. We can use the function <logiccolor>datediff()</logiccolor> to calculate the age based on the interview date and the date of birth:
+Let's add a consistency check between the date of birth and the age. We can use the function <logiccolor>datediff()</logiccolor> to calculate the age based on the interview date and the date of birth:
 
 <logic>
 PROC DAY_OF_BIRTH
@@ -295,7 +295,7 @@ endif;
 
 <subheader>Logic variables</subheader>
 
-It would better if we didn’t repeat the datediff calculation twice. Repeating code makes it harder to maintain. We may fix a bug in one copy of the code but forget to do so another. To avoid repeating ourselves we can declare a logic variable to hold the value of our calculation. Logic variables are like dictionary variables but are only for use in calculations in logic and don’t get shown on forms or saved to the data file. To create a variable, we declare it as follows:
+It would better if we didn't repeat the datediff calculation twice. Repeating code makes it harder to maintain. We may fix a bug in one copy of the code but forget to do so another. To avoid repeating ourselves we can declare a logic variable to hold the value of our calculation. Logic variables are like dictionary variables but are only for use in calculations in logic and don't get shown on forms or saved to the data file. To create a variable, we declare it as follows:
 
 <logic>
 numeric aNumber;
@@ -303,7 +303,7 @@ string anAlphanumeric;
 alpha(20) anAlphaNumericWithAFixedLength;
 </logic>
 
-Numeric variables hold numbers (including numbers with fractional parts) and string variables hold alphanumeric values. Alpha variables are like strings but with a fixed length. In early versions of CSPro string variables didn’t exist and it was common to use alpha variables. In modern CSPro you should always use string variables instead of fixed length alpha variables.
+Numeric variables hold numbers (including numbers with fractional parts) and string variables hold alphanumeric values. Alpha variables are like strings but with a fixed length. In early versions of CSPro string variables didn't exist and it was common to use alpha variables. In modern CSPro you should always use string variables instead of fixed length alpha variables.
 
 <callout>
 <center><b>Coding style</b></center>
@@ -335,15 +335,15 @@ It is possible to combine the declaration and the initialization of the variable
 
 <subheader>When to Use Consistency Checks</subheader>
 
-It is tempting to place consistency checks on every question in your application in order to maximize data quality but it is important to realize that every check you add comes at a price. Beyond the time it takes to implement and properly test each check, you also need to consider the additional time required to train and support a more complex application. Every check you add increases the risk that there will be bugs in your application when it gets to the field. Unlike a key from paper application, a bug in the field can mean an enumerator being stuck and abandoning an entire questionnaire. For surveys, you generally have a small sample and better trained enumerators so this is less of a concern. However, for a census, enumerators are not as experienced and supporting them in the field is much more of a challenge. In a census, due to the number of respondents, you can use imputation to correct many inconsistencies with minimal impact on the overall results. In any case, just the fact that the CAPI instrument imposes range checks and skip patterns will be a significant improvement in data quality over a paper census. For a CAPI census application, we recommend only adding consistency checks on the key demographic fields in the household roster and leaving potential inconsistencies in other parts of the questionnaire to be corrected post data collection. In addition, we recommend using mainly “soft” edit checks so that the enumerator is never blocked by the application. 
+It is tempting to place consistency checks on every question in your application in order to maximize data quality but it is important to realize that every check you add comes at a price. Beyond the time it takes to implement and properly test each check, you also need to consider the additional time required to train and support a more complex application. Every check you add increases the risk that there will be bugs in your application when it gets to the field. Unlike a key from paper application, a bug in the field can mean an enumerator being stuck and abandoning an entire questionnaire. For surveys, you generally have a small sample and better trained enumerators so this is less of a concern. However, for a census, enumerators are not as experienced and supporting them in the field is much more of a challenge. In a census, due to the number of respondents, you can use imputation to correct many inconsistencies with minimal impact on the overall results. In any case, just the fact that the CAPI instrument imposes range checks and skip patterns will be a significant improvement in data quality over a paper census. For a CAPI census application, we recommend only adding consistency checks on the key demographic fields in the household roster and leaving potential inconsistencies in other parts of the questionnaire to be corrected post data collection. In addition, we recommend using mainly "soft" edit checks so that the enumerator is never blocked by the application. 
 
 <subheader>Exercises</subheader>
 Implement the following consistency checks from the edit specifications. Test that they are correct. Make sure to test all possible cases (test matrices can help with this).
 <list ordered>
 	<li>Display an error message if the head of household is less than 12 years old.</li>
 	<li>Ensure that <b>B14</b> (age at first marriage) is less than or equal to the current age (<b>B05</b>).</li>
-	<li>Display an error message if the highest level of education (<b>C02</b>) is university or graduate but the age is less than eighteen. Make this a “soft check” so that the interviewer can ignore the error if they wish.</li>
-	<li>Add an error message if the highest level of education (<b>C02</b>) is “standard 5” or higher and the individual does not know how to read or write (<b>C03</b>). Make this a soft check.</li>
+	<li>Display an error message if the highest level of education (<b>C02</b>) is university or graduate but the age is less than eighteen. Make this a "soft check" so that the interviewer can ignore the error if they wish.</li>
+	<li>Add an error message if the highest level of education (<b>C02</b>) is "standard 5" or higher and the individual does not know how to read or write (<b>C03</b>). Make this a soft check.</li>
 	<li>Add a consistency check in section F that displays an error message if the household has a flush toilet in question <b>F11</b> and does NOT also specify piped water inside house for question <b>F12</b>. Use a select clause to allow them to correct either <b>F11</b> or <b>F12</b>.</li>
 	<li>Ensure that the total number of children in <b>D03</b> is equal to the sum of the boys and the girls. Do the same for question <b>D04</b>.</li>
 	<li>Check that the date that the death occurred in question <b>E05</b> is within the last five years, since the section should only include deaths occurring in that period. Use the interview date to calculate the number of years since the death occurred. For example, if the interview date is 2016-10-05 and the date of death is 2016-09 then you should show an error message. You can use datediff to calculate the difference between the interview date and the date of death as we did for the age and date of birth check, however you will need to construct a full date from just the month and year of death. Since no day is given, use 1 as the day (assume first day of the month). Note that datediff rounds to the nearest year so to do the check correctly you will need to get the difference in months and compare it to 60 (5 years times 12 months).</li>

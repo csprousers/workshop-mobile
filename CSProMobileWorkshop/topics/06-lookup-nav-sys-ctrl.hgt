@@ -6,22 +6,22 @@ At the end of this session participants will be able to:
 	<li>Create user defined functions in CSPro</li>
 	<li>Extend the interface of CSEntry with userbar buttons</li>
 	<li>Use the commands <logiccolor>advance</logiccolor> and <logiccolor>move</logiccolor> to navigate through the questionnaire</li>
-	<li>Use the function <logiccolor>visualvalue</logiccolor> to get the value of variables that are “off path”</li>
+	<li>Use the function <logiccolor>visualvalue</logiccolor> to get the value of variables that are "off path"</li>
 	<li>Use the command <logiccolor>showarray</logiccolor> to display tables to the interviewer</li>
 </list>
 
 <subheader>Lookup Files</subheader>
 It is currently possible for the interviewer to enter a district code that is not valid for the province that was selected. In order to verify that the district code is valid for the province we need to use the list of province and district codes in the annex of the questionnaire. We can do this by creating a lookup file from the Excel spreadsheet. We can then use this lookup file to check for valid districts.
 
-First, we need to create a dictionary for our lookup file. For this task, we want to be able to query if the combination of the province and district codes is a valid district. In annex 2 of the questionnaire we have a table with the province code, district code and district name. We can use this as a lookup file where the keys are the province and district code and the value is the district name. We can create a dictionary for this using the Excel2CSPro tool from the tools menu. Select the “Create CSPro dictionary from Excel File” tab, click “Select Excel File” and browse to the file QuestionnaireAnnexes.xlsx. Choose “ANN2 – District Codes” and click “Analyze Worksheet”. This detects the dictionary variables to create from the columns of the spreadsheet. The tool will show four variables, one for each column and will set the default names to column headers of the spreadsheet. Our lookup file dictionary will have the province code and district code as the id-items and province and district names as regular variables. Next to the province and district codes check the “ID” box to indicate that these should be ID items. In order to avoid name conflicts with the main dictionary we can use DI_PROVINCE, DI_DISTRICT and DI_DISTRICT_NAME as the variable names. Modify them in the Excel to CSPro tool.
+First, we need to create a dictionary for our lookup file. For this task, we want to be able to query if the combination of the province and district codes is a valid district. In annex 2 of the questionnaire we have a table with the province code, district code and district name. We can use this as a lookup file where the keys are the province and district code and the value is the district name. We can create a dictionary for this using the Excel2CSPro tool from the tools menu. Select the "Create CSPro dictionary from Excel File" tab, click "Select Excel File" and browse to the file QuestionnaireAnnexes.xlsx. Choose "ANN2 – District Codes" and click "Analyze Worksheet". This detects the dictionary variables to create from the columns of the spreadsheet. The tool will show four variables, one for each column and will set the default names to column headers of the spreadsheet. Our lookup file dictionary will have the province code and district code as the id-items and province and district names as regular variables. Next to the province and district codes check the "ID" box to indicate that these should be ID items. In order to avoid name conflicts with the main dictionary we can use DI_PROVINCE, DI_DISTRICT and DI_DISTRICT_NAME as the variable names. Modify them in the Excel to CSPro tool.
 
 <center><html><img src="excel2csprodict.png" width="600" /></html></center>
 
-We must make sure that the lengths and zero-fill settings of the id-items exactly match those in the main dictionary otherwise we won’t be able to use the variables from the main dictionary as keys for the lookup. Verify that the length of the province and district codes match those in the main dictionary and check the box “Zero fill numerics” to make sure that the id-items are zero filled. Once all settings are correct, click create dictionary to generate the CSPro dictionary file. Save it as “Districts.dcf” in the household folder.
+We must make sure that the lengths and zero-fill settings of the id-items exactly match those in the main dictionary otherwise we won't be able to use the variables from the main dictionary as keys for the lookup. Verify that the length of the province and district codes match those in the main dictionary and check the box "Zero fill numerics" to make sure that the id-items are zero filled. Once all settings are correct, click create dictionary to generate the CSPro dictionary file. Save it as "Districts.dcf" in the household folder.
 
 <center><html><img src="excel2csprodata.png" width="600" /></html></center>
 
-Once we have the dictionary we need to convert the Excel spreadsheet into a CSPro data file. We can use the first tab of the Excel2CSPro tool to do this. Select the QuestionnaireAnnexes.xlsx file again along with the Districts dictionary that we just created. Specify a new output data file to write the lookup file to. Under “Record to Worksheet Mapping” choose the second worksheet “ANN 2-District Codes”. Under the “Item to Column Mapping” link the dictionary variables to the appropriate columns in the Excel spreadsheet: DI_PROVINCE_CODE to “Column B: Province Code”, DI_DISTRICT_CODE to “Column D: District Code”, etc… Finally, click “Create CSPro Data File” to generate the file. Save it in the Data folder. Verify the file in DataViewer to make it sure it was converted correctly. 
+Once we have the dictionary we need to convert the Excel spreadsheet into a CSPro data file. We can use the first tab of the Excel2CSPro tool to do this. Select the QuestionnaireAnnexes.xlsx file again along with the Districts dictionary that we just created. Specify a new output data file to write the lookup file to. Under "Record to Worksheet Mapping" choose the second worksheet "ANN 2-District Codes". Under the "Item to Column Mapping" link the dictionary variables to the appropriate columns in the Excel spreadsheet: DI_PROVINCE_CODE to "Column B: Province Code", DI_DISTRICT_CODE to "Column D: District Code", etc… Finally, click "Create CSPro Data File" to generate the file. Save it in the Data folder. Verify the file in DataViewer to make it sure it was converted correctly. 
  
 Finally, in the district proc use the <logiccolor>loadcase()</logiccolor> command to lookup the province and district codes in the file. Loadcase takes the name of the dictionary (<b>DISTRICTS_DICT</b>) and the values to use as keys (id-items) for the lookup. For example, to lookup province 3, district 6 we would do:
 
@@ -73,7 +73,7 @@ endif;
 If the data for your lookup file changes once your survey is in the field, rather than completely regenerating the lookup file you can update the existing lookup data file based on a new Excel spreadsheet. Choose the existing csdb file as the output data file and under "Case Management" choose "Modify, add cases" or "Modify, add, delete cases". Instead of erasing and regenerating the data file this will update only the cases that are new or have been modified in the Excel file. Choosing "Modify, add, delete cases" will also delete cases that are in the data file but are not in the spreadsheet. Using this approach is important if you are planning to use CSPro data synchronization to update the lookup file during data collection. If you are using data synchronization to update the file and you generate a completely new data file you will get duplicate cases when the new lookup file is downloaded to the devices. If instead, you update the existing file then data synchronization will simply update the data files on devices that download it.
 
 <subheader>Dynamic Value Set from a Lookup File</subheader>
-An alternative to using the lookup file to check the district and province codes is to combine the lookup file with <logiccolor>setvalueset</logiccolor> to create a dynamic value set for the district that includes only districts in the selected province. To do this we need to extract all the districts in the selected province from the lookup file. We can do this using the <logiccolor>forcase</logiccolor> loop which iterates over all cases in an external data file. By itself, <logiccolor>forcase</logiccolor> will loop through each case in the data file. You can also add an optional “where” clause to only go through the districts in the selected province.
+An alternative to using the lookup file to check the district and province codes is to combine the lookup file with <logiccolor>setvalueset</logiccolor> to create a dynamic value set for the district that includes only districts in the selected province. To do this we need to extract all the districts in the selected province from the lookup file. We can do this using the <logiccolor>forcase</logiccolor> loop which iterates over all cases in an external data file. By itself, <logiccolor>forcase</logiccolor> will loop through each case in the data file. You can also add an optional "where" clause to only go through the districts in the selected province.
 
 <logic>
 PROC DISTRICT
@@ -92,7 +92,7 @@ setvalueset(DISTRICT, codes, labels);
 <subheader>User defined functions</subheader>
 Often you find you have identical blocks of logic in multiple procs in your application. This can cause problems if you later change the code in one place to fix a bug and forget to change it in the other. In such situations it is better to put the logic in a user defined function which you can then call from all the procs where it is used. User defined functions are defined in the PROC GLOBAL. You call them the same way you call built in CSPro functions.
 
-User defined functions can take arguments and return values just like built in functions. Let’s define a function that we can use in all the places where we check if a household member is a woman of childbearing age. This function will be passed the index (row number) of the household member in the household roster and it will return one if the person is a woman over 12 years old and zero otherwise. This way if we later decide that we should be using 13 or 14 as a minimum age we only have to make the change in one place.
+User defined functions can take arguments and return values just like built in functions. Let's define a function that we can use in all the places where we check if a household member is a woman of childbearing age. This function will be passed the index (row number) of the household member in the household roster and it will return one if the person is a woman over 12 years old and zero otherwise. This way if we later decide that we should be using 13 or 14 as a minimum age we only have to make the change in one place.
 
 <pagebreak />
 
@@ -229,7 +229,7 @@ Another use for user defined functions is for fills in question that require som
 
 <indent>Just to make sure that I have this right, (name) has had in total (total number) births during her life. Is this correct?</indent>
 
-We can use the question text for this but we don’t have a dictionary variable for total births. We only have the yes/no variable <b>IS_TOTAL_BIRTHS_CORRECT</b>. We could create an additional dictionary variable but instead we can simply create function to compute the total births and use that as the fill value.
+We can use the question text for this but we don't have a dictionary variable for total births. We only have the yes/no variable <b>IS_TOTAL_BIRTHS_CORRECT</b>. We could create an additional dictionary variable but instead we can simply create function to compute the total births and use that as the fill value.
 
 <logic>
 // Compute totalBirths to display in question text in fertility section
@@ -266,7 +266,7 @@ end;
 </logic>
 
 <subheader>The Userbar</subheader>
-From logic we can add buttons to the CSEntry user interface that call user-defined functions. Here is how to add a userbar button that will create an errmsg dialog that says “hello”. First we define the function hello in the PROC GLOBAL:
+From logic we can add buttons to the CSEntry user interface that call user-defined functions. Here is how to add a userbar button that will create an errmsg dialog that says "hello". First we define the function hello in the PROC GLOBAL:
 
 <logic>
 function hello()
@@ -287,7 +287,7 @@ userbar(show);
 When adding a button in the preproc of the application it is important to call clear first, otherwise we can end up with two or three copies of the same button if we start the application multiple times. We added the button in the preproc of the application but you can add or remove buttons in any proc so you can, for example, only a show button within a certain field or a certain roster.
 
 
-Let’s try a more interesting example. Let’s add a “Go To…” button that will let the user navigate directly to a particular section of the questionnaire.
+Let's try a more interesting example. Let's add a "Go To…" button that will let the user navigate directly to a particular section of the questionnaire.
 
 <logic>
 // Userbar function for navigating directly to different parts of questionnaire.
@@ -313,7 +313,7 @@ userbar(show);
 </logic>
 
 <subheader>Advance and Move</subheader>
-The above will let the interviewer jump from one section to another but using <logiccolor>skip</logiccolor> means that if we use our <i>Go To…</i> button to jump over a section, that section will end up skipped and won’t be saved in the data file. Instead of using <logiccolor>skip</logiccolor> we can use <logiccolor>advance</logiccolor> which moves forward in the questionnaire without marking fields as skipped. Using <logiccolor>advance</logiccolor> also runs all the preprocs and postprocs of the fields that are passed through to ensure that no consistency or out of range checks are missed.
+The above will let the interviewer jump from one section to another but using <logiccolor>skip</logiccolor> means that if we use our <i>Go To…</i> button to jump over a section, that section will end up skipped and won't be saved in the data file. Instead of using <logiccolor>skip</logiccolor> we can use <logiccolor>advance</logiccolor> which moves forward in the questionnaire without marking fields as skipped. Using <logiccolor>advance</logiccolor> also runs all the preprocs and postprocs of the fields that are passed through to ensure that no consistency or out of range checks are missed.
 
 <logic>
 // Userbar function for navigating directly to different parts of questionnaire.
@@ -332,7 +332,7 @@ function goto()
 end;
 </logic>
 
-This stops the function from skipping over data when navigating, however it still has a limitation. We can only navigate forward in the questionnaire. To go backwards we need to use <logiccolor>reenter</logiccolor>, but in our goto() function we don’t know if the user wants to move forward or backward. Fortunately, CSPro provides the command <logiccolor>move</logiccolor> which will use either <logiccolor>skip</logiccolor> or <logiccolor>reenter</logiccolor> as appropriate. By default, when going forward, move does a skip but you can add <logiccolor>advance</logiccolor> after the field name to make it do an <logiccolor>advance</logiccolor> instead of a <logiccolor>skip</logiccolor>.
+This stops the function from skipping over data when navigating, however it still has a limitation. We can only navigate forward in the questionnaire. To go backwards we need to use <logiccolor>reenter</logiccolor>, but in our goto() function we don't know if the user wants to move forward or backward. Fortunately, CSPro provides the command <logiccolor>move</logiccolor> which will use either <logiccolor>skip</logiccolor> or <logiccolor>reenter</logiccolor> as appropriate. By default, when going forward, move does a skip but you can add <logiccolor>advance</logiccolor> after the field name to make it do an <logiccolor>advance</logiccolor> instead of a <logiccolor>skip</logiccolor>.
 
 <logic>
 // Userbar function for navigating directly to different parts of questionnaire.
@@ -351,7 +351,7 @@ function goto()
 end;
 </logic>
 
-Let’s extend our goto function to let the interviewer navigate directly to an individual in the household roster. If they choose "household members" then instead of going to the first person in the roster, we will show them a list of all household members in the roster and the let them choose which one to goto. For this we can use the function <logiccolor>showarray()</logiccolor>. This function takes an array of values and displays them in a grid in a dialog box and returns the row number that the user picks. 
+Let's extend our goto function to let the interviewer navigate directly to an individual in the household roster. If they choose "household members" then instead of going to the first person in the roster, we will show them a list of all household members in the roster and the let them choose which one to goto. For this we can use the function <logiccolor>showarray()</logiccolor>. This function takes an array of values and displays them in a grid in a dialog box and returns the row number that the user picks. 
 
 Unlike <logiccolor>setvalueset()</logiccolor> that takes two arrays, <logiccolor>showarray()</logiccolor> takes a two-dimensional array. You can think of a two-dimensional array as a grid of variables or as a matrix. You declare a two-dimensional array in the PROC GLOBAL the same way you declare a one-dimensional array except that you specify the size in both dimensions: number of rows and number of columns.
 
@@ -368,7 +368,7 @@ When assigning a value to a two-dimensional array you specify both the row and c
 householdMembersArray(4, 2) = "This is the 4th row, 2nd column";
 </logic>
 
-In our examples we will loop through the members in the household roster and add the name, sex and relationship for each one to our array. Note that for sex and relationship we want the value set labels so we use getlabel(). Since this will be more than a few lines of code let’s put this into a function by itself and then call it from our goto() function.
+In our examples we will loop through the members in the household roster and add the name, sex and relationship for each one to our array. Note that for sex and relationship we want the value set labels so we use getlabel(). Since this will be more than a few lines of code let's put this into a function by itself and then call it from our goto() function.
 
 <logic>
 // Show list of entries in household roster in a dialog and let interviewer pick
@@ -408,11 +408,11 @@ end;
 </logic>
 
 <subheader>Path and Visualvalue</subheader>
-Our goto() function works when we are in section B or C but when we are in section A the sex and relationship are blank. What is going on? In system controlled mode, CSEntry keeps track of which variables are on and off the “path”. Variables that you have entered are considered “on path” but those that have been skipped, even if there was a value in them before they were skipped, are considered “off path”. As we have seen before, variables that are “off path” are considered blank (<logiccolor>notappl</logiccolor>) in logic. It turns out that variables that are ahead of the current field are also considered “off path” until you pass through them. The idea is that these fields have not yet been validated by running their preproc and postproc with the current values of all preceding fields and therefore cannot be considered final. The effect of this is that the values of all fields ahead of the current field in the questionnaire are <logiccolor>notappl</logiccolor> in logic. 
+Our goto() function works when we are in section B or C but when we are in section A the sex and relationship are blank. What is going on? In system controlled mode, CSEntry keeps track of which variables are on and off the "path". Variables that you have entered are considered "on path" but those that have been skipped, even if there was a value in them before they were skipped, are considered "off path". As we have seen before, variables that are "off path" are considered blank (<logiccolor>notappl</logiccolor>) in logic. It turns out that variables that are ahead of the current field are also considered "off path" until you pass through them. The idea is that these fields have not yet been validated by running their preproc and postproc with the current values of all preceding fields and therefore cannot be considered final. The effect of this is that the values of all fields ahead of the current field in the questionnaire are <logiccolor>notappl</logiccolor> in logic. 
 
 Interestingly, as we can see from our current code, this only applies to numeric items. Our code works just fine for the <b>NAME</b> field.
 
-You can see which fields are “on path” by looking at the background color of the field:
+You can see which fields are "on path" by looking at the background color of the field:
 <list>
 	<li>Green: on path</li>
 	<li>Dark Grey: skipped</li>
@@ -422,7 +422,7 @@ You can see which fields are “on path” by looking at the background color of
 
 Note that the field coloring scheme is different in operator controlled mode.
 <pagebreak />
-Fortunately, we can get the value of fields that are “off path” using the function <logiccolor>visualvalue()</logiccolor>. It returns whatever value is currently visible in the field whether or not it has been skipped or is ahead of the current field. Using this for relationship and sex in our function we get:
+Fortunately, we can get the value of fields that are "off path" using the function <logiccolor>visualvalue()</logiccolor>. It returns whatever value is currently visible in the field whether or not it has been skipped or is ahead of the current field. Using this for relationship and sex in our function we get:
 
 <logic>
 function pickFromHouseholdRoster()
@@ -453,7 +453,7 @@ endif;
 </logic>
 
 <subheader>Setting field values only once</subheader>
-Let’s prefill the interview start time. We can make the field protected and set the value in the preproc just like we did with the <b>PERSON_NUMBER</b> field. We can use the function <logiccolor>systime()</logiccolor> which returns the current time as a number formatted according to the format specification passed in.
+Let's prefill the interview start time. We can make the field protected and set the value in the preproc just like we did with the <b>PERSON_NUMBER</b> field. We can use the function <logiccolor>systime()</logiccolor> which returns the current time as a number formatted according to the format specification passed in.
 
 <logic>
 PROC INTERVIEW_START_HOURS
@@ -462,7 +462,7 @@ preproc
 INTERVIEW_START_TIME = systime("HHMM");
 </logic>
 
-This works the first time we visit the field but what happens when we come back to the question a minute or two later? We only want to record this value the first time the interviewer enters the field and once it is set we don’t want it to change. We can do this by comparing the value of <b>INTERVIEW_START_TIME</b> to blank (<logiccolor>notappl</logiccolor>) in the preproc and only setting the value to systime if it is blank.
+This works the first time we visit the field but what happens when we come back to the question a minute or two later? We only want to record this value the first time the interviewer enters the field and once it is set we don't want it to change. We can do this by comparing the value of <b>INTERVIEW_START_TIME</b> to blank (<logiccolor>notappl</logiccolor>) in the preproc and only setting the value to systime if it is blank.
 
 <logic>
 PROC INTERVIEW_START_HOURS
@@ -473,7 +473,7 @@ if INTERVIEW_START_HOURS = notappl then
 endif;
 </logic>
 
-But this doesn’t seem to work. Why? Is <b>INTERVIEW_START_HOURS</b> on path when we are in the preproc of <b>INTERVIEW_START_HOURS</b>? It is not. We have to get to the postproc for the variable to be on path. However, we can use <logiccolor>visualvalue()</logiccolor> to get the value of the field in the preproc: 
+But this doesn't seem to work. Why? Is <b>INTERVIEW_START_HOURS</b> on path when we are in the preproc of <b>INTERVIEW_START_HOURS</b>? It is not. We have to get to the postproc for the variable to be on path. However, we can use <logiccolor>visualvalue()</logiccolor> to get the value of the field in the preproc: 
 
 <logic>
 PROC INTERVIEW_START_HOURS
@@ -537,7 +537,7 @@ endif;
 <list ordered>
 	<li>Modify the question text for <b>E01</b> to say "Has any member of this household passed away in the past years, that is since (year)?" where year is replaced by the year of the interview minus 5. For example, if the year of the interview is 2018 it should read "Has any member of this household passed away in the past years, that is since 2013?". Use the the interview date from question <b>A6</b> to compute the value to insert.</li>
 	<li>Extend the goto() function to include the remaining sections of the questionnaire (D through G).</li>
-	<li>Add a button to the userbar called “household summary” that when clicked uses the errmsg function to display a message that shows the name of the head of household, and the number of household members by sex. For example: “Head of Household: John Brown, Total Members: 5, Women: 2, Men: 3”. Bonus if you can get this to work when you click the button from section A. Hint: count and seek will not work with visualvalue so you will need to use a loop to find the number of males of and females.</li>
+	<li>Add a button to the userbar called "household summary" that when clicked uses the errmsg function to display a message that shows the name of the head of household, and the number of household members by sex. For example: "Head of Household: John Brown, Total Members: 5, Women: 2, Men: 3". Bonus if you can get this to work when you click the button from section A. Hint: count and seek will not work with visualvalue so you will need to use a loop to find the number of males of and females.</li>
 	<li>Implement a check on the minimum and maximum per unit possession values in question G01. Use the spreadsheet in annex 4 to create a lookup file containing the asset code, minimum value and maximum value. Use the loadcase command with this lookup file to find the minimum and maximum values for the selected asset and show an error message if the per unit asset value entered in the roster is below the minimum value or above the maximum value. This should be a soft check.</li>
 	<li>Fill in the interview start and end date automatically using the sysdate() command and make the interview start and end date fields protected.</li>
 	<li>Add question A10, interview status to the dictionary and form. We want to fill in this question at the start of the interview if the response is code 2 (non-contact), 3 (vacant) or 4 (refused) and then immediately end the questionnaire without going into any of the subsequent questions. However, if there is a respondent willing to give the interview, then the interview status should be set 5 (partially complete) until the entire questionnaire is complete at which point it should be set to 1 (complete). To implement this, keep the question in its current position in the questionnaire but use a dynamic value set to limit the options so that the interview cannot be set as completed until the entire questionnaire has been completed. The first time the field is entered (before any value has been entered) the value set should be: 2 Non-contact, 3 Vacant, 4 Refused, 5 Continue interview. If the interviewer chooses 2, 3 or 4, end the interview, otherwise, if they choose 5, continue to the next field. At the end of the interview (postproc of the level), if the value is currently 5, set it to 1 (complete). If the interviewer returns to A9 after the field has been set to 1 (complete) then display the value set as it is on the questionnaire.</li>

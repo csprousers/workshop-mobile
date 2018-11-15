@@ -11,9 +11,9 @@ At the end of this lesson participants will be able to:
 </list>
 
 <subheader>Question Text</subheader>
-We can add text to each question in our survey by clicking on "CAPI Questions" in the toolbar. This allows us to enter literal question text for the questionnaire that the interviewer will read verbatim.  Additionally, we can add interviewer instructions. Let’s start with the first few questions in section B.
+We can add text to each question in our survey by clicking on "CAPI Questions" in the toolbar. This allows us to enter literal question text for the questionnaire that the interviewer will read verbatim.  Additionally, we can add interviewer instructions. Let's start with the first few questions in section B.
 
-For <b>RELATIONSHIP</b>, enter “What is (name’s) relationship to the head of the household?” For <b>SEX</b> enter “Is (name) a male or a female?”. Run the application on Windows and then on mobile to see how the question text is displayed.
+For <b>RELATIONSHIP</b>, enter "What is (name's) relationship to the head of the household?" For <b>SEX</b> enter "Is (name) a male or a female?". Run the application on Windows and then on mobile to see how the question text is displayed.
 
 In addition to the text, we can add instructions to the interviewer. For example for <b>AGE</b> we can have:
 
@@ -21,25 +21,25 @@ In addition to the text, we can add instructions to the interviewer. For example
 	
 Followed by the instruction:
 
-<indent><i>Enter age in completed years (“0” for children less than one year old)</i></indent>
+<indent><i>Enter age in completed years ("0" for children less than one year old)</i></indent>
 
 To make it clear to the interviewer that this is an instruction, we use italics to distinguish it from the question. We can also use different colors and fonts as well. You can use whatever scheme you like as long as it is consistent throughout the application.
 
 If you have your question text in Word or Excel you can copy and paste into CSPro and it will preserve the formatting.
 
 <subheader>Help Text</subheader>
-In addition to question text, we can provide additional instructions to the interviewer as “help text”. Help text is not shown by default but can be displayed by using the F2 key on Windows or tapping the help icon next to the question text on Mobile.
+In addition to question text, we can provide additional instructions to the interviewer as "help text". Help text is not shown by default but can be displayed by using the F2 key on Windows or tapping the help icon next to the question text on Mobile.
 
-Let’s add the following help text to the <b>NAME</b> field in section B:
+Let's add the following help text to the <b>NAME</b> field in section B:
 
 <indent><i>Include all persons living in this house who have common arrangements for cooking and dining.</i></indent>
 
 Run the application on both Android and mobile and see how the help text is displayed.
 
 <subheader>Fills in Question Text</subheader>
-It is possible to have the question include the values of dictionary variables. For example, for <b>SEX</b>, instead of asking “Is (name) a male or a female?” we can include the respondents name by using <b>%NAME%</b> inside the question text. At runtime, this will be replaced by the contents of the variable <b>NAME</b>.
+It is possible to have the question include the values of dictionary variables. For example, for <b>SEX</b>, instead of asking "Is (name) a male or a female?" we can include the respondents name by using <b>%NAME%</b> inside the question text. At runtime, this will be replaced by the contents of the variable <b>NAME</b>.
 
-Let’s change the text for <b>RELATIONSHIP</b>, <b>SEX</b> and <b>AGE</b> to use <b>%NAME%</b> in place of “(name)”.
+Let's change the text for <b>RELATIONSHIP</b>, <b>SEX</b> and <b>AGE</b> to use <b>%NAME%</b> in place of "(name)".
 <pagebreak />
 <subheader>Conditional Question Text</subheader>
 Sometimes, the question text will be completely different depending on other factors and using fill variables is not sufficient to implement the differences. For example, the question text for the NAME field should really be:
@@ -48,7 +48,7 @@ Sometimes, the question text will be completely different depending on other fac
 
 <indent>What is the name of the next member of the household? – for the remaining rows of the roster.</indent>
 
-We can implement this using the conditions window underneath the question text window. By default, this window contains a single empty condition. Right-clicking on the conditions lets you add a new condition. Let’s modify the first condition so that <b>Min Occ</b> and <b>Max Occ</b> are both 1 and then add a second condition where <b>Min Occ</b> is 2 and <b>Max Occ</b> is 20. Now we have two different question texts, one that will be shown for the first occurrence and the other that will be shown for the rest. Edit these two questions texts as above and test it to verify that it works.
+We can implement this using the conditions window underneath the question text window. By default, this window contains a single empty condition. Right-clicking on the conditions lets you add a new condition. Let's modify the first condition so that <b>Min Occ</b> and <b>Max Occ</b> are both 1 and then add a second condition where <b>Min Occ</b> is 2 and <b>Max Occ</b> is 20. Now we have two different question texts, one that will be shown for the first occurrence and the other that will be shown for the rest. Edit these two questions texts as above and test it to verify that it works.
 
 <center><image capicond.png /></center>
 
@@ -58,11 +58,11 @@ In addition to using the occurrence numbers it possible to specify a logic expre
 It is possible to add question text, dictionary labels and error messages in multiple languages.
 
 <subheader>Multiple Languages for Question Text</subheader>
-To have multiple languages for question text you first need to define the languages.  This is done from the CAPI Options Menu.  Select <b>“Define CAPI Languages”</b>. This will bring up the “Language” dialog box.  Click on “Add” to add a language, specify the name and label to use for the language and click "OK". The label is what the interviewer will see when choosing a language and the name is what will be used in logic to refer to the language. We generally use abbreviations for the language names such as EN, FR and ES but this is just a convention.
+To have multiple languages for question text you first need to define the languages.  This is done from the CAPI Options Menu.  Select <b>"Define CAPI Languages"</b>. This will bring up the "Language" dialog box.  Click on "Add" to add a language, specify the name and label to use for the language and click "OK". The label is what the interviewer will see when choosing a language and the name is what will be used in logic to refer to the language. We generally use abbreviations for the language names such as EN, FR and ES but this is just a convention.
 
 <center><image langdialog.png /></center>
 
-When creating question text, you enter the question text for each language specified. Let’s look at the question text for the “Sex” item. There is a Drop Down menu for the languages we specified in the above steps. We select the language and then enter the question text in that language.
+When creating question text, you enter the question text for each language specified. Let's look at the question text for the "Sex" item. There is a Drop Down menu for the languages we specified in the above steps. We select the language and then enter the question text in that language.
 
 For example, to add French translations for the sex, relationship and age questions we would enter:
 
@@ -75,7 +75,7 @@ For example, to add French translations for the sex, relationship and age questi
 <indent><i>Entrez l'âge en années révolues (entrez 0 pour les enfants âgés de moins de 1 an)</i>. Si inconnu entrez 999.</indent>
 
 Now that you have created the question text in the specified languages, they can be selected during data entry.
-In Windows, we can go to the “Options” Menu and select “Change Language” and a menu of the languages we defined will be displayed.  Click on the desired language and the question text will be displayed in that language. On mobile devices you will find "Change Language" on the menu during data entry.
+In Windows, we can go to the "Options" Menu and select "Change Language" and a menu of the languages we defined will be displayed.  Click on the desired language and the question text will be displayed in that language. On mobile devices you will find "Change Language" on the menu during data entry.
 
 <subheader>Multiple Languages for Dictionary Items</subheader>
 To have multiple language in value sets, you first need to define the languages.  This is similar to the process we did to define multiple languages for question text; however, for dictionary items you define languages from the Edit menu of the dictionary. Make sure you are in the dictionary editor (you may need to click on the little blue book in the toolbar) and choose "Edit" and then "Languages". This dialog is identical to the one used for adding languages to question text. You should make sure to use the same names and labels for languages in this dialog as you entered for question text.
@@ -154,10 +154,10 @@ We can use these occurrence labels in the question text for <b>F05</b>:
 
 <indent>How many %getocclabel% units are in this household?</indent>
 
-Anytime you use <b>%getocclabel%</b> in question text it is replaced by the occurrence label of the current occurrence. With the above, the question text for the first occurrence will be “How many traditional round hut units are in this household?” and the text for the second occurrence will be “How many detached house units are in this household?” …
+Anytime you use <b>%getocclabel%</b> in question text it is replaced by the occurrence label of the current occurrence. With the above, the question text for the first occurrence will be "How many traditional round hut units are in this household?" and the text for the second occurrence will be "How many detached house units are in this household?" …
 
 <subheader>Case Labels</subheader>
-By default, the case listing screen shows the id-items concatenated together. This is not very easy for an interviewer to read. You can customize the case listing for a case using the <logiccolor>setcaselabel</logiccolor> command. As an example let’s set the case label to the string “province-district-ea-household number: name of head of household”. Since we need to have the name of the head of household to do this, we can add it in the postproc of <b>NAME</b>. In order to format the case label from the variables we can use the function <logiccolor>maketext()</logiccolor> which works like <logiccolor>errmsg()</logiccolor> but returns a string instead of displaying it on the screen.
+By default, the case listing screen shows the id-items concatenated together. This is not very easy for an interviewer to read. You can customize the case listing for a case using the <logiccolor>setcaselabel</logiccolor> command. As an example let's set the case label to the string "province-district-ea-household number: name of head of household". Since we need to have the name of the head of household to do this, we can add it in the postproc of <b>NAME</b>. In order to format the case label from the variables we can use the function <logiccolor>maketext()</logiccolor> which works like <logiccolor>errmsg()</logiccolor> but returns a string instead of displaying it on the screen.
 
 <logic>
 PROC NAME
@@ -179,7 +179,7 @@ Now after entering a case we have a much friendlier case listing:
 Note that <logiccolor>setcaselabel</logiccolor> only works with data files of type CSPro DB.
 
 <subheader>Dynamic Value Sets</subheader>
-It is often useful to change the value set for a question from logic. This can be done using the command <logiccolor>setvalueset</logiccolor>. Let’s start with a simple example. Currently our value set for relationship in section B has labels like “Son/Daughter” and “Brother/Sister” to allow for both genders. However, when we show the relationship value set we already know the gender of the household member so we could show “Son” for males and “Daughter” for females. To do this we create two new value sets for relationship in the dictionary: <b>RELATIONSHIP_MALE</b> and <b>RELATIONSHIP_FEMALE</b>. Then we can use logic to choose between the value sets depending on the value of <b>SEX</b>. Which proc do we do that in? We do that in the onfocus of <b>RELATIONSHIP</b> since we need to use it when we are in that field. The onfocus is called every time the field is entered. We cannot do this in the preproc since the preproc is not triggered when moving backwards through the questions.
+It is often useful to change the value set for a question from logic. This can be done using the command <logiccolor>setvalueset</logiccolor>. Let's start with a simple example. Currently our value set for relationship in section B has labels like "Son/Daughter" and "Brother/Sister" to allow for both genders. However, when we show the relationship value set we already know the gender of the household member so we could show "Son" for males and "Daughter" for females. To do this we create two new value sets for relationship in the dictionary: <b>RELATIONSHIP_MALE</b> and <b>RELATIONSHIP_FEMALE</b>. Then we can use logic to choose between the value sets depending on the value of <b>SEX</b>. Which proc do we do that in? We do that in the onfocus of <b>RELATIONSHIP</b> since we need to use it when we are in that field. The onfocus is called every time the field is entered. We cannot do this in the preproc since the preproc is not triggered when moving backwards through the questions.
 
 <logic>
 PROC RELATIONSHIP
@@ -280,7 +280,7 @@ setvalueset(MOTHER_LINE_NUMBER, codes, labels);
 </logic>
 
 <subheader>Dynamic Value Sets from Checkboxes</subheader>
-Question <b>B16</b> (primary language) should only show a subset of the languages chosen in <b>B15</b> (languages spoken). We can do this using a dynamic value set as well. The trick is that since <b>B15</b> uses checkboxes it will have alpha codes (A, B, C…) while <b>B16</b> will have numeric codes (1,2,3…) so we need to convert from numeric to alpha to determine if a given language was selected. We could do this with a series of <logiccolor>if then else</logiccolor> statements but an easier approach is to use the string <b>“ABCDEFGH”</b> to convert from numeric to alpha by looking up the character at the position of the numeric code. For example, numeric code 1 would give us the character at the first position: A. Numeric code 2 would give us the character at position 2, B etc…
+Question <b>B16</b> (primary language) should only show a subset of the languages chosen in <b>B15</b> (languages spoken). We can do this using a dynamic value set as well. The trick is that since <b>B15</b> uses checkboxes it will have alpha codes (A, B, C…) while <b>B16</b> will have numeric codes (1,2,3…) so we need to convert from numeric to alpha to determine if a given language was selected. We could do this with a series of <logiccolor>if then else</logiccolor> statements but an easier approach is to use the string <b>"ABCDEFGH"</b> to convert from numeric to alpha by looking up the character at the position of the numeric code. For example, numeric code 1 would give us the character at the first position: A. Numeric code 2 would give us the character at position 2, B etc…
 
 <logic>
 PROC MAIN_LANGUAGE
@@ -317,7 +317,7 @@ codes(nextEntry) = notappl;
 setvalueset(MAIN_LANGUAGE, codes, labels);
 </logic>
 
-What if the interviewer doesn’t pick any language in <b>B15</b>? Then our dynamic value set is empty. We should add a check to <b>B15</b> to ensure that at least one language is chosen.
+What if the interviewer doesn't pick any language in <b>B15</b>? Then our dynamic value set is empty. We should add a check to <b>B15</b> to ensure that at least one language is chosen.
 
 <logic>
 PROC LANGUAGES_SPOKEN
@@ -330,7 +330,7 @@ endif;
 </logic>
 
 <subheader>Dynamic Checkboxes</subheader>
-Let’s implement a dynamic value set for question <b>G2</b>, “were assets purchased with a loan”. Rather than a series of yes/no questions, we implement this using a single variable with checkboxes. We could have one checkbox for each of the 10 items in the assets roster but it would be better if we only displayed the checkboxes for the assets that the household actually possesses. How do we know if the household possesses an item? The household possesses the item if its quantity is greater than zero. We need to loop through the rows of the roster and add a checkbox to the value set for each item with quantity greater than zero. The only tricky part is that these are checkboxes so we need to use alpha values.
+Let's implement a dynamic value set for question <b>G2</b>, "were assets purchased with a loan". Rather than a series of yes/no questions, we implement this using a single variable with checkboxes. We could have one checkbox for each of the 10 items in the assets roster but it would be better if we only displayed the checkboxes for the assets that the household actually possesses. How do we know if the household possesses an item? The household possesses the item if its quantity is greater than zero. We need to loop through the rows of the roster and add a checkbox to the value set for each item with quantity greater than zero. The only tricky part is that these are checkboxes so we need to use alpha values.
 
 In order to create a value set with alpha values we need a code array of type string. Where do we declare it? PROC GLOBAL.
 
