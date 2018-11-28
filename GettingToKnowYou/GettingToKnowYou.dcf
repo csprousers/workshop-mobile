@@ -1,0 +1,395 @@
+﻿[Dictionary]
+Version=CSPro 7.2
+Label=GettingToKnowYou
+Name=GETTINGTOKNOWYOU_DICT
+RecordTypeStart=0
+RecordTypeLen=0
+Positions=Relative
+ZeroFill=No
+DecimalChar=Yes
+
+[Level]
+Label=GettingToKnowYou questionnaire
+Name=GETTINGTOKNOWYOU_QUEST
+
+[IdItems]
+
+[Item]
+Label=First and last name
+Name=FIRST_AND_LAST_NAME
+Start=1
+Len=50
+DataType=Alpha
+
+[Record]
+Label=GettingToKnowYou record
+Name=GETTINGTOKNOWYOU_REC
+RecordTypeValue=''
+RecordLen=71
+
+[Item]
+Label=Country
+Name=COUNTRY
+Start=51
+Len=3
+
+[ValueSet]
+Label=Country
+Name=COUNTRY_VS1
+Value=201;Afghanistan
+Value=301;Albania
+Value=101;Algeria
+Value=302;Andorra
+Value=102;Angola
+Value=401;Antigua and Barbuda
+Value=601;Argentina
+Value=303;Armenia
+Value=501;Australia
+Value=304;Austria
+Value=305;Azerbaijan
+Value=402;Bahamas
+Value=202;Bahrain
+Value=203;Bangladesh
+Value=403;Barbados
+Value=306;Belarus
+Value=307;Belgium
+Value=404;Belize
+Value=103;Benin
+Value=204;Bhutan
+Value=602;Bolivia
+Value=308;Bosnia and Herzegovina
+Value=104;Botswana
+Value=603;Brazil
+Value=205;Brunei
+Value=309;Bulgaria
+Value=105;Burkina Faso
+Value=106;Burundi
+Value=206;Cambodia
+Value=107;Cameroon
+Value=405;Canada
+Value=108;Cape Verde
+Value=109;Central African Republic
+Value=110;Chad
+Value=604;Chile
+Value=207;China
+Value=605;Colombia
+Value=111;Comoros
+Value=112;Congo
+Value=113;Congo, Democratic Republic of
+Value=406;Costa Rica
+Value=310;Croatia
+Value=407;Cuba
+Value=311;Cyprus
+Value=312;Czech Republic
+Value=313;Denmark
+Value=114;Djibouti
+Value=408;Dominica
+Value=409;Dominican Republic
+Value=208;East Timor
+Value=606;Ecuador
+Value=115;Egypt
+Value=410;El Salvador
+Value=116;Equatorial Guinea
+Value=117;Eritrea
+Value=314;Estonia
+Value=118;eSwatini
+Value=119;Ethiopia
+Value=502;Fiji
+Value=315;Finland
+Value=316;France
+Value=120;Gabon
+Value=121;Gambia
+Value=317;Georgia
+Value=318;Germany
+Value=122;Ghana
+Value=319;Greece
+Value=411;Grenada
+Value=412;Guatemala
+Value=123;Guinea
+Value=124;Guinea-Bissau
+Value=607;Guyana
+Value=413;Haiti
+Value=414;Honduras
+Value=320;Hungary
+Value=321;Iceland
+Value=209;India
+Value=210;Indonesia
+Value=211;Iran
+Value=212;Iraq
+Value=322;Ireland
+Value=213;Israel
+Value=323;Italy
+Value=125;Ivory Coast
+Value=415;Jamaica
+Value=214;Japan
+Value=215;Jordan
+Value=216;Kazakhstan
+Value=126;Kenya
+Value=503;Kiribati
+Value=217;Korea, North
+Value=218;Korea, South
+Value=324;Kosovo
+Value=219;Kuwait
+Value=220;Kyrgyzstan
+Value=221;Laos
+Value=325;Latvia
+Value=222;Lebanon
+Value=127;Lesotho
+Value=128;Liberia
+Value=129;Libya
+Value=326;Liechtenstein
+Value=327;Lithuania
+Value=328;Luxembourg
+Value=329;Macedonia
+Value=130;Madagascar
+Value=131;Malawi
+Value=223;Malaysia
+Value=224;Maldives
+Value=132;Mali
+Value=330;Malta
+Value=504;Marshall Islands
+Value=133;Mauritania
+Value=134;Mauritius
+Value=416;Mexico
+Value=505;Micronesia
+Value=331;Moldova
+Value=332;Monaco
+Value=225;Mongolia
+Value=333;Montenegro
+Value=135;Morocco
+Value=136;Mozambique
+Value=226;Myanmar (Burma)
+Value=137;Namibia
+Value=506;Nauru
+Value=227;Nepal
+Value=334;Netherlands
+Value=507;New Zealand
+Value=417;Nicaragua
+Value=138;Niger
+Value=139;Nigeria
+Value=335;Norway
+Value=228;Oman
+Value=229;Pakistan
+Value=508;Palau
+Value=418;Panama
+Value=509;Papua New Guinea
+Value=608;Paraguay
+Value=609;Peru
+Value=230;Philippines
+Value=336;Poland
+Value=337;Portugal
+Value=231;Qatar
+Value=338;Romania
+Value=232;Russia
+Value=140;Rwanda
+Value=419;Saint Kitts and Nevis
+Value=420;Saint Lucia
+Value=421;Saint Vincent and the Grenadines
+Value=510;Samoa
+Value=339;San Marino
+Value=141;Sao Tome and Principe
+Value=233;Saudi Arabia
+Value=142;Senegal
+Value=340;Serbia
+Value=143;Seychelles
+Value=144;Sierra Leone
+Value=234;Singapore
+Value=341;Slovakia
+Value=342;Slovenia
+Value=511;Solomon Islands
+Value=145;Somalia
+Value=146;South Africa
+Value=147;South Sudan
+Value=343;Spain
+Value=235;Sri Lanka
+Value=148;Sudan
+Value=610;Suriname
+Value=344;Sweden
+Value=345;Switzerland
+Value=236;Syria
+Value=237;Tajikistan
+Value=149;Tanzania
+Value=238;Thailand
+Value=150;Togo
+Value=512;Tonga
+Value=422;Trinidad and Tobago
+Value=151;Tunisia
+Value=239;Turkey
+Value=240;Turkmenistan
+Value=513;Tuvalu
+Value=152;Uganda
+Value=346;Ukraine
+Value=241;United Arab Emirates
+Value=347;United Kingdom
+Value=423;United States
+Value=611;Uruguay
+Value=242;Uzbekistan
+Value=514;Vanuatu
+Value=348;Vatican City
+Value=612;Venezuela
+Value=243;Vietnam
+Value=244;Yemen
+Value=153;Zambia
+Value=154;Zimbabwe
+
+[Item]
+Label=Education/Training
+Name=EDUCATION
+Start=54
+Len=1
+
+[ValueSet]
+Label=Education/Training
+Name=EDUCATION_VS1
+Value=1;Statistitics
+Value=2;Demography
+Value=3;Information Technology/Computer Science
+Value=4;Other
+
+[Item]
+Label=Languages
+Name=LANGUAGES
+Start=55
+Len=7
+DataType=Alpha
+
+[ValueSet]
+Label=Languages
+Name=LANGUAGES_VS1
+Value='A      ';English
+Value='B      ';French
+Value='C      ';Portuguese
+Value='D      ';Spanish
+Value='E      ';Arabic
+Value='F      ';Swahili
+Value='G      ';Chinese
+
+[Item]
+Label=Suit and Tie
+Name=SUIT_AND_TIE
+Start=62
+Len=1
+
+[ValueSet]
+Label=Suit and Tie
+Name=SUIT_AND_TIE_VS1
+Value=1;Yes
+Value=2;No
+
+[Item]
+Label=Favorite Food
+Name=FAVORITE_FOOD
+Start=63
+Len=1
+
+[ValueSet]
+Label=Favorite Food
+Name=FAVORITE_FOOD_VS1
+Value=1;Ugali
+Value=2;Fondue
+Value=3;Pizza
+Value=4;Chocolate
+Value=5;Leaf sauce
+Value=6;Ice Cream
+Value=7;Sushi
+Value=8;None of the above
+
+[Item]
+Label=Weekend Activity
+Name=WEEKEND_ACTIVITY
+Start=64
+Len=1
+
+[ValueSet]
+Label=Weekend Activity
+Name=WEEKEND_ACTIVITY_VS1
+Value=1;Go to the bar
+Value=2;Dance
+Value=3;Listen to music
+Value=4;Read books
+Value=5;Watch television
+Value=6;Program CSPro
+
+[Item]
+Label=English
+Name=ENGLISH
+Start=65
+Len=1
+
+[ValueSet]
+Label=English
+Name=ENGLISH_VS1
+Value=1;Yes
+Value=2;No
+
+[Item]
+Label=French
+Name=FRENCH
+Start=66
+Len=1
+
+[ValueSet]
+Label=French
+Name=FRENCH_VS1
+Value=1;Yes
+Value=2;No
+
+[Item]
+Label=Swahili
+Name=SWAHILI
+Start=67
+Len=1
+
+[ValueSet]
+Label=Swahili
+Name=SWAHILI_VS1
+Value=1;Yes
+Value=2;No
+
+[Item]
+Label=Portuguese
+Name=PORTUGUESE
+Start=68
+Len=1
+
+[ValueSet]
+Label=Portuguese
+Name=PORTUGUESE_VS1
+Value=1;Yes
+Value=2;No
+
+[Item]
+Label=Chinese
+Name=CHINESE
+Start=69
+Len=1
+
+[ValueSet]
+Label=Chinese
+Name=CHINESE_VS1
+Value=1;Yes
+Value=2;No
+
+[Item]
+Label=Spanish
+Name=SPANISH
+Start=70
+Len=1
+
+[ValueSet]
+Label=Spanish
+Name=SPANISH_VS1
+Value=1;Yes
+Value=2;No
+
+[Item]
+Label=Arabic
+Name=ARABIC
+Start=71
+Len=1
+
+[ValueSet]
+Label=Arabic
+Name=ARABIC_VS1
+Value=1;Yes
+Value=2;No

@@ -1,0 +1,58 @@
+﻿[CAPI QUESTIONS]
+Version=CSPro 6.1
+
+[LANGUAGES]
+ENG=English
+
+[QUESTION]
+Field=GETTINGTOKNOWYOU_DICT.COUNTRY
+ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+ENG={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
+ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What country are you from?\cf2\par
+ENG=}
+
+[QUESTION]
+Field=GETTINGTOKNOWYOU_DICT.EDUCATION
+ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+ENG={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
+ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What was your primary area of study at school?\cf2\par
+ENG=}
+
+[QUESTION]
+Field=GETTINGTOKNOWYOU_DICT.FAVORITE_FOOD
+ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+ENG={\colortbl ;\red0\green0\blue128;}
+ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What is your favorite food?\par
+ENG=}
+
+[QUESTION]
+Field=GETTINGTOKNOWYOU_DICT.FIRST_AND_LAST_NAME
+ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+ENG={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
+ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What is your first and last name?\cf2\par
+ENG=}
+
+[QUESTION]
+Field=GETTINGTOKNOWYOU_DICT.LANGUAGES
+ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+ENG={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;\red0\green128\blue0;}
+ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 Which languages do you speak?\cf2\par
+ENG=\par
+ENG=\cf3\i (Select all that apply)\i0\par
+ENG=\cf2\par
+ENG=}
+
+[QUESTION]
+Field=GETTINGTOKNOWYOU_DICT.SUIT_AND_TIE
+ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+ENG={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
+ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 Do you normally wear a suit and tie to work?\cf2\par
+ENG=}
+
+[QUESTION]
+Field=GETTINGTOKNOWYOU_DICT.WEEKEND_ACTIVITY
+ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+ENG={\colortbl ;\red0\green0\blue128;}
+ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What do you for fun on weekends?\par
+ENG=}
+

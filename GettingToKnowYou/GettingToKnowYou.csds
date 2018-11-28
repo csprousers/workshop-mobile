@@ -1,0 +1,25 @@
+{
+  "fileType": "Application Deployment Specification",
+  "version": "7.1",
+  "name": "Getting to Know You",
+  "description": "Intoductory exercise for CSPro workshop",
+  "files": [
+    {
+      "path": ".\\GettingToKnowYou.ent"
+    },
+    {
+      "path": ".\\GettingToKnowYou.pff"
+    }
+  ],
+  "dictionaries": [
+    {
+      "path": ".\\GettingToKnowYou.dcf",
+      "uploadForSync": true
+    }
+  ],
+  "deployment": {
+    "type": "CSWeb",
+    "cswebUrl": "http:\/\/csweb.teleyah.com\/api",
+    "ftpUrl": "ftp:\/\/ftp.teleyah.com"
+  }
+}
