@@ -80,7 +80,7 @@ PROC DISTRICT
 onfocus
 // Create dynamic value set of districts for selected province using lookup file
 numeric nextEntry = 1;
-forcase DI_DICT where DI_PROVINCE_CODE = PROVINCE do
+forcase DISTRICT_DICT where DI_PROVINCE_CODE = PROVINCE do
     codes(nextEntry) = DI_DISTRICT_CODE;
     labels(nextEntry) = DI_DISTRICT_NAME;
     nextEntry = nextEntry + 1;
