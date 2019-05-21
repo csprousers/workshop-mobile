@@ -177,27 +177,27 @@ In the onfocus proc for <b>CHOOSE_HOUSEHOLD</b> we need to loop through every ca
 PROC CHOOSE_HOUSEHOLD
 onfocus
 
-numeric nextEntry = 1;
-
+valueset string householdVSet;
+string code, label;
 // Loop through all cases in listing file
 // to build dynamic value set.
 forcase LISTING_DICT do
     // Values are household ids concatenated together
-    codesString(nextEntry)=maketext("%v%v%v%v%v", 
+    code = maketext("%v%v%v%v%v", 
         LI_PROVINCE, LI_DISTRICT, LI_ENUMERATION_AREA,
         LI_AREA_TYPE, LI_HOUSEHOLD_NUMBER);
         
     // Labels have househould number and name of head
-    labels(nextEntry) = maketext("%v: (%v)", LI_HOUSEHOLD_NUMBER, 
+    label = maketext("%v: (%v)", LI_HOUSEHOLD_NUMBER, 
                             strip(LI_NAME_OF_HEAD_OF_HOUSEHOLD));
     
-    nextEntry = nextEntry + 1;
+    householdVSet.add(label, code);
 endfor;
 
-// Mark end of array    
-codesString(nextEntry) = "";
+// Add entry to value set to return to previous menu
+householdVSet.add("Back", "Back");
 
-setvalueset($, codesString, labels);
+setvalueset($, householdVSet);
 </logic>
 
 When we run this we should see a list of the households in the listing file as the value set for <b>CHOOSE_HOUSEHOLD</b>.
@@ -208,32 +208,30 @@ While the dynamic value set works correctly when there are households that have 
 PROC CHOOSE_HOUSEHOLD
 onfocus
 
-numeric nextEntry = 1;
+valueset string householdVSet;
+string code, label;
 
 // Loop through all cases in listing file
 // to build dynamic value set.
 forcase LISTING_DICT do
     // Values are household ids concatenated together
-    codesString(nextEntry)=maketext("v%v%v%v%v", 
+    code = maketext("v%v%v%v%v", 
         LI_PROVINCE, LI_DISTRICT, LI_ENUMERATION_AREA,
         LI_AREA_TYPE, LI_HOUSEHOLD_NUMBER);
         
     // Labels have househould number and name of head
-    labels(nextEntry) = maketext("%v: (%v)", LI_HOUSEHOLD_NUMBER, 
+    label = maketext("%v: (%v)", LI_HOUSEHOLD_NUMBER, 
                             strip(LI_NAME_OF_HEAD_OF_HOUSEHOLD));
     
-    nextEntry = nextEntry + 1;
+    householdVSet.add(label, code);
 endfor;
 
-if nextEntry = 1 then
+if length(householdVSet.codes) = 0 then
 	errmsg("No households have been listed. Please list households first before interviewing.");
 	reenter INTERVIEWER_MAIN_MENU;
 endif;
 
-// Mark end of array    
-codesString(nextEntry) = "";
-
-setvalueset($, codesString, labels);
+setvalueset($, householdVSet);
 </logic>
 
 <subheader>Generating the PFF File</subheader>
