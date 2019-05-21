@@ -195,25 +195,22 @@ endif;
 <subheader>Dynamic Value Sets from a Roster</subheader>
 For question <b>A11</b>, line number of respondent, we would like to create a value set from the names and line numbers of the eligible household members. For this to work correctly we will need to ask <b>A11</b> after entering the names and ages in the household members rosters. Create a new numeric variable in the dictionary for <b>A11</b> and place it on the household members form after the roster.
 
-To create the value set from the household roster we need the second form of setvalueset that takes an array of codes and an array of labels. This will allow us to create the list of names in logic instead of in the dictionary.
+To create the value set from the household roster we need the second form of setvalueset that takes a valueset object. This will allow us to create the list of names in logic instead of in the dictionary.
 
-First, we need to declare the two arrays. We will declare them in the PROC global section so that it is available everywhere. If you declare a logic variable inside the PROC of a dictionary variable or group, it is only available inside that PROC. Anything in the PROC global is available in all the PROCs and in the question text.
+First, we need to declare a valueset object. We will declare them in the PROC global section so that it is available everywhere. If you declare a logic variable inside the PROC of a dictionary variable or group, it is only available inside that PROC. Anything in the PROC global is available in all the PROCs and in the question text.
 
 To view the proc GLOBAL, in the logic view, click on the first item in the form tree. This shows all of the program logic at once: the proc GLOBAL plus all the other procs. Clicking on any other item in the form tree shows just the procs for that item.
 
 <logic>
 PROC GLOBAL
-array string labels(100);
-array numeric codes(100);
+valueset dynamicVSet;
 </logic>
 
-An array logic variable is similar to a dictionary item with occurrences. A numeric array of length seven stores seven numbers, each of which is accessed through subscripts.
-
-We will fill in the arrays of codes and labels with names and line numbers of the eligible members in the household. According the specification, only household members 12 and over can be respondents. For example, if we have the following household:
+We will fill in the valueset object with names and line numbers of the eligible members in the household. According the specification, only household members 12 and over can be respondents. For example, if we have the following household:
 
 <center><html><img src="householdfordynvset.png" width=600 /></html></center>
 
-We would fill in the two arrays as follows:
+We would fill in the valueset object as follows:
 
 <table 3 header><cell>Subscript</cell><cell>Codes</cell><cell>Labels</cell>
 <cell>1</cell><cell>1</cell><cell>John Brown</cell>
@@ -222,28 +219,24 @@ We would fill in the two arrays as follows:
 <cell>4</cell><cell>notappl</cell><cell></cell>
 </table>
 
-To do this in logic we need to loop through the household roster and add an entry into our arrays for each eligible household member:
+To do this in logic we need to loop through the household roster and add an entry into our valueset object for each eligible household member:
 
 <logic>
-PROC RESPONDENT
+PROC RESPONDENT_LINE_NUMBER
 onfocus
 // Create the value set for respondent from all household members 12 and over
-numeric indexRoster;
-numeric nextEntryValueSet = 1;
+dynamicVSet.clear(); //clear old values from the valueset object
 do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
     if AGE(indexRoster) >= 12 then
-        labels(nextEntryValueSet) = NAME(indexRoster);
-        codes(nextEntryValueSet) = indexRoster;
-        nextEntryValueSet = nextEntryValueSet + 1;
+		dynamicVSet.add(NAME(indexRoster),indexRoster);
     endif;
 enddo;
 </logic>
 
-Finally, we need to terminate the array of codes with a <logiccolor>notappl</logiccolor> to tell CSPro not to use the whole array and then pass the array of codes and the array labels to the setvalueset command. Make sure to set the capture type of the field to "Radio Button" in the field properties for <b>RESPONDENT_LINE_NUMBER</b>.
+Finally, we need to tell CSPro to use the valueset object in the setvalueset command. Make sure to set the capture type of the field to "Radio Button" in the field properties for <b>RESPONDENT_LINE_NUMBER</b>.
 
 <logic>
-codes(nextEntryValueSet) = notappl;
-setvalueset(RESPONDENT, codes, labels);
+setvalueset(RESPONDENT_LINE_NUMBER, dynamicVSet);
 </logic>
 
 As a second example we will implement the dynamic value set for mother line number (<b>B10</b>). For this value set we only show females in the household over 12 and don't allow a woman to be her own mother. 
@@ -251,12 +244,10 @@ As a second example we will implement the dynamic value set for mother line numb
 <logic>
 // Create value set from women over 12 in household roster
 numeric indexRoster;
-numeric nextEntryValueSet = 1;
+dynamicVSet.clear(); //clear old values from the valueset object
 do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
 	if SEX(indexRoster) = 2 and AGE(indexRoster) > 12 and indexRoster <> curocc() then
-		codes(nextEntryValueSet) = indexRoster;
-		labels(nextEntryValueSet) = NAME(indexRoster);
-		nextEntryValueSet = nextEntryValueSet + 1;
+		dynamicVSet.add(NAME(indexRoster),indexRoster);
 	endif;
 enddo;
 </logic>
@@ -264,19 +255,14 @@ enddo;
 We also need to include the codes for non-resident and deceased in the value set.
 
 <logic>
-codes(nextEntryValueSet) = 87;
-labels(nextEntryValueSet) = "Non-resident";
-nextEntryValueSet = nextEntryValueSet + 1;
-codes(nextEntryValueSet) = 88;
-labels(nextEntryValueSet) = "Deceased";
-nextEntryValueSet = nextEntryValueSet + 1;
+dynamicVSet.add("Non-resident",87);
+dynamicVSet.add("Deceased",88);
 </logic>
 
-Finally we mark the end of the value set.
+Finally we need to set the valueset object.
 
 <logic>
-codes(nextEntryValueSet) = notappl;
-setvalueset(MOTHER_LINE_NUMBER, codes, labels);
+setvalueset(MOTHER_LINE_NUMBER, dynamicVSet);
 </logic>
 
 <subheader>Dynamic Value Sets from Checkboxes</subheader>
@@ -287,34 +273,30 @@ PROC MAIN_LANGUAGE
 onfocus
 
 // Create value set from items selected in languages spoken
-numeric nextEntry = 1;
-
 // Used to translate from checkbox (alpha codes) to numeric codes
 string languageCheckboxCodes = "ABCDEFGH";
+
+valueset languageVSet; //valueset object
 
 // Loop through the numeric codes 1-8 and each selected
 // to value set
 do numeric languageNumericCode = 1 while languageNumericCode <= 8
 
     // Convert the numeric code to the checkbox alpha code
-    // by looking it up in the array.
+    // by looking it up in the string.
     string languageCheckboxCode = languageCheckboxCodes[languageNumericCode:1];
     
     // Check if the language is selected in the checkbox field
     if pos(languageCheckboxCode, LANGUAGES_SPOKEN) > 0 then
         // Language is selected. Add it to the value set.
-        codes(nextEntry) = languageNumericCode;
-        labels(nextEntry) = getlabel(MAIN_LANGUAGE_VS1, languageNumericCode);
-        nextEntry = nextEntry + 1;
+        string language = getlabel(MAIN_LANGUAGE_VS1, languageNumericCode);
+		languageVSet.add(language, languageNumericCode);
     endif;
     
 enddo;
 
-// Mark end of value set
-codes(nextEntry) = notappl;
-
 // Modify value set
-setvalueset(MAIN_LANGUAGE, codes, labels);
+setvalueset(MAIN_LANGUAGE, languageVSet);
 </logic>
 
 What if the interviewer doesn't pick any language in <b>B15</b>? Then our dynamic value set is empty. We should add a check to <b>B15</b> to ensure that at least one language is chosen.
@@ -332,13 +314,11 @@ endif;
 <subheader>Dynamic Checkboxes</subheader>
 Let's implement a dynamic value set for question <b>G2</b>, "were assets purchased with a loan". Rather than a series of yes/no questions, we implement this using a single variable with checkboxes. We could have one checkbox for each of the 10 items in the assets roster but it would be better if we only displayed the checkboxes for the assets that the household actually possesses. How do we know if the household possesses an item? The household possesses the item if its quantity is greater than zero. We need to loop through the rows of the roster and add a checkbox to the value set for each item with quantity greater than zero. The only tricky part is that these are checkboxes so we need to use alpha values.
 
-In order to create a value set with alpha values we need a code array of type string. Where do we declare it? PROC GLOBAL.
+In order to create a value set with alpha values we need declare a valueset object 
+that accepts alpha codes.
 
 <logic>
-PROC GLOBAL
-array string labels(100);
-array codes (100);
-array string codesString(100);
+valueset string possessionsVSet;
 </logic>
 
 We build the value set in the onfocus of the checkboxes field. We use the alphabet string trick again to get the alpha codes from the occurrence number. We also use the function <logiccolor>getocclabel()</logiccolor> to get the occurrence label from the assets roster to use in the value set.
@@ -348,7 +328,7 @@ PROC POSSESSIONS_PURCHASED_WITH_LOAN
 onfocus
 
 // Create dynamic value set from assets that have quantity > 0
-numeric nextEntry = 1;
+valueset string possessionsVSet;
 
 string alphabet = "ABCDEFGHIJ";
     
@@ -356,16 +336,12 @@ do numeric assetNumber = 1 while assetNumber <= totocc(POSSESSIONS_ROSTER)
     // Check if household possesses this asset
     if QUANTITY(assetNumber) > 0 then
         // Add to value set
-        labels(nextEntry) = 
-                         getocclabel(POSSESSIONS_ROSTER(assetNumber));
-        codesString(nextEntry) = alphabet[assetNumber:1];
-        nextEntry = nextEntry + 1;
+        string label = getocclabel(POSSESSIONS_ROSTER(assetNumber));
+        possessionsVSet.add(label, alphabet[assetNumber:1]);
     endif;
 enddo;
 
-// Mark end of array (use "" instead of notappl since field is alphanumeric)
-codesString(nextEntry) = "";
-setvalueset($, codesString, labels);
+setvalueset($, possessionsVSet);
 </logic>
 
 <pagebreak />

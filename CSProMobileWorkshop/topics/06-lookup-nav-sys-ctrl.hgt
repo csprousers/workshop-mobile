@@ -79,14 +79,11 @@ An alternative to using the lookup file to check the district and province codes
 PROC DISTRICT
 onfocus
 // Create dynamic value set of districts for selected province using lookup file
-numeric nextEntry = 1;
+dynamicVSet.clear();
 forcase DISTRICT_DICT where DI_PROVINCE_CODE = PROVINCE do
-    codes(nextEntry) = DI_DISTRICT_CODE;
-    labels(nextEntry) = DI_DISTRICT_NAME;
-    nextEntry = nextEntry + 1;
+    dynamicVSet.add(DI_DISTRICT_NAME, DI_DISTRICT_CODE);
 endfor;
-codes(nextEntry) = notappl;
-setvalueset(DISTRICT, codes, labels);
+setvalueset(DISTRICT, dynamicVSet);
 </logic>
 
 <subheader>User defined functions</subheader>
@@ -116,23 +113,16 @@ onfocus
 // Create the value set for child mother from all eligible women
 // in household roster.
 numeric indexRoster;
-numeric nextEntryValueSet = 1;
+dynamicVSet.clear();
 do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
 
     if isChildbearingWoman(indexRoster) = 1 then
-        labels(nextEntryValueSet) = NAME(indexRoster);
-        codes(nextEntryValueSet) = indexRoster;
-        nextEntryValueSet = nextEntryValueSet + 1;
+        dynamicVSet.add(NAME(indexRoster),indexRoster);
     endif;
 enddo;
-labels(nextEntryValueSet) = "non-resident";
-codes(nextEntryValueSet) = 87;
-nextEntryValueSet = nextEntryValueSet + 1;
-labels(nextEntryValueSet) = "deceased";
-codes(nextEntryValueSet) = 88;
-nextEntryValueSet = nextEntryValueSet + 1;
-codes(nextEntryValueSet) = notappl;
-setvalueset(MOTHERS_LINE_NUMBER, codes, labels);
+dynamicVSet.add("Non-resident",87);
+dynamicVSet.add("Deceased",88);
+setvalueset(MOTHER_LINE_NUMBER, dynamicVSet);
 </logic>
 
 <logic>
@@ -141,21 +131,15 @@ onfocus
 // Create the value set for deceased mother from all eligible women
 // in household roster
 numeric indexRoster;
-numeric nextEntryValueSet = 1;
+dynamicVSet.clear();
 do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
 
     if isChildbearingWoman(indexRoster) = 1 then
-        labels(nextEntryValueSet) = NAME(indexRoster);
-        codes(nextEntryValueSet) = indexRoster;
-        nextEntryValueSet = nextEntryValueSet + 1;
+		dynamicVSet.add(NAME(indexRoster),indexRoster);
     endif;
 enddo;
-labels(nextEntryValueSet) = "not in household";
-codes(nextEntryValueSet) = 99;
-nextEntryValueSet = nextEntryValueSet + 1;
-
-codes(nextEntryValueSet) = notappl;
-setvalueset(DECEASED_MOTHERS_LINE_NUMBER, codes, labels);
+dynamicVSet.add("not in household",99);
+setvalueset(DECEASED_MOTHERS_LINE_NUMBER, dynamicVSet);
 </logic>
 
 <pagebreak />
@@ -173,17 +157,13 @@ Looking at these two procs we could probably move the shared code that creates t
 function createMothersValueSet(excludeIndex)
 
     numeric indexRoster;
-    numeric nextEntryValueSet = 1;
+    dynamicVSet.clear();
     do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
 
         if isChildbearingWoman(indexRoster) = 1 and indexRoster <> excludeIndex then
-            labels(nextEntryValueSet) = NAME(indexRoster);
-            codes(nextEntryValueSet) = indexRoster;
-            nextEntryValueSet = nextEntryValueSet + 1;
+            dynamicVSet.add(NAME(indexRoster), indexRoster);
         endif;
     enddo;
-
-   createMothersValueSet = nextEntryValueSet;
 
 end;
 
@@ -192,34 +172,22 @@ onfocus
 // Create the value set for child mother from all eligible
 // women in household roster. Exclude current occurrence so
 // that person cannot be their own mother.
-numeric nextEntryValueSet = createMothersValueSet(curocc());
+createMothersValueSet(curocc());
 // Add additional entries for non-resident and deceased
-labels(nextEntryValueSet) = "non-resident";
-codes(nextEntryValueSet) = 87;
-nextEntryValueSet = nextEntryValueSet + 1;
-labels(nextEntryValueSet) = "deceased";
-codes(nextEntryValueSet) = 88;
-nextEntryValueSet = nextEntryValueSet + 1;
-// Mark end of value set with notappl
-codes(nextEntryValueSet) = notappl;
-// Update the value set with values in codes and labels
-setvalueset(MOTHER_LINE_NUMBER, codes, labels);
+dynamicVSet.add("Non-resident",87);
+dynamicVSet.add("Deceased",88);
+// Update the value set with values in valueset object
+setvalueset(MOTHER_LINE_NUMBER, dynamicVSet);
 
 PROC MOTHER_OF_DECEASED_LINE_NUMBER
 onfocus
 // Create the value set for child mother from all eligible
 // women in household roster
-numeric nextEntryValueSet = createMothersValueSet(0);
-
+createMothersValueSet(0);
 // Add additional entry for not in household
-labels(nextEntryValueSet) = "not in household";
-codes(nextEntryValueSet) = 99;
-nextEntryValueSet = nextEntryValueSet + 1;
-
-// Mark end of value set with notappl
-codes(nextEntryValueSet) = notappl;
+dynamicVSet.add("not in household",99);
 // Update the value set with values in codes and labels
-setvalueset($, codes, labels);
+setvalueset($, dynamicVSet);
 </logic>
 
 <pagebreak />
@@ -353,7 +321,13 @@ end;
 
 Let's extend our goto function to let the interviewer navigate directly to an individual in the household roster. If they choose "household members" then instead of going to the first person in the roster, we will show them a list of all household members in the roster and the let them choose which one to goto. For this we can use the function <logiccolor>showarray()</logiccolor>. This function takes an array of values and displays them in a grid in a dialog box and returns the row number that the user picks. 
 
-Unlike <logiccolor>setvalueset()</logiccolor> that takes two arrays, <logiccolor>showarray()</logiccolor> takes a two-dimensional array. You can think of a two-dimensional array as a grid of variables or as a matrix. You declare a two-dimensional array in the PROC GLOBAL the same way you declare a one-dimensional array except that you specify the size in both dimensions: number of rows and number of columns.
+An array logic variable is similar to a dictionary item with occurrences. A numeric array of length seven stores seven numbers, each of which is accessed through subscripts.
+
+<logic>
+array numeric codes(7);
+</logic>
+
+<logiccolor>showarray()</logiccolor> takes a two-dimensional array. You can think of a two-dimensional array as a grid of variables or as a matrix. You declare a two-dimensional array in the PROC GLOBAL the same way you declare a one-dimensional array except that you specify the size in both dimensions: number of rows and number of columns.
 
 <logic>
 array string householdMembersArray(30, 3);
