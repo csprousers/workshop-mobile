@@ -234,10 +234,11 @@ endif;
 setvalueset($, householdVSet);
 </logic>
 
-<subheader>Generating the PFF File</subheader>
-The next step is to handle the menu choice in the postproc to launch the household data entry program using the id-items for the household that was chosen. In order to do this, we will need to specify the id-items as parameters in the pff file. We will write the values of the id-items for the chosen household to the pff file. The menu program will then read these values from the pff once it is launched.
+<pagebreak />
 
-<center><html><img src="pass-ids-from-menu-to-household.png" width="500" /></html></center>
+<subheader>Generating the PFF File</subheader>
+The next step is to handle the menu choice in the postproc to launch the household data entry program using the id-items for the household that was chosen. In order to do this, we will need to pass the id-items as caseid string in the "Key" attribute of the [DataEntryInit] section of the pff file. The entry program will then automatically read these values from the generated pff and prefill the id items once it is launched.
+
 
 The first step is to change the launchHouseholdDataEntry() function to first write out the pff file before launching it so that we can customize it. We can use <logiccolor>filewrite</logiccolor> to write out the file as we did with the reports in the last lesson. An easy way to write this logic is to use open the pff file in the pff editor and enable "expert mode". This displays an extra tab containing CSPro logic to write out the pff file. We can copy and paste this into our logic and make a few modifications.
 
@@ -280,37 +281,23 @@ function launchHouseholdDataEntry()
 end;
 </logic>
 
-Next we need to write the household ids from the menu program into the pff file. We write these to the <b>[Parameters]</b> section of the file. We need to extract them from the appropriate positions of the variable CHOOSE_HOUSEHOLD which contains the entire case id string. By using "[]" we can extract substrings from CHOOSE_HOUSEHOLD for each of the id-items.
+Next we need to write the household ids from the menu program into the pff file. We write these to the <b>[DataEntryInit]</b> section of the file. We need to use the entire caseid string  chosen in CHOOSE_HOUSEHOLD and write it to the "Key" attribute
 
 <logic>
-    filewrite(pffFile,"PROVINCE=%s", CHOOSE_HOUSEHOLD[1:1]);
-    filewrite(pffFile,"DISTRICT=%s", CHOOSE_HOUSEHOLD[2:2]);
-    filewrite(pffFile,"ENUMERATION_AREA=%s", CHOOSE_HOUSEHOLD[4:3]);
-    filewrite(pffFile,"AREA_TYPE=%s", CHOOSE_HOUSEHOLD[7:1]);
-    filewrite(pffFile,"HOUSEHOLD_NUMBER=%s", CHOOSE_HOUSEHOLD[8:3]);
+	filewrite(pffFile,"[DataEntryInit]");
+    filewrite(pffFile,"Key=%s", CHOOSE_HOUSEHOLD);
 </logic>
 
-The last step is to modify the household data entry application to prefill the id-items using the parameters in the pff file. This can be using the <logiccolor>sysparm()</logiccolor> command which retrieves a parameter by name from the pff file. We can do this in the preproc of each of the id-items in the household application. <logiccolor>sysparm</logiccolor> always returns the result as a string so we need to convert it to a number.
+
+CSEntry prefills the id items using the caseid string passed in the "Key" attribute.
+Let's also make the field protected if it is prefilled. We can do this using <logiccolor>setproperty</logiccolor>.
 
 <logic>
 PROC PROVINCE
 preproc
 
-// Retreive parameters from menu program via pff file
-if sysparm("PROVINCE") <> "" then
-    PROVINCE = tonumber(sysparm("PROVINCE"));
-endif;
-</logic>
-
-We use an if statement to only fill in the field if the pff file actually has a value for the parameter. This way we can still easily test our application without using the menu program. We should also make the field protected if we are filling it in. We can do this using <logiccolor>setproperty</logiccolor>.
-
-<logic>
-PROC PROVINCE
-preproc
-
-// Retreive parameters from menu program via pff file
-if sysparm("PROVINCE") <> "" then
-    PROVINCE = tonumber(sysparm("PROVINCE"));
+// protect the field if it is prefilled
+if visualvalue(PROVINCE) <> notappl
 
     // protect field so the interviewer cannot modify it
     setproperty(PROVINCE, "Protected","Yes");
@@ -320,12 +307,32 @@ endif;
 
 The logic for <b>DISTRICT</b>, <b>ENUMERATION_AREA</b>, <b>AREA_TYPE</b> and <b>HOUSEHOLD_NUMBER</b> is similar.
 
-Since we have not set the start mode in the pff file that we write out, after adding a first case, the next time we launch a case from the menu program, it goes to the case listing screen instead of starting the case. We can fix this by setting the <b>StartMode</b> parameter to "add" in the pff for the household application the way we did for the menu program. In order for this to work when we are modifying an existing case we need to add the case id to the <b>StartMode</b> line. In the menu program, the case id to use is just <b>CHOOSE_HOUSEHOLD</b>. Finally, so that after finishing a case we return to the menu program rather than returning to the case listing we add "Lock=CaseListing" to the pff file which prevents the case listing from ever being shown.
+Finally, so that after finishing a case we return to the menu program rather than returning to the case listing we add "Lock=CaseListing" to the pff file "[DataEntryInit]" section, which prevents the case listing from ever being shown.
 
 <logic>
-filewrite(pffFile,"[DataEntryInit]");
-filewrite(pffFile,"StartMode=add;%s", CHOOSE_HOUSEHOLD);
 filewrite(pffFile,"Lock=CaseListing");
+</logic>
+
+<subheader>Parameters</subheader>
+The parameter section in the pff file allows you to pass any value to your data entry program. Let's use this to pass interviewer code chosen in the menu program to household entry program.
+
+<logic>
+filewrite(pffFile,"[Parameters]");
+filewrite(pffFile,"INTERVIEWER_CODE=%d", STAFF_CODE);
+</logic>
+
+The next step is to modify the household data entry application to prefill the interviewer code using the parameter in the pff file. This can be done using the <logiccolor>sysparm()</logiccolor> command which retrieves a parameter by name from the pff file. We can do this in the preproc of the INTERVIEWER_CODE in the household application. <logiccolor>sysparm</logiccolor> always returns the result as a string so we need to convert it to a number. 
+
+<logic>
+PROC INTERVIEWER_CODE
+// Prefill with parameter from pff file
+preproc
+if sysparm("INTERVIEWER_CODE") <> "" then
+	$ = tonumber(sysparm("INTERVIEWER_CODE"));
+	
+	// make field protected
+	setproperty($, "Protected", "Yes");
+endif;
 </logic>
 
 <subheader>Using a Lookup File for Login</subheader>
@@ -507,8 +514,7 @@ end;
 
 <subheader>Exercises</subheader>
 <list ordered>
-	<li>Modify the launchHouseholdDataEntry() function to write the staff code as a parameter in the pff file used to launch the household application. Modify the household application to prefill the interviewer code (<b>A9</b>) with the staff code from the pff file.</li>
-	<li>Implement the function launchHouseholdListing() in the menu program. It should write out and launch a pff file to run the listing program. Write the province, district, enumeration area and staff code from the staff file as parameters in the pff file and prefill those items in the listing program. Make sure that the listing program returns to the menu program on exit.</li>
+	<li>Implement the function launchHouseholdListing() in the menu program. It should write out and launch a pff file to run the listing program. Write the province, district, enumeration area as caseid string to "Key" attribute in the pff file and staff code from the staff file as parameters in the pff file. Prefill staff code in the listing program. Make sure that the listing program returns to the menu program on exit.</li>
 	<li>Modify the logic in the onfocus and postproc of <b>CHOOSE_HOUSEHOLD</b> to add an extra option to the end of the list labeled "Back" that will move back to the interviewer main menu.</li>
 	<li>Modify the dynamic value set we create in the onfocus proc of <b>CHOOSE_HOUSEHOLD</b> to show the interview status (<b>A10</b> in the household questionnaire) in addition to the household number and the head's name. To do this you will need to use loadcase on the household questionnaire dictionary to find the case from the household data file. You will also need to handle the case where the household does not yet exist in the household data file.</li>
 	<li>Create a new menu called "Summary Reports" that has options for the completion report (the one we implemented already) and a new "Total Population Report" that you will implement. This new menu should also have an option to go back to the main menu. The "Summary Reports" menu should be accessed from the Supervisor Main Menu. The new "Total Population Report" should look like:
