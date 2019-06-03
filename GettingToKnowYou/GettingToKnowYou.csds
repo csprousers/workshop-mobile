@@ -1,8 +1,8 @@
 {
   "fileType": "Application Deployment Specification",
-  "version": "7.1",
+  "version": "7.3",
   "name": "Getting to Know You",
-  "description": "Intoductory exercise for CSPro workshop",
+  "description": "Introductory exercise for CSPro workshop",
   "files": [
     {
       "path": ".\\GettingToKnowYou.ent"

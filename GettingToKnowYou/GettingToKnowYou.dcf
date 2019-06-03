@@ -1,28 +1,35 @@
 ﻿[Dictionary]
-Version=CSPro 7.2
-Label=GettingToKnowYou
+Version=CSPro 7.3
+Label=GettingToKnowYou Dictionary
 Name=GETTINGTOKNOWYOU_DICT
 RecordTypeStart=0
 RecordTypeLen=0
 Positions=Relative
-ZeroFill=No
+ZeroFill=Yes
 DecimalChar=Yes
 
 [Level]
-Label=GettingToKnowYou questionnaire
-Name=GETTINGTOKNOWYOU_QUEST
+Label=GettingToKnowYou Level
+Name=GETTINGTOKNOWYOU_LEVEL
 
 [IdItems]
 
 [Item]
-Label=First and last name
-Name=FIRST_AND_LAST_NAME
+Label=First Name
+Name=FIRST_NAME
 Start=1
-Len=50
+Len=25
+DataType=Alpha
+
+[Item]
+Label=Last Name
+Name=LAST_NAME
+Start=26
+Len=25
 DataType=Alpha
 
 [Record]
-Label=GettingToKnowYou record
+Label=GettingToKnowYou Record
 Name=GETTINGTOKNOWYOU_REC
 RecordTypeValue=''
 RecordLen=71
@@ -32,6 +39,7 @@ Label=Country
 Name=COUNTRY
 Start=51
 Len=3
+ZeroFill=Yes
 
 [ValueSet]
 Label=Country
@@ -237,6 +245,7 @@ Label=Education/Training
 Name=EDUCATION
 Start=54
 Len=1
+ZeroFill=Yes
 
 [ValueSet]
 Label=Education/Training
@@ -269,6 +278,7 @@ Label=Suit and Tie
 Name=SUIT_AND_TIE
 Start=62
 Len=1
+ZeroFill=Yes
 
 [ValueSet]
 Label=Suit and Tie
@@ -281,6 +291,7 @@ Label=Favorite Food
 Name=FAVORITE_FOOD
 Start=63
 Len=1
+ZeroFill=Yes
 
 [ValueSet]
 Label=Favorite Food
@@ -299,6 +310,7 @@ Label=Weekend Activity
 Name=WEEKEND_ACTIVITY
 Start=64
 Len=1
+ZeroFill=Yes
 
 [ValueSet]
 Label=Weekend Activity
@@ -315,6 +327,7 @@ Label=English
 Name=ENGLISH
 Start=65
 Len=1
+ZeroFill=Yes
 
 [ValueSet]
 Label=English
@@ -327,6 +340,7 @@ Label=French
 Name=FRENCH
 Start=66
 Len=1
+ZeroFill=Yes
 
 [ValueSet]
 Label=French
@@ -339,6 +353,7 @@ Label=Swahili
 Name=SWAHILI
 Start=67
 Len=1
+ZeroFill=Yes
 
 [ValueSet]
 Label=Swahili
@@ -351,6 +366,7 @@ Label=Portuguese
 Name=PORTUGUESE
 Start=68
 Len=1
+ZeroFill=Yes
 
 [ValueSet]
 Label=Portuguese
@@ -363,6 +379,7 @@ Label=Chinese
 Name=CHINESE
 Start=69
 Len=1
+ZeroFill=Yes
 
 [ValueSet]
 Label=Chinese
@@ -375,6 +392,7 @@ Label=Spanish
 Name=SPANISH
 Start=70
 Len=1
+ZeroFill=Yes
 
 [ValueSet]
 Label=Spanish
@@ -387,6 +405,7 @@ Label=Arabic
 Name=ARABIC
 Start=71
 Len=1
+ZeroFill=Yes
 
 [ValueSet]
 Label=Arabic
