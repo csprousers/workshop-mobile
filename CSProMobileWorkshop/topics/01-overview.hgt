@@ -37,14 +37,12 @@ Split into groups of 3-4 people and use the provided tablets to interview each o
 <subheader>Creating a Data Entry Application</subheader>
 For most of the examples in this workshop, we will be creating a data entry application based on the Popstan 2020 Census questionnaire included with the workshop materials. With CAPI applications, a paper questionnaire alone is not sufficient to define a data entry application. We also a need a specification document that describes consistency checks, skip patterns, text fills, error messages and other aspects of the interactive application that are not defined on a paper questionnaire. Take a moment to review both the questionnaire and the accompanying specification document.
 
-While CSPro data entry programs can be run on Android and Windows<html><sup>1</sup></html>tablets and phones, to develop a survey or census application in CSPro you will use the CSPro Designer which runs on Windows PCs. When you launch CSPro Designer you are given the choice of "Data Entry Application" for key from paper (PAPI) and "CAPI Data Entry Application" for electronic data collection using phones/tablets/laptops. The differences are:
+While CSPro data entry programs can be run on Android and Windows tablets and phones, to develop a survey or census application in CSPro you will use the CSPro Designer which runs on Windows PCs. When you launch CSPro Designer you are given the choice of "Data Entry Application" for key from paper (PAPI) and "CAPI Data Entry Application" for electronic data collection using phones/tablets/laptops. The differences are:
 
 <list><li>System controlled (tightly controlled path)</li>
 <li>CAPI question text</li>
 <li>Extended controls (radio buttons, checkboxes, date picker, …)</li></list>
-~!~~!~
-<html><hr/></html>
-<font 0.8><html><sup>1</sup>The mobile version of CSEntry for Windows runs only on phones and tablets running Windows 10 or later</html></font>
+
 <pagebreak />
 Since we are creating a CAPI application we will choose "CAPI Data Entry Application". We will name the application "Popstan2020" and we will use the same name for the dictionary. Since we will eventually add other applications such as the listing questionnaire and the menu, we will create the following folder structure:
 
@@ -116,7 +114,7 @@ for the person record?
 
 Now add some fields to the person record:
 
-<list><li>Person number (numeric length 2)<html><sup>2</sup></html></li>
+<list><li>Person number (numeric length 2)<html><sup>1</sup></html></li>
 <li>Name (alpha length 30)</li>
 <li>Relationship (numeric length 1)</li>
 <li>Sex (numeric length 1)</li>
@@ -140,13 +138,13 @@ Define the value sets for some of our variables based on the response codes on t
 <li>Name (no value set)</li>
 <li>Sex (1- Male, 2-Female)</li>
 <li>Relationship (see questionnaire)</li>
-<li>Age (use a range: 0-120, plus don't know code 999)</li>
+<li>Age (use a range: 0-120, plus don't know code 999). We can set the entry for 999 to the special value "missing". This tells CSPro that this is a special code indicating that the response is unknown. We will see later how we can take advantage of this when doing consistency checks</li>
 <li>Number of rooms (use generate value set to generate the codes 1-20)</li>
 <li>Type of main dwelling (use codes from questionnaire)</li></list>
 
 ~!~~!~~!~
 <html><hr/></html>
-<font 0.8><html><sup>2</sup></html>The line number is not needed in CSPro itself as there are ways to determine the row number using logic, however, when exporting the data to other packages it is often useful to have it. We will see later how to fill this in automatically during data entry.</font>
+<font 0.8><html><sup>1</sup></html>The line number is not needed in CSPro itself as there are ways to determine the row number using logic, however, when exporting the data to other packages it is often useful to have it. We will see later how to fill this in automatically during data entry.</font>
 <pagebreak />
 
 <subheader>Dictionary Macros</subheader>
@@ -265,7 +263,7 @@ Tip: When dragging items onto a form with an existing roster drop the items insi
 <pagebreak />
 
 <subheader>Blocks</subheader>
-Blocks feature allows you to group several fields into a related unit. Blocks are primarily useful for two reasons. Firstly, they provide the mechanism for CSEntry to display multiple fields on a screen. Secondly, they allow you to write logic checks in one place that apply to a number of fields.
+The blocks feature allows you to group several fields into a related unit. Blocks are primarily useful for two reasons. Firstly, they provide the mechanism for CSEntry to display multiple fields on a screen. Secondly, they allow you to write logic checks in one place that apply to a number of fields.
 Let's add a block to group date fields. To create a new block, select day, month and year fields in the Forms Tree by holding down the Ctrl key while selecting fields. Once the fields are selected, right-click and select Add Block. In the "Block Properties" dialog box, type "Date of Birth" for the label and "DOB_BLOCK" for the name. Leave the checkbox option "Show on same screen on mobile" checked to display the grouped fields on the same screen on mobile devices. 
 
 <subheader>Exercises</subheader>

@@ -115,7 +115,7 @@ Form teams of three to five people. The instructor adds errmsg to the postproc a
 Now that we understand procs, which proc should we set the occurrence labels in? The preproc of the questionnaire! We can do something like the following:
 
 <logic>
-PROC POPSTANLFS_QUEST
+PROC POPSTAN2020_QUEST
 preproc
 setocclabel(HOUSEHOLD_MEMBERS_ROSTER(1), strip(NAME(1)));
 setocclabel(HOUSEHOLD_MEMBERS_ROSTER(2), strip(NAME(2)));
