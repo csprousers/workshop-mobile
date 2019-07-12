@@ -5,7 +5,7 @@ At the end of this lesson participants will be able to:
 	<li>Add question text and help text</li>
 	<li>Add fills in question text</li>
 	<li>Use multiple languages in question text, error messages and the dictionary</li>
-	<li>Use occurrence labels and logic variables as fills in question text</li>
+	<li>Use occurrence labels as fills in question text</li>
 	<li>Use <logiccolor>setcaselabel</logiccolor> to customize the case listing</li>
 	<li>Use dynamic value sets</li>
 </list>
