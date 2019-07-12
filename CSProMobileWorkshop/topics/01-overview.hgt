@@ -14,7 +14,7 @@ CSPro is a suite of software tools for census and survey data processing that in
 
 CSPro has a long history. It was first released in 2000 and has been used in over 100 countries worldwide. It has been used for censuses all over the world as well as for many large and complex household surveys including the Demographic and Health Survey (USAID), Multiple Indicator Cluster Survey (UNICEF) and Living Standards Measurement Study (World Bank). The first Android version was released in 2014.  CSPro Android has already been used in production for household surveys and population censuses in multiple countries.
 
-CSPro is free software developed by the US Census Bureau and funded by USAID. The Census Bureau provides free email customer support. You can send questions to cspro@lists.census.gov. There is also a user forum where you can post questions and see answers to questions posted by other users at http://www.csprousers.org/forum/.
+CSPro is free software developed by the US Census Bureau and funded by USAID. The Census Bureau provides free email customer support. You can send questions to cspro@lists.census.gov. There is also a user forum where you can post questions and see answers to questions posted by other users at https://www.csprousers.org/forum/.
 
 CSPro can be used for both the traditional PAPI (pencil and paper interview) workflow as well as the computer aided personal interview (CAPI) workflow. In this workshop, we will focus on data collection in CSPro using a CAPI workflow.
 
@@ -205,7 +205,7 @@ In addition to the data entry options, there are other useful settings in the "D
 Add the variable <b>F02 number of bedrooms</b> to the dictionary and form right before F03 type of main dwelling. Don't forget to modify the order in the form tree so that it is asked before F03. Run the application again and modify one of the existing cases. Why is the number of household members blank? Once data has been entered, you should avoid adding variables in the middle of a record. It is fine to add to the end of the record but adding in the middle invalidates the start positions of the existing variables. If you must add a variable in the middle of a record, you can use the reformat data tool to adjust old data files to match the new dictionary.
 
 <subheader>Subitems</subheader>
-Let's add the <b>Date of Birth (B06)</b> to the application. In order to be able to look at both the date as an 8-digit number and look at the day, month and year individually we can create an item with subitems. Subitems are items that are made up of a subset of the digits of their parent item. Add the item for interview date and the following subitems:
+Let's add the <b>Date of Birth (B06)</b> to the application. In order to be able to look at both the date as an 8-digit number and look at the day, month and year individually we can create an item with subitems. Subitems are items that are made up of a subset of the digits of their parent item. Add the item for date of birth and the following subitems:
 <list><li>year of birth (length 4)</li>
 <li>month of birth (length 2)</li>
 <li>day of birth (length 2)</li></list>
