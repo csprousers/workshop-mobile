@@ -89,7 +89,6 @@ setocclabel(HOUSEHOLD_MEMBERS_ROSTER(curocc()), strip(NAME));
 setocclabel(DEMOGRAPHICS_ROSTER(curocc()), strip(NAME));
 setocclabel(EDUCATION_ROSTER(curocc()), strip(NAME));
 setocclabel(FERTILITY_ROSTER(curocc()), strip(NAME));
-setocclabel(FERTILITY_ROSTER, strip(NAME));
 </logic>
 
 This works fine when we are adding a new case, however we open an existing case in modify mode the occurrence labels are not set until we get to the person roster even though the occurrences already exist. In modify mode, while still on the demographics roster you can scroll the case tree to see Demographics (1), Demographics (2)… as we had before. In order to prevent this, we need to set the occurrence labels for the rosters as soon as we open the case. 
@@ -186,7 +185,7 @@ The above works but only if we know the size of the household in advance. In ord
 <logic>
 PROC HOUSEHOLD_MEMBERS_ROSTER
 
-// After adults roster is complete, check to make sure that there is
+// After person roster is complete, check to make sure that there is
 // exactly one head of household.
 
 numeric numberOfHeads = 0;

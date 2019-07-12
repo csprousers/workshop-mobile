@@ -39,7 +39,7 @@ In addition to "=" to check if two values are equal, you can use the following o
 <cell>Greater than or equal to</cell><cell>&gt;=</cell>
 </table></indent>
 
-For example, to skip over <b>B08</b>, residence one year ago, for those less than one year of age we could add the following logic to the postproc of the preceding question:
+For example, to skip over <b>B08</b>, residence one year ago, for those less than one year of age we could add the following logic to the PROC of the preceding question:
 
 <logic>PROC PLACE_OF_BIRTH
 if AGE < 1 then

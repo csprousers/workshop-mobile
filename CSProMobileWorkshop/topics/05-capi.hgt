@@ -34,7 +34,7 @@ Let's add the following help text to the <b>NAME</b> field in section B:
 
 <indent><i>Include all persons living in this house who have common arrangements for cooking and dining.</i></indent>
 
-Run the application on both Android and mobile and see how the help text is displayed.
+Run the application on both Android and Windows and see how the help text is displayed.
 
 <subheader>Fills in Question Text</subheader>
 It is possible to have the question include the values of dictionary variables. For example, for <b>SEX</b>, instead of asking "Is (name) a male or a female?" we can include the respondents name by using <b>%NAME%</b> inside the question text. At runtime, this will be replaced by the contents of the variable <b>NAME</b>.
@@ -48,7 +48,7 @@ Sometimes, the question text will be completely different depending on other fac
 
 <indent>What is the name of the next member of the household? – for the remaining rows of the roster.</indent>
 
-We can implement this using the conditions window underneath the question text window. By default, this window contains a single empty condition. Right-clicking on the conditions lets you add a new condition. Let's modify the first condition so that <b>Min Occ</b> and <b>Max Occ</b> are both 1 and then add a second condition where <b>Min Occ</b> is 2 and <b>Max Occ</b> is 20. Now we have two different question texts, one that will be shown for the first occurrence and the other that will be shown for the rest. Edit these two questions texts as above and test it to verify that it works.
+We can implement this using the conditions window underneath the question text window. By default, this window contains a single empty condition. Right-clicking on the conditions lets you add a new condition. Let's modify the first condition so that <b>Min Occ</b> and <b>Max Occ</b> are both 1 and then add a second condition where <b>Min Occ</b> is 2 and <b>Max Occ</b> is 30. Now we have two different question texts, one that will be shown for the first occurrence and the other that will be shown for the rest. Edit these two questions texts as above and test it to verify that it works.
 
 <center><image capicond.png /></center>
 
@@ -58,7 +58,7 @@ In addition to using the occurrence numbers it possible to specify a logic expre
 It is possible to add question text, dictionary labels and error messages in multiple languages.
 
 <subheader>Multiple Languages for Question Text</subheader>
-To have multiple languages for question text you first need to define the languages.  This is done from the CAPI Options Menu.  Select <b>"Define CAPI Languages"</b>. This will bring up the "Language" dialog box.  Click on "Add" to add a language, specify the name and label to use for the language and click "OK". The label is what the interviewer will see when choosing a language and the name is what will be used in logic to refer to the language. We generally use abbreviations for the language names such as EN, FR and ES but this is just a convention.
+To have multiple languages for question text you first need to define the languages.  This is done from the CAPI Options Menu.  Select <b>"Define CAPI Languages"</b>. This will bring up the "Language" dialog box.  Click on "Add" to add a language, specify the name and label to use for the language and click "OK". The label is what the interviewer will see when choosing a language and the name is what will be used in logic to refer to the language. The name should be a two letter abbreviation for the language from the <link https://www.loc.gov/standards/iso639-2/php/code_list.php>ISO 639-1</link> standard such as EN, FR and ES. While you may use any language name, if you use one of the ISO 639-1 codes then CSPro will automatically set the language of your application to the language set in the system settings of your mobile device.
 
 <center><image langdialog.png /></center>
 
@@ -238,13 +238,12 @@ do numeric indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
 		eligibleMembersVSet.add(NAME(indexRoster),indexRoster);
     endif;
 enddo;
-</logic>
 
-Finally, we need to tell CSPro to use the valueset object in the setvalueset command. Make sure to set the capture type of the field to "Radio Button" in the field properties for <b>RESPONDENT_LINE_NUMBER</b>.
-
-<logic>
 setvalueset(RESPONDENT_LINE_NUMBER, eligibleMembersVSet);
+
 </logic>
+
+Finally, make sure to set the capture type of the field to "Radio Button" in the field properties for <b>RESPONDENT_LINE_NUMBER</b>.
 
 As a second example we will implement the dynamic value set for mother line number (<b>B10</b>). For this value set we only show females in the household over 12 and don't allow a woman to be her own mother. 
 
@@ -284,9 +283,9 @@ onfocus
 // Used to translate from checkbox (alpha codes) to numeric codes
 string languageCheckboxCodes = "ABCDEFGH";
 
-valueset languageVSet; //valueset object
+valueset languageVSet = MAIN_LANGUAGE_VS1;
 
-// Loop through the numeric codes 1-8 and each selected
+// Loop through the numeric codes 1-8 and add each selected
 // to value set
 do numeric languageNumericCode = 1 while languageNumericCode <= 8
 
@@ -295,10 +294,9 @@ do numeric languageNumericCode = 1 while languageNumericCode <= 8
     string languageCheckboxCode = languageCheckboxCodes[languageNumericCode:1];
     
     // Check if the language is selected in the checkbox field
-    if pos(languageCheckboxCode, LANGUAGES_SPOKEN) > 0 then
-        // Language is selected. Add it to the value set.
-        string language = getlabel(MAIN_LANGUAGE_VS1, languageNumericCode);
-		languageVSet.add(language, languageNumericCode);
+    if pos(languageCheckboxCode, LANGUAGES_SPOKEN) = 0 then
+        // Language is not selected. Remove it from the value set.
+		languageVSet.remove(languageNumericCode);
     endif;
     
 enddo;
