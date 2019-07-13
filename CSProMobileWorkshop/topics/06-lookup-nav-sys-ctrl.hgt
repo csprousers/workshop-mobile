@@ -112,9 +112,8 @@ PROC MOTHER_LINE_NUMBER
 onfocus
 // Create the value set for child mother from all eligible women
 // in household roster.
-numeric indexRoster;
 valueset motherVSet;
-do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
+do numeric indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
     if isChildbearingWoman(indexRoster) = 1 then
         motherVSet.add(NAME(indexRoster), indexRoster);
     endif;
@@ -129,9 +128,8 @@ PROC MOTHER_OF_DECEASED_LINE_NUMBER
 onfocus
 // Create the value set for deceased mother from all eligible women
 // in household roster
-numeric indexRoster;
 valueset motherVSet;
-do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
+do numeric indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
     if isChildbearingWoman(indexRoster) = 1 then
 		motherVSet.add(NAME(indexRoster), indexRoster);
     endif;
@@ -153,8 +151,7 @@ Looking at these two procs we could probably move the shared code that creates t
 // The household member in row excludeIndex will not be included in the value 
 // set. This can be used to exclude someone from being their own mother.
 function createMothersValueSet(valueset motherVSet, excludeIndex)
-    numeric indexRoster;
-    do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
+    do numeric indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
         if isEligibleMother(indexRoster) = 1 and indexRoster <> excludeIndex then
             motherVSet.add(NAME(indexRoster), indexRoster);
         endif;
