@@ -114,7 +114,7 @@ endif;
 Now when we run the application with the language set to French and encounter the error, it will show the French text.
 
 You can also use a separate message file for each language. To add an additional message file, use "Add files" from the files menu and enter the name of the message file next to "External Message File".
-
+<pagebreak />
 <callout>
 <center><b>Group exercise</b></center>
 Add the question text and the French translations for the question text, labels, value sets and error messages for marital status (<b>B13</b>).
