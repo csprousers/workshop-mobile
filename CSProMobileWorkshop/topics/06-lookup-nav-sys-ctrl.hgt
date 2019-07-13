@@ -38,8 +38,8 @@ PROC DISTRICT
 
 // Verify that the district code is valid for the province selected.
 if loadcase(DISTRICT_DICT, PROVINCE, DISTRICT)  = 0 then
-    errmsg("District code %d is not valid for province %s",
-           DISTRICT, getlabel(PROVINCE, PROVINCE));
+    errmsg("District code %d is not valid for province %l",
+           DISTRICT, PROVINCE);
     reenter;
 else
     errmsg("You have selected district: %s", DI_DISTRICT_NAME);
@@ -58,8 +58,8 @@ PROC DISTRICT
 // Verify that the district code is valid for the province
 // selected.
 if loadcase(DISTRICT_DICT, PROVINCE, DISTRICT)  = 0 then
-    errmsg("District code %d is not valid for province %s",
-           DISTRICT, getlabel(PROVINCE, PROVINCE));
+    errmsg("District code %d is not valid for province %l",
+           DISTRICT, PROVINCE);
     reenter;
 else
     // Assign province and district names from lookup to main
@@ -79,17 +79,17 @@ An alternative to using the lookup file to check the district and province codes
 PROC DISTRICT
 onfocus
 // Create dynamic value set of districts for selected province using lookup file
-dynamicVSet.clear();
+valueset districtsVSet;
 forcase DISTRICT_DICT where DI_PROVINCE_CODE = PROVINCE do
-    dynamicVSet.add(DI_DISTRICT_NAME, DI_DISTRICT_CODE);
+    districtsVSet.add(DI_DISTRICT_NAME, DI_DISTRICT_CODE);
 endfor;
-setvalueset(DISTRICT, dynamicVSet);
+setvalueset(DISTRICT, districtsVSet);
 </logic>
 
 <subheader>User defined functions</subheader>
-Often you find you have identical blocks of logic in multiple procs in your application. This can cause problems if you later change the code in one place to fix a bug and forget to change it in the other. In such situations it is better to put the logic in a user defined function which you can then call from all the procs where it is used. User defined functions are defined in the PROC GLOBAL. You call them the same way you call built in CSPro functions.
+Often you find you have identical blocks of logic in multiple procs in your application. This can cause problems if you later change the code in one place to fix a bug and forget to change it in the other. In such situations it is better to put the logic in a user defined function which you can then call from all the procs where it is used. User defined functions are defined in the PROC GLOBAL. Anything declared in the PROC global is available in all the PROCs in your program. If you declare a logic variable inside the PROC of a dictionary variable or group, it is only available inside that PROC but if you declare it in the PROC GLOBAL you can use it anywhere. To view the proc GLOBAL, in the logic view, click on the first item in the form tree. This shows all of the program logic at once: the proc GLOBAL plus all the other procs. Clicking on any other item in the form tree shows just the procs for that item.
 
-User defined functions can take arguments and return values just like built in functions. Let's define a function that we can use in all the places where we check if a household member is a woman of childbearing age. This function will be passed the index (row number) of the household member in the household roster and it will return one if the person is a woman over 12 years old and zero otherwise. This way if we later decide that we should be using 13 or 14 as a minimum age we only have to make the change in one place.
+User defined functions can take arguments and return values just like built in functions. You call them the same way you call built in CSPro functions. Let's define a function that we can use in all the places where we check if a household member is a woman of childbearing age. This function will be passed the index (row number) of the household member in the household roster and it will return one if the person is a woman over 12 years old and zero otherwise. This way if we later decide that we should be using 13 or 14 as a minimum age we only have to make the change in one place.
 
 <pagebreak />
 
@@ -113,16 +113,15 @@ onfocus
 // Create the value set for child mother from all eligible women
 // in household roster.
 numeric indexRoster;
-dynamicVSet.clear();
+valueset motherVSet;
 do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
-
     if isChildbearingWoman(indexRoster) = 1 then
-        dynamicVSet.add(NAME(indexRoster),indexRoster);
+        motherVSet.add(NAME(indexRoster), indexRoster);
     endif;
 enddo;
-dynamicVSet.add("Non-resident",87);
-dynamicVSet.add("Deceased",88);
-setvalueset(MOTHER_LINE_NUMBER, dynamicVSet);
+motherVSet.add("Non-resident",87);
+motherVSet.add("Deceased",88);
+setvalueset(MOTHER_LINE_NUMBER, motherVSet);
 </logic>
 
 <logic>
@@ -131,15 +130,14 @@ onfocus
 // Create the value set for deceased mother from all eligible women
 // in household roster
 numeric indexRoster;
-dynamicVSet.clear();
+valueset motherVSet;
 do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
-
     if isChildbearingWoman(indexRoster) = 1 then
-		dynamicVSet.add(NAME(indexRoster),indexRoster);
+		motherVSet.add(NAME(indexRoster), indexRoster);
     endif;
 enddo;
-dynamicVSet.add("not in household",99);
-setvalueset(DECEASED_MOTHERS_LINE_NUMBER, dynamicVSet);
+motherVSet.add("not in household",99);
+setvalueset(DECEASED_MOTHERS_LINE_NUMBER, motherVSet);
 </logic>
 
 <pagebreak />
@@ -148,46 +146,49 @@ Looking at these two procs we could probably move the shared code that creates t
 
 <logic>
 // Create a value set of all household members that are eligible to be
-// mothers by filling in the global codes and labels arrays.
+// mothers by filling in the valueset motherVSet that is passed as 
+// the first argument.
 // Labels are names of household members and codes are the corresponding 
 // line numbers.
-// Returns the number of eligible members in the value set.
 // The household member in row excludeIndex will not be included in the value 
 // set. This can be used to exclude someone from being their own mother.
-function createMothersValueSet(excludeIndex)
-
+function createMothersValueSet(valueset motherVSet, excludeIndex)
     numeric indexRoster;
-    dynamicVSet.clear();
     do indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
-
-        if isChildbearingWoman(indexRoster) = 1 and indexRoster <> excludeIndex then
-            dynamicVSet.add(NAME(indexRoster), indexRoster);
+        if isEligibleMother(indexRoster) = 1 and indexRoster <> excludeIndex then
+            motherVSet.add(NAME(indexRoster), indexRoster);
         endif;
     enddo;
-
 end;
 
 PROC MOTHER_LINE_NUMBER
 onfocus
+
 // Create the value set for child mother from all eligible
 // women in household roster. Exclude current occurrence so
 // that person cannot be their own mother.
-createMothersValueSet(curocc());
+valueset motherVSet;
+createMothersValueSet(motherVSet, curocc());
+
 // Add additional entries for non-resident and deceased
-dynamicVSet.add("Non-resident",87);
-dynamicVSet.add("Deceased",88);
+motherVSet.add("Non-resident",87);
+motherVSet.add("Deceased",88);
+
 // Update the value set with values in valueset object
-setvalueset(MOTHER_LINE_NUMBER, dynamicVSet);
+setvalueset(MOTHER_LINE_NUMBER, motherVSet);
 
 PROC MOTHER_OF_DECEASED_LINE_NUMBER
 onfocus
 // Create the value set for child mother from all eligible
 // women in household roster
-createMothersValueSet(0);
+valueset motherVSet;
+createMothersValueSet(motherVSet, curocc());
+
 // Add additional entry for not in household
-dynamicVSet.add("not in household",99);
+motherVSet.add("not in household",99);
+
 // Update the value set with values in codes and labels
-setvalueset($, dynamicVSet);
+setvalueset($, motherVSet);
 </logic>
 
 <pagebreak />
@@ -197,7 +198,7 @@ Another use for user defined functions is for fills in question that require som
 
 <indent>Just to make sure that I have this right, (name) has had in total (total number) births during her life. Is this correct?</indent>
 
-We can use the question text for this but we don't have a dictionary variable for total births. We only have the yes/no variable <b>IS_TOTAL_BIRTHS_CORRECT</b>. We could create an additional dictionary variable but instead we can simply create function to compute the total births and use that as the fill value.
+We can use the question text for this but we don't have a dictionary variable for total births. We only have the yes/no variable <b>IS_TOTAL_BIRTHS_CORRECT</b>. We could create an additional dictionary variable but instead we can simply create a function to compute the total births and use that as the fill value.
 
 <logic>
 // Compute totalBirths to display in question text in fertility section
@@ -342,7 +343,7 @@ When assigning a value to a two-dimensional array you specify both the row and c
 householdMembersArray(4, 2) = "This is the 4th row, 2nd column";
 </logic>
 
-In our examples we will loop through the members in the household roster and add the name, sex and relationship for each one to our array. Note that for sex and relationship we want the value set labels so we use getlabel(). Since this will be more than a few lines of code let's put this into a function by itself and then call it from our goto() function.
+In our examples we will loop through the members in the household roster and add the name, sex and relationship for each one to our array. Since this will be more than a few lines of code let's put this into a function by itself and then call it from our goto() function.
 
 <logic>
 // Show list of entries in household roster in a dialog and let interviewer pick
@@ -381,6 +382,8 @@ function goto()
 end;
 </logic>
 
+Note that for sex and relationship we want the value set labels so we use the function getlabel(). This function returns the label from value set as an alpha value. It takes the name of the variable (or value set) and the value to use. For example <logiccolor>getlabel(SEX, 1)</logiccolor> will return "Male". Inside our loop, <logiccolor>getlabel(SEX, SEX(i))</logiccolor> will return the label for the sex of the ith household member.
+
 <subheader>Path and Visualvalue</subheader>
 Our goto() function works when we are in section B or C but when we are in section A the sex and relationship are blank. What is going on? In system controlled mode, CSEntry keeps track of which variables are on and off the "path". Variables that you have entered are considered "on path" but those that have been skipped, even if there was a value in them before they were skipped, are considered "off path". As we have seen before, variables that are "off path" are considered blank (<logiccolor>notappl</logiccolor>) in logic. It turns out that variables that are ahead of the current field are also considered "off path" until you pass through them. The idea is that these fields have not yet been validated by running their preproc and postproc with the current values of all preceding fields and therefore cannot be considered final. The effect of this is that the values of all fields ahead of the current field in the questionnaire are <logiccolor>notappl</logiccolor> in logic. 
 
@@ -395,7 +398,7 @@ You can see which fields are "on path" by looking at the background color of the
 </list>
 
 Note that the field coloring scheme is different in operator controlled mode.
-<pagebreak />
+
 Fortunately, we can get the value of fields that are "off path" using the function <logiccolor>visualvalue()</logiccolor>. It returns whatever value is currently visible in the field whether or not it has been skipped or is ahead of the current field. Using this for relationship and sex in our function we get:
 
 <logic>
@@ -505,7 +508,7 @@ if INTERVIEW_END_TIMESTAMP = notappl then
 endif;
 </logic>
 
-<pagebreak />
+If we don't need to display the start and end times on the form we can avoid using visualvalue. We can simply remove the variables from the form and keep them in the dictionary. When we set the values of these variables in logic and the case is saved the values are saved to the data file just like variables that are on the form. Unlike variables on the form, however, variables that are not on the form are always considered "on path" so you do not need to worry about using visualvalue.
 
 <subheader>Exercises</subheader>
 <list ordered>
