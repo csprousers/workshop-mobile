@@ -179,7 +179,7 @@ onfocus
 // Create the value set for child mother from all eligible
 // women in household roster
 valueset motherVSet;
-createMothersValueSet(motherVSet, curocc());
+createMothersValueSet(motherVSet, 0);
 
 // Add additional entry for not in household
 motherVSet.add("not in household",99);
@@ -271,7 +271,7 @@ function goto()
     endif;
 end;
 
-PROC HOUSEHOLDQUESTIONNAIRE_FF
+PROC POPSTAN2020_FF
 preproc
 userbar(clear);
 userbar(add button, "Go To...", goto);
@@ -325,7 +325,7 @@ An array logic variable is similar to a dictionary item with occurrences. A nume
 array numeric codes(7);
 </logic>
 
-<logiccolor>showarray()</logiccolor> takes a two-dimensional array. You can think of a two-dimensional array as a grid of variables or as a matrix. You declare a two-dimensional array in the PROC GLOBAL the same way you declare a one-dimensional array except that you specify the size in both dimensions: number of rows and number of columns.
+<logiccolor>showarray()</logiccolor> takes a two-dimensional array. You can think of a two-dimensional array as a grid of variables or as a matrix. You declare a two-dimensional array the same way you declare a one-dimensional array except that you specify the size in both dimensions: number of rows and number of columns.
 
 <logic>
 array string householdMembersArray(30, 3);
