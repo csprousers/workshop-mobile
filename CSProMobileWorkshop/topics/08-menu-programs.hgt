@@ -3,7 +3,7 @@
 At the end of this session participants will be able to:
 <list>
 	<li>Understand how to design the screens of a menu program</li>
-	<li>Use the command execpff() to launch one CSPro application from another</li>
+	<li>Use variables of type pff to launch one CSPro application from another</li>
 	<li>Create a simple menu program to launch the main data entry program</li>
 	<li>Create dynamic menus with dynamic value sets</li>
 </list>
@@ -113,13 +113,16 @@ reenter;
 </logic>
 
 <subheader>Launching one CSPro Application from Another</subheader>
-Let's fill in the function to launch the household data entry program. We can launch other CSPro programs from within our data entry program using <logiccolor>execpff()</logiccolor>. You give <logiccolor>execpff</logiccolor> the path to a pff file for a CSPro application and it will start the application using the parameters in the pff file. In addition to the filename, you can also pass execpff either the keyword <logiccolor>wait</logiccolor> or the keyword <logiccolor>stop</logiccolor>. Using <logiccolor>wait</logiccolor> will pause the menu application until the application that was launched exits, while using <logiccolor>stop</logiccolor> will exit the menu application immediately after launching the other application. On mobile devices, we will always use the stop parameter since it is not possible to run two CSEntry applications at the same time on mobile.
+Let's fill in the function to launch the household data entry program. We can launch other CSPro programs from within our data entry program using a variable of type <logiccolor>pff</logiccolor>. A <logiccolor>pff</logiccolor> variable represents a pff file. You can load the contents of an existing pff file into a <logiccolor>pff</logiccolor> variable using the  load() function and passing it the path to the file. You can then run the associated CSPro application by calling the exec() function. This will start the application using the parameters in the pff file.
 
 The following logic will launch a data entry application using the pff file Popstan2020.pff in the sibling directory to the menu program directory.
 
 <logic>
 function launchHouseholdDataEntry()
-    execpff("../Household/Popstan2020.pff", stop);
+
+	pff householdPff;
+	householdPff.load("../Household/Popstan2020.pff");
+	householdPff.exec();	
 end;
 </logic>
 
@@ -178,31 +181,28 @@ PROC CHOOSE_HOUSEHOLD
 onfocus
 
 valueset string householdVSet;
-string code, label;
+
 // Loop through all cases in listing file
 // to build dynamic value set.
 forcase LISTING_DICT do
     // Values are household ids concatenated together
-    code = maketext("%v%v%v%v%v", 
+    numeric code = maketext("%v%v%v%v", 
         LI_PROVINCE, LI_DISTRICT, LI_ENUMERATION_AREA,
-        LI_AREA_TYPE, LI_HOUSEHOLD_NUMBER);
+        LI_HOUSEHOLD_NUMBER);
         
     // Labels have househould number and name of head
-    label = maketext("%v: (%v)", LI_HOUSEHOLD_NUMBER, 
+    string label = maketext("%v: (%s)", LI_HOUSEHOLD_NUMBER, 
                             strip(LI_NAME_OF_HEAD_OF_HOUSEHOLD));
     
     householdVSet.add(label, code);
 endfor;
-
-// Add entry to value set to return to previous menu
-householdVSet.add("Back", "Back");
 
 setvalueset($, householdVSet);
 </logic>
 
 When we run this we should see a list of the households in the listing file as the value set for <b>CHOOSE_HOUSEHOLD</b>.
 
-While the dynamic value set works correctly when there are households that have been listed, if the listing file is empty we get and empty value set. Instead we should show an error message and return to the main menu.
+While the dynamic value set works correctly when there are households that have been listed, if the listing file is empty we get an empty value set. Instead we should show an error message and return to the main menu. We can determine if the value set is empty by checking the length of the list of codes in the value set. You can access the lists of codes and labels of a value set using the variable name followed by a dot (".") and "codes" or "labels". The codes and labels properties of the value set are CSPro lists so you can retreive their sizes using the length() function.
 
 <logic>
 PROC CHOOSE_HOUSEHOLD
@@ -236,68 +236,27 @@ setvalueset($, householdVSet);
 
 <pagebreak />
 
-<subheader>Generating the PFF File</subheader>
-The next step is to handle the menu choice in the postproc to launch the household data entry program using the id-items for the household that was chosen. In order to do this, we will need to pass the id-items as caseid string in the "Key" attribute of the [DataEntryInit] section of the pff file. The entry program will then automatically read these values from the generated pff and prefill the id items once it is launched.
-
-
-The first step is to change the launchHouseholdDataEntry() function to first write out the pff file before launching it so that we can customize it. We can use <logiccolor>filewrite</logiccolor> to write out the file as we did with the reports in the last lesson. An easy way to write this logic is to use open the pff file in the pff editor and enable "expert mode". This displays an extra tab containing CSPro logic to write out the pff file. We can copy and paste this into our logic and make a few modifications.
-
-We want to write the pff file to the same folder as the household application. To do that we change the function we copied from the pff editor to figure out the path to the pff file based on the path to the application using the <logiccolor>pathname</logiccolor> command. <logiccolor>pathname(Application)</logiccolor> returns the path to the current application, which in this case is the menu program. By adding ".." we go up one level to the Popstan2020 directory and from there we can get to the household directory where the household application is.
+<subheader>Setting the "Key" attribute in the pff</subheader>
+The next step is to handle the menu choice in the postproc to launch the household data entry program using the id-items for the household that was chosen. In order to do this, we will need to pass the id-items of the selected household to household application as the "Key" attribute of the pff file. The household data entry program will then automatically read the value from the pff and prefill the id items once it is launched. To set the "Key" attribute in the pff file call the setproperty() function of the pff variable and pass it the attribute name and attribute value. The value for the key should be the entire caseid string picked in the field CHOOSE_HOUSEHOLD.
 
 <logic>
 // Launch household questionnaire data entry application
 function launchHouseholdDataEntry()
-    string pffFilename = pathname(Application) + 
-                         "../Household/Popstan2020.pff";
-    
-    if setfile(pffFile,pffFilename,create) = 0 then
-        errmsg("Failed to open file %s", pffFilename);
-    endif;
-    
-    filewrite(pffFile,"[Run Information]");
-    filewrite(pffFile,"Version=CSPro <definition version />");
-    filewrite(pffFile,"AppType=Entry");
-	filewrite(pffFile,"Description=Popstan 2020 Census");
-	
-    filewrite(pffFile,"[DataEntryInit]");
-	
-    filewrite(pffFile,"[Files]");
-	filewrite(pffFile,"Application=%s","./Popstan2020.ent");
-	filewrite(pffFile,"InputData=%s","../Data/Popstan2020.csdb");
-
-	filewrite(pffFile,"[ExternalFiles]");
-	filewrite(pffFile,"DISTRICT_DICT=%s","../Data/Districts.csdb");
-	filewrite(pffFile,"POSSESSION_LIMITS_DICT=%s","../Data/PossessionLimits.csdb");
- 
-    filewrite(pffFile,"[UserFiles]");
-    filewrite(pffFile,"TEMPFILE=%s","");
-
-    filewrite(pffFile,"[Parameters]");
-	filewrite(pffFile,"OnExit=../Menu/Popstan2020Menu.pff");
-
-    close(pffFile);
-    
-    execpff(pffFilename, stop);
+	pff householdPff;
+	householdPff.load("../Household/Popstan2020.pff");
+	householdPff.setproperty("Key", CHOOSE_HOUSEHOLD);
+	householdPff.exec();	
 end;
 </logic>
 
-Next we need to write the household ids from the menu program into the pff file. We write these to the <b>[DataEntryInit]</b> section of the file. We need to use the entire caseid string  chosen in CHOOSE_HOUSEHOLD and write it to the "Key" attribute
-
-<logic>
-	filewrite(pffFile,"[DataEntryInit]");
-    filewrite(pffFile,"Key=%s", CHOOSE_HOUSEHOLD);
-</logic>
-
-
-CSEntry prefills the id items using the caseid string passed in the "Key" attribute.
-Let's also make the field protected if it is prefilled. We can do this using <logiccolor>setproperty</logiccolor>.
+CSEntry prefills the id items using the caseid string passed in the "Key" attribute. Let's also make the field protected if it is prefilled. We can do this using <logiccolor>setproperty</logiccolor>.
 
 <logic>
 PROC PROVINCE
 preproc
 
 // protect the field if it is prefilled
-if visualvalue(PROVINCE) <> notappl
+if visualvalue(PROVINCE) <> notappl then
 
     // protect field so the interviewer cannot modify it
     setproperty(PROVINCE, "Protected","Yes");
@@ -305,35 +264,7 @@ if visualvalue(PROVINCE) <> notappl
 endif;
 </logic>
 
-The logic for <b>DISTRICT</b>, <b>ENUMERATION_AREA</b>, <b>AREA_TYPE</b> and <b>HOUSEHOLD_NUMBER</b> is similar.
-
-Finally, so that after finishing a case we return to the menu program rather than returning to the case listing we add "Lock=CaseListing" to the pff file "[DataEntryInit]" section, which prevents the case listing from ever being shown.
-
-<logic>
-filewrite(pffFile,"Lock=CaseListing");
-</logic>
-
-<subheader>Parameters</subheader>
-The parameter section in the pff file allows you to pass any value to your data entry program. Let's use this to pass interviewer code chosen in the menu program to household entry program.
-
-<logic>
-filewrite(pffFile,"[Parameters]");
-filewrite(pffFile,"INTERVIEWER_CODE=%d", STAFF_CODE);
-</logic>
-
-The next step is to modify the household data entry application to prefill the interviewer code using the parameter in the pff file. This can be done using the <logiccolor>sysparm()</logiccolor> command which retrieves a parameter by name from the pff file. We can do this in the preproc of the INTERVIEWER_CODE in the household application. <logiccolor>sysparm</logiccolor> always returns the result as a string so we need to convert it to a number. 
-
-<logic>
-PROC INTERVIEWER_CODE
-// Prefill with parameter from pff file
-preproc
-if sysparm("INTERVIEWER_CODE") <> "" then
-	$ = tonumber(sysparm("INTERVIEWER_CODE"));
-	
-	// make field protected
-	setproperty($, "Protected", "Yes");
-endif;
-</logic>
+The logic for <b>DISTRICT</b>, <b>ENUMERATION_AREA</b>, and <b>HOUSEHOLD_NUMBER</b> is similar.
 
 <subheader>Using a Lookup File for Login</subheader>
 Rather than have the user choose their role, lets assign each interviewer and supervisor a staff code and then create a lookup file containing the staff codes along with the role and the district/enumeration area assigned to the interviewer/supervisor. Here is an example staff file:
@@ -434,6 +365,34 @@ endif;
 reenter;
 </logic>
 
+<subheader>PFF Parameters</subheader>
+The parameter section in the pff file allows you to pass any value to your data entry program. Let's use this to pass the interviewer code chosen in the menu program to the household entry program.
+
+<logic>
+// Launch household questionnaire data entry application
+function launchHouseholdDataEntry()
+	pff householdPff;
+	householdPff.load("../Household/Popstan2020.pff");
+	householdPff.setproperty("Key", CHOOSE_HOUSEHOLD);
+	householdPff.setproperty("INTERVIEWER_CODE", STAFF_CODE);
+	householdPff.exec();	
+end;
+</logic>
+
+The next step is to modify the household data entry application to prefill the interviewer code using the parameter in the pff file. This can be done using the <logiccolor>sysparm()</logiccolor> command which retrieves a parameter by name from the pff file. We can do this in the preproc of the INTERVIEWER_CODE in the household application. <logiccolor>sysparm</logiccolor> always returns the result as a string so we need to convert it to a number. 
+
+<logic>
+PROC INTERVIEWER_CODE
+// Prefill with parameter from pff
+preproc
+if sysparm("INTERVIEWER_CODE") <> "" then
+	$ = tonumber(sysparm("INTERVIEWER_CODE"));
+	
+	// make field protected
+	setproperty($, "Protected", "Yes");
+endif;
+</logic>
+
 <subheader>The Completion Report</subheader>
 Let's add the report to the supervisor menu. We will create a report that shows the total number of households by interview status. Here is an example:
 
@@ -459,14 +418,15 @@ To generate this report, we need to loop through all the cases in the household 
 function showCompletionReport()
 
     string reportFilename = maketext("%sreport.txt", pathname(Application));
+	file tempFile;
     setfile(tempFile, reportFilename);
     
     filewrite(tempFile, "Completion Report");
     filewrite(tempFile, "-----------------");
     filewrite(tempFile, "");
-    filewrite(tempFile, "Province %d District %02d", 
-                        visualvalue(STAFF_PROVINCE), 
-                        visualvalue(STAFF_DISTRICT));
+    filewrite(tempFile, "Province %v District %v", 
+                        STAFF_PROVINCE, 
+                        STAFF_DISTRICT);
     filewrite(tempFile, "");
     filewrite(tempFile, "Interview Status");
     filewrite(tempFile, "----------------");
@@ -500,12 +460,7 @@ function showCompletionReport()
                                      vacant + refused + partial);
     
     close(tempFile);
-    if getos() = 20 then
-        // Android - use "view:"
-        execsystem(maketext("view:%s", reportFilename));
-    elseif getos() = 10 then
-        // Windows - use "explorer.exe <filename>"
-        execsystem(maketext("explorer.exe %s", reportFilename));
+    view(reportFilename);
     endif;  
 end;
 </logic>
@@ -514,7 +469,7 @@ end;
 
 <subheader>Exercises</subheader>
 <list ordered>
-	<li>Implement the function launchHouseholdListing() in the menu program. It should write out and launch a pff file to run the listing program. Write the province, district, enumeration area as caseid string to "Key" attribute in the pff file and staff code from the staff file as parameters in the pff file. Prefill staff code in the listing program. Make sure that the listing program returns to the menu program on exit.</li>
+	<li>Implement the function launchHouseholdListing() in the menu program. It should write out and launch a pff file to run the listing program. Set the "Key" attribute in the pff file to the province, district, and enumeration area. Set the staff area type and thecode from the staff file as a parameter in the pff file. Prefill the staff code in the listing program. Make sure that the listing program returns to the menu program on exit.</li>
 	<li>Modify the logic in the onfocus and postproc of <b>CHOOSE_HOUSEHOLD</b> to add an extra option to the end of the list labeled "Back" that will move back to the interviewer main menu.</li>
 	<li>Modify the dynamic value set we create in the onfocus proc of <b>CHOOSE_HOUSEHOLD</b> to show the interview status (<b>A10</b> in the household questionnaire) in addition to the household number and the head's name. To do this you will need to use loadcase on the household questionnaire dictionary to find the case from the household data file. You will also need to handle the case where the household does not yet exist in the household data file.</li>
 	<li>Create a new menu called "Summary Reports" that has options for the completion report (the one we implemented already) and a new "Total Population Report" that you will implement. This new menu should also have an option to go back to the main menu. The "Summary Reports" menu should be accessed from the Supervisor Main Menu. The new "Total Population Report" should look like:
