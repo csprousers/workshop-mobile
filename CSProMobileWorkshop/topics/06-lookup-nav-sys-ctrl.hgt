@@ -114,7 +114,7 @@ onfocus
 // in household roster.
 valueset motherVSet;
 do numeric indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
-    if isChildbearingWoman(indexRoster) = 1 then
+    if isChildbearingWoman(indexRoster) = 1 and indexRoster <> curocc() then
         motherVSet.add(NAME(indexRoster), indexRoster);
     endif;
 enddo;
@@ -470,24 +470,11 @@ if INTERVIEW_END_TIME = notappl then
 endif;
 </logic>
 
-We should make this field protected. However, if we do that we get an error when we don't fill it in while in section A of the questionnaire. While we don't normally want to allow a field to be left blank, in this case we need to make an exception. We can do that using the <logiccolor>setproperty()</logiccolor> command. <logiccolor>setproperty</logiccolor> allows you to modify properties of fields and of the application from within CSPro logic. To allow entry of blanks in a field we need to set the "CanEnterNotAppl" property to "NoConfirm". We can do this in the preproc of the application so that it is done once when the application first starts.
+We should make this field protected. However, if we do that we get an error when we don't fill it in while in section A of the questionnaire. While we don't normally want to allow a field to be left blank, in this case we need to make an exception. We can do that by changing the validation method in the field properties to "Allow out of range without confirmation". With this setting, you are allowed to leave a field blank or to enter a value outside the value set with no error. 
+
+Having captured the interview start and end time as hours and minutes we can calculate the total interview time by subtracting the start time from the end time. However, this calculation is tricky because we have to handle the case where the end minutes are less than the start minutes. It would be easier if instead of using <logiccolor>systime()</logiccolor> we used the function <logiccolor>timestamp()</logiccolor> which gives the time in total seconds since January 1, 1970. If we subtract the start timestamp from the end timestamp we get the total interview time in seconds. Let's add new protected variables for start timestamp, end timestamp and interview duration and fill them in. Since these fields will be on the section A form but will not be filled until the end of the questionnaire, set the validation method to "Allow out of range without confirmation" as we did with INTERVIEW_END_TIME. 
 
 <logic>
-PROC POPSTAN2020_FF
-preproc 
-setproperty(INTERVIEW_END_TIME_HOURS, "CanEnterNotAppl", "NoConfirm");
-setproperty(INTERVIEW_END_TIME_MINUTES, "CanEnterNotAppl", "NoConfirm");
-</logic>
-
-Having captured the interview start and end time as hours and minutes we can calculate the total interview time by subtracting the start time from the end time. However, this calculation is tricky because we have to handle the case where the end minutes are less than the start minutes. It would be easier if instead of using <logiccolor>systime()</logiccolor> we used the function <logiccolor>timestamp()</logiccolor> which gives the time in total seconds since January 1, 1970. If we subtract the start timestamp from the end timestamp we get the total interview time in seconds. Let's add new protected variables for start timestamp, end timestamp and interview duration and fill them in.
-
-<logic>
-PROC POPSTAN2020_FF
-preproc 
-setproperty(INTERVIEW_START_TIMESTAMP, "CanEnterNotAppl", "NoConfirm");
-setproperty(INTERVIEW_END_TIMESTAMP, "CanEnterNotAppl", "NoConfirm");
-setproperty(INTERVIEW_DURATION_MINUTES, "CanEnterNotAppl", "NoConfirm");
-
 PROC INTERVIEW_START_TIMESTAMP
 preproc
 // Prefill interview start time with current time.
