@@ -155,10 +155,10 @@ It is more convenient to have a single password that is shared by all devices an
 The <logiccolor>syncdata()</logiccolor> command has an optional third parameter, the universe. This is a string that CSPro tries to match to the concatenated case-id items to limit the data transferred. If a universe is provided, then only cases who case-ids match the universe are synchronized. For example, to limit synchronization to only province 1, district 2 we would call:
 
 <logic>
-syncdata(BOTH, HOUSEHOLDQUESTIONNAIRE_DICT, "12");
+syncdata(BOTH, HOUSEHOLDQUESTIONNAIRE_DICT, "102");
 </logic>
 
-This will only synchronize cases whose case-ids start with "12". Since province and district are both single digit fields this limits the sync to cases in province 1 and district 2. Similarly, if we used "1" as the universe all cases in province 1 would be synced.
+This will only synchronize cases whose case-ids start with "102". This limits the sync to cases in province 1 and district 2. Similarly, if we used "1" as the universe all cases in province 1 would be synced.
 
 This is useful when there are a large number of interviewers and you don't want every interviewer to download the data from every other interviewer. You can specify the geographic area assigned to the interviewer as the universe so that only cases in the interviewer's area are synced.
 

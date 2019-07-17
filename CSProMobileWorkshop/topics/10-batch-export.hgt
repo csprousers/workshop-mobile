@@ -114,7 +114,7 @@ if AGE_AT_FIRST_MARRIAGE > AGE then
 endif;
 </logic>
 
-When we run this time we will specify an output file: Popstan2020Edited.csdat. The changes we make will only be made to the output file. We can then rerun the batch application on the output file and make sure that we don't have any error messages.
+When we run this time we will specify an output file: Popstan2020Edited.csdb. The changes we make will only be made to the output file. We can then rerun the batch application on the output file and make sure that we don't have any error messages.
 
 Instead of just assigning the value of AGE_FIRST_MARRIAGE we can use the <logiccolor>impute</logiccolor> command which does the assignment just like "=" but also generates a nice report showing the values that were imputed.
 
