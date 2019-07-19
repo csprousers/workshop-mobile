@@ -11,18 +11,18 @@ File=.\GettingToKnowYou.dcf
   
 [Form]
 Name=FORM000
-Label=GettingToKnowYou questionnaire
+Label=Form
 Level=1
-Size=434,344
+Size=490,610
   
+Item=FIRST_NAME
+Item=LAST_NAME
 Item=COUNTRY
 Item=EDUCATION
 Item=LANGUAGES
 Item=SUIT_AND_TIE
 Item=FAVORITE_FOOD
 Item=WEEKEND_ACTIVITY
-Item=FIRST_NAME
-Item=LAST_NAME
   
 [EndForm]
   
@@ -33,7 +33,7 @@ Label=GettingToKnowYou questionnaire
 [Group]
 Required=Yes
 Name=GETTINGTOKNOWYOU_QUEST_FORM
-Label=GettingToKnowYou questionnaire
+Label=Form
 Form=1
 LogicControl=No
 Max=1
@@ -41,101 +41,106 @@ Max=1
   
 [Field]
 Name=FIRST_NAME
-Position=187,40,397,60
+Position=224,32,459,52
 Item=FIRST_NAME,GETTINGTOKNOWYOU_DICT
 FieldLabelType=DictionaryLabel
 UseUnicodeTextBox=Yes
 Form=1
   
 [Text]
-Position=40,43,108,59
-Text=First Name
+Position=37,35,101,51
+Text=Prénom(s)
  
   
 [Field]
 Name=LAST_NAME
-Position=187,80,397,100
+Position=224,62,459,82
 Item=LAST_NAME,GETTINGTOKNOWYOU_DICT
 FieldLabelType=DictionaryLabel
 UseUnicodeTextBox=Yes
 Form=1
   
 [Text]
-Position=40,83,107,99
-Text=Last Name
+Position=37,65,66,81
+Text=Nom
  
   
 [Field]
 Name=COUNTRY
-Position=187,120,230,140
+Position=224,92,267,112
 Item=COUNTRY,GETTINGTOKNOWYOU_DICT
+FieldLabelType=DictionaryLabel
 DataCaptureType=RadioButton
 Form=1
   
 [Text]
-Position=40,123,89,139
-Text=Country
+Position=37,95,67,111
+Text=Pays
  
   
 [Field]
 Name=EDUCATION
-Position=187,160,202,180
+Position=224,122,239,142
 Item=EDUCATION,GETTINGTOKNOWYOU_DICT
+FieldLabelType=DictionaryLabel
 DataCaptureType=RadioButton
 Form=1
   
 [Text]
-Position=40,163,160,179
-Text=Education/Training
+Position=37,125,102,141
+Text=Formation
  
   
 [Field]
 Name=LANGUAGES
-Position=187,200,286,220
+Position=224,152,323,172
 Item=LANGUAGES,GETTINGTOKNOWYOU_DICT
-UpperCase=Yes
+FieldLabelType=DictionaryLabel
 DataCaptureType=CheckBox
 Form=1
   
 [Text]
-Position=40,203,110,219
-Text=Languages
+Position=37,155,91,171
+Text=Langues
  
   
 [Field]
 Name=SUIT_AND_TIE
-Position=187,240,202,260
+Position=224,182,239,202
 Item=SUIT_AND_TIE,GETTINGTOKNOWYOU_DICT
+FieldLabelType=DictionaryLabel
 DataCaptureType=RadioButton
 Form=1
   
 [Text]
-Position=40,243,117,259
-Text=Suit and Tie
+Position=37,185,159,201
+Text=Costume et cravate
  
   
 [Field]
 Name=FAVORITE_FOOD
-Position=187,280,202,300
+Position=224,212,239,232
 Item=FAVORITE_FOOD,GETTINGTOKNOWYOU_DICT
+FieldLabelType=DictionaryLabel
 DataCaptureType=RadioButton
 Form=1
   
 [Text]
-Position=40,283,128,299
-Text=Favorite Food
+Position=37,215,112,231
+Text=Plat préféré
  
   
 [Field]
 Name=WEEKEND_ACTIVITY
-Position=187,320,202,340
+Position=224,242,239,262
 Item=WEEKEND_ACTIVITY,GETTINGTOKNOWYOU_DICT
+FieldLabelType=DictionaryLabel
 DataCaptureType=RadioButton
 Form=1
   
 [Text]
-Position=40,323,150,339
-Text=Weekend Activity
+Position=37,245,202,261
+Text=Activité de fin de semaine
  
 [Block]
 Name=NAME_BLOCK

@@ -7,7 +7,7 @@ PROC GETTINGTOKNOWYOU_FF
 PROC NAME_BLOCK
 
 	if FIRST_NAME = "" or LAST_NAME = ""then
-		errmsg("Name cannot be blank");
+		errmsg(1);
 		reenter;
 	endif;
 
@@ -15,7 +15,7 @@ PROC NAME_BLOCK
 PROC LANGUAGES
 
 	if $ = "" then
-		errmsg("Please select at least one language");
+		errmsg(2);
 		reenter;
 	endif;
 

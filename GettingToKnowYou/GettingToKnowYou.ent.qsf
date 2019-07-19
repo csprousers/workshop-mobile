@@ -2,58 +2,98 @@
 Version=CSPro 7.3
 
 [LANGUAGES]
-ENG=English
+EN=English
+FR=Français
 
 [QUESTION]
 Field=GETTINGTOKNOWYOU_DICT.COUNTRY
-ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-ENG={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
-ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What country are you from?\cf2\par
-ENG=}
+EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+EN={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
+EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What country are you from?\cf2\par
+EN=}
+FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+FR={\colortbl ;\red0\green0\blue128;\red0\green64\blue128;}
+FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
+FR=\pard\cf1\fs24 De quel pays \'eates vous?\cf2\par
+FR=}
 
 [QUESTION]
 Field=GETTINGTOKNOWYOU_DICT.EDUCATION
-ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-ENG={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
-ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What was your primary area of study at school?\cf2\par
-ENG=}
+EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+EN={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
+EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What was your primary area of study at school?\cf2\par
+EN=}
+FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+FR={\colortbl ;\red0\green0\blue128;\red0\green64\blue128;}
+FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
+FR=\pard\cf1\fs24 Quel \'e9tait votre principal domaine d'\'e9tude \'e0 l'\'e9cole?\cf2\par
+FR=}
 
 [QUESTION]
 Field=GETTINGTOKNOWYOU_DICT.FAVORITE_FOOD
-ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-ENG={\colortbl ;\red0\green0\blue128;}
-ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What is your favorite food?\par
-ENG=}
+EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+EN={\colortbl ;\red0\green0\blue128;}
+EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What is your favorite food?\par
+EN=}
+FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+FR={\colortbl ;\red0\green0\blue128;}
+FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
+FR=\pard\cf1\fs24 Quel est votre plat pr\'e9f\'e9r\'e9?\par
+FR=}
 
 [QUESTION]
 Field=GETTINGTOKNOWYOU_DICT.LANGUAGES
-ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-ENG={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;\red0\green128\blue0;}
-ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 Which languages do you speak?\cf2\par
-ENG=\par
-ENG=\cf3\i (Select all that apply)\i0\par
-ENG=\cf2\par
-ENG=}
+EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+EN={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;\red0\green128\blue0;}
+EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 Which languages do you speak?\cf2\par
+EN=\par
+EN=\cf3\i (Select all that apply)\i0\par
+EN=\cf2\par
+EN=}
+FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+FR={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;\red0\green128\blue0;\red0\green64\blue128;}
+FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
+FR=\pard\cf1\fs24 Quelle langues parlez vous?\cf2\par
+FR=\par
+FR=\cf3\i (Cochez tout ce qui s'applique)\i0\par
+FR=
+FR=\pard\cf4\par
+FR=}
 
 [QUESTION]
 Field=GETTINGTOKNOWYOU_DICT.SUIT_AND_TIE
-ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-ENG={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
-ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 Do you normally wear a suit and tie to work?\cf2\par
-ENG=}
+EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+EN={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
+EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 Do you normally wear a suit and tie to work?\cf2\par
+EN=}
+FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+FR={\colortbl ;\red0\green0\blue128;}
+FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
+FR=\pard\cf1\fs24 Portez-vous normalement un costume et une cravate pour aller au bureau?\par
+FR=}
 
 [QUESTION]
 Field=GETTINGTOKNOWYOU_DICT.WEEKEND_ACTIVITY
-ENG={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-ENG={\colortbl ;\red0\green0\blue128;}
-ENG={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What do you for fun on weekends?\par
-ENG=}
+EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+EN={\colortbl ;\red0\green0\blue128;}
+EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What do you for fun on weekends?\par
+EN=}
+FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+FR={\colortbl ;\red0\green0\blue128;}
+FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
+FR=\pard\cf1\fs24 Qu'est-ce que vous faites d'habitude pour vous amuser le week-end?\par
+FR=}
 
 [QUESTION]
 Field=NAME_BLOCK
-ENG={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-ENG={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
-ENG={\*\generator Riched20 10.0.17763}\viewkind4\uc1
-ENG=\pard\cf1\fs24 What is your first and last name?\cf2\par
-ENG=}
+EN={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+EN={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
+EN={\*\generator Riched20 10.0.17134}\viewkind4\uc1
+EN=\pard\cf1\fs24 What is your first and last name?\cf2\par
+EN=}
+FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+FR={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
+FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
+FR=\pard\cf1\fs24 Quel est votre nom?\cf2\fs19\par
+FR=}
 
