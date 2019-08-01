@@ -29,6 +29,7 @@ Application
 AppType
 AreaNames
 AutoAdd
+BaseMap
 CaseListingFilter
 CheckRanges
 CommonStore
@@ -40,6 +41,7 @@ DeletePrompt
 Description
 DisplayNames
 ErrmsgOverride
+Excel
 ExportedData
 ExtraFile
 FormatInputTAB
@@ -48,7 +50,9 @@ ImputeFreqs
 InputData
 InputDict
 InputOrder
+InputParadata
 Interactive
+Key
 Language
 Listing
 ListingWidth
@@ -60,6 +64,7 @@ Operation
 OperatorID
 OutputData
 OutputDict
+OutputParadata
 OutputTBW
 PackInclude
 Paradata
