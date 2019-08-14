@@ -262,8 +262,8 @@ enddo;
 We also need to include the codes for non-resident and deceased in the value set.
 
 <logic>
-dynamicVSet.motherVSet("Non-resident",87);
-dynamicVSet.motherVSet("Deceased",88);
+motherVSet.add("Non-resident", 87);
+motherVSet.add("Deceased", 88);
 </logic>
 
 Finally we need to set the valueset object.

@@ -254,7 +254,7 @@ ZeroFill=Yes
 [ValueSet]
 Label=Education/Training|Formation
 Name=EDUCATION_VS1
-Value=1;Statistitics|Statistique
+Value=1;Statistics|Statistique
 Value=2;Demography|Demographe
 Value=3;Information Technology/Computer Science|Informatique
 Value=4;Other|Autre
