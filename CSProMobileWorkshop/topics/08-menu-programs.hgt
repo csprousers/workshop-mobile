@@ -186,7 +186,7 @@ valueset string householdVSet;
 // to build dynamic value set.
 forcase LISTING_DICT do
     // Values are household ids concatenated together
-    numeric code = maketext("%v%v%v%v", 
+    string code = maketext("%v%v%v%v", 
         LI_PROVINCE, LI_DISTRICT, LI_ENUMERATION_AREA,
         LI_HOUSEHOLD_NUMBER);
         
@@ -374,7 +374,7 @@ function launchHouseholdDataEntry()
 	pff householdPff;
 	householdPff.load("../Household/Popstan2020.pff");
 	householdPff.setproperty("Key", CHOOSE_HOUSEHOLD);
-	householdPff.setproperty("INTERVIEWER_CODE", STAFF_CODE);
+	householdPff.setproperty("INTERVIEWER_CODE", maketext("%v", STAFF_CODE));
 	householdPff.exec();	
 end;
 </logic>
@@ -416,7 +416,6 @@ To generate this report, we need to loop through all the cases in the household 
 // Display the completion report that shows total interview status
 // for all cases in the supervisor's district.
 function showCompletionReport()
-
     string reportFilename = maketext("%sreport.txt", pathname(Application));
 	file tempFile;
     setfile(tempFile, reportFilename);
@@ -461,7 +460,6 @@ function showCompletionReport()
     
     close(tempFile);
     view(reportFilename);
-    endif;  
 end;
 </logic>
 

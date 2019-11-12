@@ -195,10 +195,8 @@ function syncWithSupervisor()
         // Sync main data file.
         syncdata(BOTH, POPSTAN2020_DICT);
     
-        // Download latest application files from the supervisor.
-        // The root file on the supervisor tablet is in the "Popstan2020" folder 
-		// so the from folder starts from there and we need to add "Menu" to get to 
-		// the Menu programs.
+        // Download latest application files from the supervisor. The
+        // root file on the supervisor tablet is in the Menu folder.
         syncfile(GET, "./Menu.pen", "./Menu.pen");
         syncfile(GET, "./Menu.pff", "./Menu.pff");
         

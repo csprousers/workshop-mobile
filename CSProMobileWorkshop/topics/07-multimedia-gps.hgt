@@ -235,7 +235,7 @@ Then we can use the commands <logiccolor>setfile()</logiccolor>, <logiccolor>fil
 function showHouseholdReport()
     string reportFilename = maketext("%sreport.txt", pathname(Application));
 	file tempFile;
-    setfile(tempFile, reportFilename);
+    setfile(tempFile, reportFilename, create);
     filewrite(tempFile, "Household Summary Report");
     filewrite(tempFile, "------------------------");
     filewrite(tempFile, "");
