@@ -418,7 +418,7 @@ To generate this report, we need to loop through all the cases in the household 
 function showCompletionReport()
     string reportFilename = maketext("%sreport.txt", pathname(Application));
 	file tempFile;
-    setfile(tempFile, reportFilename);
+    setfile(tempFile, reportFilename, create);
     
     filewrite(tempFile, "Completion Report");
     filewrite(tempFile, "-----------------");
