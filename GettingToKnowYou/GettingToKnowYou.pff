@@ -1,9 +1,7 @@
 ﻿[Run Information]
-Version=CSPro 7.3
+Version=CSPro 7.7
 AppType=Entry
-
-[DataEntryInit]
 
 [Files]
 Application=.\GettingToKnowYou.ent
-InputData=.\GettingToKnowYou.csdb|CSPRODB
+InputData=.\GettingToKnowYou.csdb

@@ -1,99 +1,137 @@
-﻿[CAPI QUESTIONS]
-Version=CSPro 7.3
-
-[LANGUAGES]
-EN=English
-FR=Français
-
-[QUESTION]
-Field=GETTINGTOKNOWYOU_DICT.COUNTRY
-EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-EN={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
-EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What country are you from?\cf2\par
-EN=}
-FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-FR={\colortbl ;\red0\green0\blue128;\red0\green64\blue128;}
-FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
-FR=\pard\cf1\fs24 De quel pays \'eates vous?\cf2\par
-FR=}
-
-[QUESTION]
-Field=GETTINGTOKNOWYOU_DICT.EDUCATION
-EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-EN={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
-EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What was your primary area of study at school?\cf2\par
-EN=}
-FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-FR={\colortbl ;\red0\green0\blue128;\red0\green64\blue128;}
-FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
-FR=\pard\cf1\fs24 Quel \'e9tait votre principal domaine d'\'e9tude \'e0 l'\'e9cole?\cf2\par
-FR=}
-
-[QUESTION]
-Field=GETTINGTOKNOWYOU_DICT.FAVORITE_FOOD
-EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-EN={\colortbl ;\red0\green0\blue128;}
-EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What is your favorite food?\par
-EN=}
-FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-FR={\colortbl ;\red0\green0\blue128;}
-FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
-FR=\pard\cf1\fs24 Quel est votre plat pr\'e9f\'e9r\'e9?\par
-FR=}
-
-[QUESTION]
-Field=GETTINGTOKNOWYOU_DICT.LANGUAGES
-EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-EN={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;\red0\green128\blue0;}
-EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 Which languages do you speak?\cf2\par
-EN=\par
-EN=\cf3\i (Select all that apply)\i0\par
-EN=\cf2\par
-EN=}
-FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-FR={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;\red0\green128\blue0;\red0\green64\blue128;}
-FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
-FR=\pard\cf1\fs24 Quelle langues parlez vous?\cf2\par
-FR=\par
-FR=\cf3\i (Cochez tout ce qui s'applique)\i0\par
-FR=
-FR=\pard\cf4\par
-FR=}
-
-[QUESTION]
-Field=GETTINGTOKNOWYOU_DICT.SUIT_AND_TIE
-EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-EN={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
-EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 Do you normally wear a suit and tie to work?\cf2\par
-EN=}
-FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-FR={\colortbl ;\red0\green0\blue128;}
-FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
-FR=\pard\cf1\fs24 Portez-vous normalement un costume et une cravate pour aller au bureau?\par
-FR=}
-
-[QUESTION]
-Field=GETTINGTOKNOWYOU_DICT.WEEKEND_ACTIVITY
-EN={\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-EN={\colortbl ;\red0\green0\blue128;}
-EN={\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\cf1\fs24 What do you for fun on weekends?\par
-EN=}
-FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-FR={\colortbl ;\red0\green0\blue128;}
-FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
-FR=\pard\cf1\fs24 Qu'est-ce que vous faites d'habitude pour vous amuser le week-end?\par
-FR=}
-
-[QUESTION]
-Field=NAME_BLOCK
-EN={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-EN={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
-EN={\*\generator Riched20 10.0.17134}\viewkind4\uc1
-EN=\pard\cf1\fs24 What is your first and last name?\cf2\par
-EN=}
-FR={\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-FR={\colortbl ;\red0\green0\blue128;\red0\green0\blue0;}
-FR={\*\generator Riched20 10.0.17134}\viewkind4\uc1
-FR=\pard\cf1\fs24 Quel est votre nom?\cf2\fs19\par
-FR=}
-
+﻿---
+fileType: Question Text
+version: CSPro 7.7
+languages:
+  - name: EN
+    label: English
+  - name: FR
+    label: Français
+  - name: PT
+    label: Português
+styles:
+  - name: Normal
+    className: normal
+    css: |
+      font-family: Arial;font-size: 16px;color:#000080
+  - name: Instruction
+    className: instruction
+    css: |
+      font-family: Arial;font-style:italic;font-size:16px;color:#008000;
+  - name: Heading 1
+    className: heading1
+    css: |
+      font-family: Arial;font-size: 36px;
+  - name: Heading 2
+    className: heading2
+    css: |
+      font-family: Arial;font-size: 24px;
+  - name: Heading 3
+    className: heading3
+    css: |
+      font-family: Arial;font-size: 18px;
+questions:
+  - name: NAME_BLOCK
+    conditions:
+      - questionText:
+          EN: |
+            <p class="normal">What is your first and last name?</p>
+          FR: |
+            <p class="normal">Quel est votre nom?</p>
+          PT: |
+            <p class="normal">Qual é o seu primeiro e último nome?</p>
+        helpText:
+          EN: |
+            
+          FR: |
+            
+  - name: GETTINGTOKNOWYOU_DICT.COUNTRY
+    conditions:
+      - questionText:
+          EN: |
+            <p class="normal">What country are you from?</p>
+          FR: |
+            <p class="normal">De quel pays êtes vous?</p>
+          PT: |
+            <p class="normal">Você é de que país?</p>
+        helpText:
+          EN: |
+            
+          FR: |
+            
+  - name: GETTINGTOKNOWYOU_DICT.EDUCATION
+    conditions:
+      - questionText:
+          EN: |
+            <p class="normal">What was your primary area of study at school?</p>
+          FR: |
+            <p class="normal">Quel était votre principal domaine d&apos;étude à l&apos;école?</p>
+          PT: |
+            <p class="normal">Qual era a sua área principal de estudo na escola?</p>
+        helpText:
+          EN: |
+            
+          FR: |
+            
+  - name: GETTINGTOKNOWYOU_DICT.LANGUAGES
+    conditions:
+      - questionText:
+          EN: |
+            <p class="normal">Which languages do you speak?</p>
+            <p>&#160;</p>
+            <p class="instruction">(Select all that apply)</p>
+          FR: |
+            <p class="normal">Quelle langues parlez vous?</p>
+            <p>&#160;</p>
+            <p><span style="font-style:italic;font-size:16px;color:#008000;">(Cochez tout ce qui s&apos;applique)</p>
+          PT: |
+            <p class="normal">Quais idiomas você fala?</p>
+            <p>&#160;</p>
+            <p class="instruction">(Selecione tudo que se aplica)</p>
+        helpText:
+          EN: |
+            
+          FR: |
+            
+  - name: GETTINGTOKNOWYOU_DICT.SUIT_AND_TIE
+    conditions:
+      - questionText:
+          EN: |
+            <p class="normal">Do you normally wear a suit and tie to work?</p>
+          FR: |
+            <p class="normal">Portez-vous normalement un costume et une cravate pour aller au bureau?</p>
+          PT: |
+            <p class="normal">Você normalmente usa terno e gravata para o trabalho?</p>
+        helpText:
+          EN: |
+            
+          FR: |
+            
+  - name: GETTINGTOKNOWYOU_DICT.FAVORITE_FOOD
+    conditions:
+      - questionText:
+          EN: |
+            <p class="normal">What is your favorite food?</p>
+          FR: |
+            <p class="normal">Quel est votre plat préféré?</p>
+          PT: |
+            <p class="normal">Qual sua comida favorita?</p>
+        helpText:
+          EN: |
+            
+          FR: |
+            
+  - name: GETTINGTOKNOWYOU_DICT.WEEKEND_ACTIVITY
+    conditions:
+      - questionText:
+          EN: |
+            <p class="normal">What do you for fun on weekends?</p>
+          FR: |
+            <p class="normal">Qu&apos;est-ce que vous faites d&apos;habitude pour vous amuser le week-end?</p>
+          PT: |
+            <p class="normal">O que você faz por diversão nos fins de semana?</p>
+        helpText:
+          EN: |
+            
+          FR: |
+            
+...
