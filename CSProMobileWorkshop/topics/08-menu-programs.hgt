@@ -259,7 +259,7 @@ preproc
 if visualvalue(PROVINCE) <> notappl then
 
     // protect field so the interviewer cannot modify it
-    setproperty(PROVINCE, "Protected","Yes");
+    protect(PROVINCE, true);
 
 endif;
 </logic>
@@ -389,7 +389,7 @@ if sysparm("INTERVIEWER_CODE") <> "" then
 	$ = tonumber(sysparm("INTERVIEWER_CODE"));
 	
 	// make field protected
-	setproperty($, "Protected", "Yes");
+	protect($, true);
 endif;
 </logic>
 

@@ -37,9 +37,9 @@ Let's add the following help text to the <b>NAME</b> field in section B:
 Run the application on both Android and Windows and see how the help text is displayed.
 
 <subheader>Fills in Question Text</subheader>
-It is possible to have the question include the values of dictionary variables. For example, for <b>SEX</b>, instead of asking "Is (name) a male or a female?" we can include the respondents name by using <b>%NAME%</b> inside the question text. At runtime, this will be replaced by the contents of the variable <b>NAME</b>.
+It is possible to have the question include the values of dictionary variables. For example, for <b>SEX</b>, instead of asking "Is (name) a male or a female?" we can include the respondents name by using <b>~~NAME~~</b> inside the question text. At runtime, this will be replaced by the contents of the variable <b>NAME</b>.
 
-Let's change the text for <b>RELATIONSHIP</b>, <b>SEX</b> and <b>AGE</b> to use <b>%NAME%</b> in place of "(name)".
+Let's change the text for <b>RELATIONSHIP</b>, <b>SEX</b> and <b>AGE</b> to use <b>~~NAME~~</b> in place of "(name)".
 <pagebreak />
 <subheader>Conditional Question Text</subheader>
 Sometimes, the question text will be completely different depending on other factors and using fill variables is not sufficient to implement the differences. For example, the question text for the NAME field should really be:
@@ -48,11 +48,11 @@ Sometimes, the question text will be completely different depending on other fac
 
 <indent>What is the name of the next member of the household? – for the remaining rows of the roster.</indent>
 
-We can implement this using the conditions window underneath the question text window. By default, this window contains a single empty condition. Right-clicking on the conditions lets you add a new condition. Let's modify the first condition so that <b>Min Occ</b> and <b>Max Occ</b> are both 1 and then add a second condition where <b>Min Occ</b> is 2 and <b>Max Occ</b> is 30. Now we have two different question texts, one that will be shown for the first occurrence and the other that will be shown for the rest. Edit these two questions texts as above and test it to verify that it works.
+We can implement this using the conditions window underneath the question text window. By default, this window contains a single empty condition. Right-clicking on the conditions lets you add a new condition. Let's modify the first condition to be <logiccolor>curocc() = 1</logiccolor> and then add a second condition <logiccolor>curocc() > 1</logiccolor>. Now we have two different question texts, one that will be shown for the first occurrence and the other that will be shown for the rest. Edit these two questions texts as above and test it to verify that it works.
 
 <center><image capicond.png /></center>
 
-In addition to using the occurrence numbers it possible to specify a logic expression in the condition column to determine whether or not to display the text. For example setting the condition to "SEX=1" will display the question text only for males.
+It possible to specify any logic expression in the condition column to determine whether or not to display the text. For example setting the condition to "SEX=1" will display the question text only for males.
 
 <subheader>Supporting Multiple Languages</subheader>
 It is possible to add question text, dictionary labels and error messages in multiple languages.
@@ -66,11 +66,11 @@ When creating question text, you enter the question text for each language speci
 
 For example, to add French translations for the sex, relationship and age questions we would enter:
 
-<indent>Est-ce que %NAME% est masculin ou feminin?</indent>
+<indent>Est-ce que ~~NAME~~ est masculin ou feminin?</indent>
 
-<indent>Quel est le lien de parenté de %NAME% avec le chef de ménage?</indent>
+<indent>Quel est le lien de parenté de ~~NAME~~ avec le chef de ménage?</indent>
 
-<indent>Quel est l'âge de %NAME%?</indent>
+<indent>Quel est l'âge de ~~NAME~~?</indent>
 
 <indent><i>Entrez l'âge en années révolues (entrez 0 pour les enfants âgés de moins de 1 an)</i>. Si inconnu entrez 999.</indent>
 
@@ -132,9 +132,9 @@ We have the following occurrence labels for the housing unit types in question <
 
 We can use these occurrence labels in the question text for <b>F05</b>:
 
-<indent>How many %getocclabel% units are in this household?</indent>
+<indent>How many ~~getocclabel~~ units are in this household?</indent>
 
-Anytime you use <b>%getocclabel%</b> in question text it is replaced by the occurrence label of the current occurrence. With the above, the question text for the first occurrence will be "How many traditional round hut units are in this household?" and the text for the second occurrence will be "How many detached house units are in this household?" …
+Anytime you use <b>~~getocclabel~~</b> in question text it is replaced by the occurrence label of the current occurrence. With the above, the question text for the first occurrence will be "How many traditional round hut units are in this household?" and the text for the second occurrence will be "How many detached house units are in this household?" …
 
 <subheader>Case Labels</subheader>
 By default, the case listing screen shows the id-items concatenated together. This is not very easy for an interviewer to read. You can customize the case listing for a case using the <logiccolor>setcaselabel</logiccolor> command. As an example let's set the case label to the string "province-district-ea-household number: name of head of household". Since we need to have the name of the head of household to do this, we can add it in the postproc of <b>NAME</b>. In order to format the case label from the variables we can use the function <logiccolor>maketext()</logiccolor> which works like <logiccolor>errmsg()</logiccolor> but returns a string instead of displaying it on the screen.
