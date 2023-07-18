@@ -5,13 +5,13 @@ At the end of this session participants will be able to:
 	<li>Implement consistency checks in a batch edit application</li>
 	<li>Use batch edit to add calculated variables and recoded variables</li>
 	<li>Use batch edit to convert checkbox values to yes/no variables for analysis</li>
-	<li>Use the export data tool to take data from CSPro to other software packages</li>
+	<li>Use the Export Data tool to take data from CSPro to other software packages</li>
 </list>
 
 <subheader>Creating a Batch Edit Application</subheader>
 A batch edit application is like a data entry application but without the forms. It is meant to be run after data entry to detect and fix problems in the data file. A batch edit application takes an input data file and runs logic on it. It generates both a report, called a listing file, and optionally an output data file which is a modified version of the input file. A batch edit application never changes the input file.
 
-To create a batch edit application you choose File->New from CSPro and choose Batch Edit Application. You then choose a dictionary. This is usually the same dictionary that you used for data entry. 
+To create a batch edit application you choose File->New from CSPro and choose Batch Edit Application. You then choose a dictionary. This is usually the same dictionary that you used for data entry.
 
 The user interface for working with batch applications is similar to the one for working with data entry applications except that there are no forms. Instead there is a tab in the tree one left side of the window for edits. Just like in data entry, you add logic to PROCS. Instead of running interactively, all the error messages are written out to a log file for review after the whole program has run.
 
@@ -27,12 +27,12 @@ if AGE_AT_FIRST_MARRIAGE > AGE then
 endif;
 </logic>
 
-Next we run the application but first we need a test data file. You can use the file Popstan2020Raw.csdb.  Run the application against this test data. After the application runs, we see the log file.  The log file reports that we have a case where this error exists.
+Next we run the application but first we need a test data file. You can use the file Popstan2020Raw.csdb. Run the application against this test data. After the application runs, we see the log file. The log file reports that we have a case where this error exists.
 
 <html><pre>
 Process Messages
 
-*** Case [3691141112] has 1 messages (0 E / 0 W / 1U)        
+*** Case [3691141112] has 1 messages (0 E / 0 W / 1U)
     U   -20 Age at first marriage greater than age
 
 User unnumbered messages:
@@ -44,7 +44,7 @@ User unnumbered messages:
 CSPRO Executor Normal End
 </pre></html>
 
-To figure out what the problem is we can open up the problem case in data entry. The printout in the listing file contains the case identifiers which we can use to find the case. You can copy the case id from the listing file and use it with Find Case on the Edit menu in CSEntry.
+To figure out what the problem is we can open up the problem case in data entry. The printout in the listing file contains the case identifiers which we can use to find the case. You can copy the case ID from the listing file and use it with Find Case on the Edit menu in CSEntry.
 
 <pagebreak />
 
@@ -85,7 +85,7 @@ if AGE >= 10 and MARITAL_STATUS in 2:4 then
 
 	// Check for age at first marriage less than current age
 	if AGE_AT_FIRST_MARRIAGE > AGE then
-		errmsg("Age at first marriage greater than age") summary 
+		errmsg("Age at first marriage greater than age") summary
 				denom = numHHMembers10AndOverEverMarried;
 	endif;
 endif;
@@ -126,13 +126,13 @@ if AGE_AT_FIRST_MARRIAGE > AGE then
 endif;
 </logic>
 
-The imputation report will be opened in TextViewer after you run the batch application but to see it you will need to go to the Window menu and choose the file that ends in ".frq.lst".
+The imputation report will be opened in Text Viewer after you run the batch application but to see it you will need to go to the Window menu and choose the file that ends in ".frq.lst".
 
 <html><pre>
                            IMPUTE FREQUENCIES                           Page   1
 
 ________________________________________________________________________________
-       Imputed Item AGE_AT_FISRT_MARRIAGE: Age at first marriage - all occurrences        
+       Imputed Item AGE_AT_FISRT_MARRIAGE: Age at first marriage - all occurrences
                                 _____________________________ _____________
  Categories                           Frequency       CumFreq      %  Cum %
 _______________________________ _____________________________ _____________
@@ -156,7 +156,7 @@ elseif AGE(1)  = 999 then
 	impute(CHILD_HEADED_HOUSEHOLD, 9);
 else
 	// Head over 18, not child headed
-	impute(CHILD_HEADED_HOUSEHOLD, 2);	
+	impute(CHILD_HEADED_HOUSEHOLD, 2);
 endif;
 </logic>
 
@@ -195,38 +195,38 @@ endif;
 The remaining languages follow the same pattern.
 
 <subheader>The Export Data Tool</subheader>
-The CSPro export data tool is available from the Tools menu. When you first start Export Data you are prompted to provide a data dictionary. Choose the Popstan2020 dictionary. From the main export screen, you can choose which records/variables to export using the checkboxes next to each one. To start with let's just pick the id items and the first few fields from section F. At the bottom of the export window you can choose the file format to export to. For this exercise we will choose CSV which can be easily opened in Excel. To run the export, click on the traffic light. You are prompted to choose the data file. We will use the Popstan2020Edited.csdb data file. Finally, you are prompted for the name(s) of the exported files. Once the export completes the exported files are displayed in Text Viewer. Let's open them in Excel and see what we have. Note that each household is saved in a separate line in the Excel file. 
+The CSPro Export Data tool is available from the Tools menu. When you first start Export Data you are prompted to provide a data dictionary. Choose the Popstan2020 dictionary. From the main export screen, you can choose which records/variables to export using the checkboxes next to each one. To start with let's just pick the ID items and the first few fields from section F. At the bottom of the export window you can choose the file format to export to. For this exercise we will choose CSV which can be easily opened in Excel. To run the export, click on the traffic light. You are prompted to choose the data file. We will use the Popstan2020Edited.csdb data file. Finally, you are prompted for the name(s) of the exported files. Once the export completes the exported files are displayed in Text Viewer. Let's open them in Excel and see what we have. Note that each household is saved in a separate line in the Excel file.
 
-<center><html><img src="export-id-housing.png" width="600" /></html></center>
+<center><image export-id-housing.png width 600 /></center>
 
 <subheader>Exporting Repeating Records</subheader>
 Let's try exporting a few fields from section B: line number, name and sex. Notice for each variable we exported we get 50 columns. Why is that? We are getting one column for each record occurrence. CSPro is still exporting each household on a single row and since there are up to 50 people in the household it generates 50 columns for each variable. Even empty occurrences are still generating columns in the spreadsheet.
 
-<center><html><img src="export-repeating-all-one-row.png" width="600" /></html></center>
+<center><image export-repeating-all-one-row.png width 600 /></center>
 
-Having a column for each occurrence can complicate working with the data. For example, in this file it is rather tough to do something as simple as count the total number of people. If instead of choosing the default setting of putting multiple record occurrences in a single row (the <i>All in One Record setting</i>) try selecting <i>As Separate Records</i>. Now we get each person in the household in a separate row. It is important to include the household id items when doing this so that it is clear which people are in which household.
+Having a column for each occurrence can complicate working with the data. For example, in this file it is rather tough to do something as simple as count the total number of people. If instead of choosing the default setting of putting multiple record occurrences in a single row (the <i>All in One Record setting</i>) try selecting <i>As Separate Records</i>. Now we get each person in the household in a separate row. It is important to include the household ID items when doing this so that it is clear which people are in which household.
 
-<center><html><img src="export-repeating-separate-rows.png" width="600" /></html></center>
+<center><image export-repeating-separate-rows.png width 600 /></center>
 
 <subheader>Exporting Multiple Record Types</subheader>
 Now let's try exporting the first few items from both the person record (B) and the deaths record (E). With our current settings, Export Data warns us that only items from the first record will be exported. Why? The problem is that if you put each record in its own row then some rows would have household members on them and others would have deaths on them but then the columns would not match.
 
 The solution is to export each record in a separate file by selecting <i>Multiple Files (one for each record type)</i> under Number of Files Created. Doing this generates two files: PERSON.csv which contains the household members and DEATHS.csv which contains the deaths.
 
-<center><html><img src="export-sep-files.png" width="600" /></html></center>
+<center><image export-sep-files.png width 600 /></center>
 
-The households in these two files can be linked together based on the id items.
+The households in these two files can be linked together based on the ID items.
 
 It also possible to have Export Data join together single and multiple records. If you select this option, then one file will be generated for each record with multiple occurrences and the selected columns for all the selected singly occurring records will be added to each row in each of the exported files. For example, if we choose the tenure status (<b>F06</b>) and type of main dwelling (<b>F03</b>) from the single record housing and also choose the first few items from the person record then <b>F06</b> and <b>F03</b> will be added to each of the two exported files: PERSON.csv and DEATHS.csv.
 
-<center><html><img src="export-join-single.png" width="600" /></html></center>
+<center><image export-join-single.png width 600 /></center>
 
 It is not possible to join multiple records to other multiple records from export.
 
 Note that in some cases it may be easier to do the export of the single and multiple records without joining and then do the join in the software that you have imported the data into.
 
 <subheader>Importing Data into SAS, SPSS, Stata and R</subheader>
-When exporting data to statistical packages, CSPro generates both a data file and script to run inside the statistical software itself to run the import. For details in how to run this script for each package see the online help for Export Data and look under "How to…".
+When exporting data to statistical packages, CSPro generates both a data file and script to run inside the statistical software itself to run the import. For details on how to run this script for each package, see the helps for <link https://www.csprousers.org/help/CSExport/introduction_to_export_data.html>Export Data</link> and look under "Loading Exported Data Into…".
 
 <subheader>Saving your Export Specification</subheader>
 You can save your export settings as CSPro export specification file (.exf). You can later double click on this file or open it from the Export Data Tool to retrieve all the selections that were made.
@@ -240,7 +240,5 @@ You can save your export settings as CSPro export specification file (.exf). You
 	<li>Modify the batch edit application to add a check that the type of main dwelling (<b>F03</b>) is consistent with the total numbers of each dwelling type in <b>F05</b>. For example, if the main dwelling in <b>F03</b> is detached house then the total number of detached houses in <b>F05</b> must not be zero.</li>
 	<li>Modify the batch edit application to convert the disabilities (<b>B11</b>) from alpha (used for checkboxes) to a set of numeric yes/no variables. Create the new variables in the dictionary and write logic to set the value of each of the new variables based on the selections in <b>B11</b>.</li>
 	<li>Using the test data, export the household members along with the ID items to the package of your choice (Excel, SPSS, Stata, SAS or R). Use that package to determine the total number of people by sex (total, males, females) and also the number of people by sex for district 01.</li>
-	<li>Export the deaths record and the person record along with the id items into the package of your choice. You should export all the records at once, not one by one. How many households have more than one death? How many households have children under 5 years of age?</li>
+	<li>Export the deaths record and the person record along with the ID items into the package of your choice. You should export all the records at once, not one by one. How many households have more than one death? How many households have children under 5 years of age?</li>
 </list>
-
-

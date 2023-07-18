@@ -1,6 +1,6 @@
 ﻿<title>Session 02: Skips and Prefills</title>
 
-At the end of this lesson participants will be able to:
+At the end of this session participants will be able to:
 <list>
 	<li>Use the commands <logiccolor>skip</logiccolor> and <logiccolor>ask if</logiccolor> to skip fields</li>
 	<li>Use <logiccolor>if then else</logiccolor> statements to implement skip patterns</li>
@@ -9,7 +9,7 @@ At the end of this lesson participants will be able to:
 </list>
 
 <subheader>Skips</subheader>
-In question <b>F04</b> (other housing units), we need to skip over question <b>F05</b> (numbers of housing units) if they answer "no". 
+In question <b>F04</b> (other housing units), we need to skip over question <b>F05</b> (numbers of housing units) if they answer "no".
 
 To skip to a field, we need to use logic. To add logic to a CSPro application click on the logic button <image logic.png /> on the toolbar to switch to the logic view. Here we can type in CSPro logic to control the program. Logic is added to a PROC (procedure) usually associated with a field on the form. To go to the PROC for a field in the logic view, just click on the field in the form tree on the left while in logic view. We will add our skip to the PROC of field <b>OTHER_HOUSING_UNITS</b> so click on <b>OTHER_HOUSING_UNITS</b> in the form tree.
 
@@ -30,21 +30,23 @@ This will skip directly to TENURE for individuals who answer "no" to OTHER_HOUSI
 In addition to "=" to check if two values are equal, you can use the following operators:
 
 <indent><table 2>
-<cell><b>Operation</b></cell><cell><b>Symbol</b></cell>
-<cell>Equal to</cell><cell>=</cell>
-<cell>Not equal to</cell><cell>&lt;&gt;</cell>
-<cell>Less than</cell><cell>&lt;</cell>
-<cell>Less than or equal to</cell><cell>&lt;=</cell>
-<cell>Greater than</cell><cell>&gt;</cell>
-<cell>Greater than or equal to</cell><cell>&gt;=</cell>
+	<cell><b>Operation</b></cell><cell><b>Symbol</b></cell>
+	<cell>Equal to</cell><cell>=</cell>
+	<cell>Not equal to</cell><cell>&lt;&gt;</cell>
+	<cell>Less than</cell><cell>&lt;</cell>
+	<cell>Less than or equal to</cell><cell>&lt;=</cell>
+	<cell>Greater than</cell><cell>&gt;</cell>
+	<cell>Greater than or equal to</cell><cell>&gt;=</cell>
 </table></indent>
 
 For example, to skip over <b>B08</b>, residence one year ago, for those less than one year of age we could add the following logic to the PROC of the preceding question:
 
-<logic>PROC PLACE_OF_BIRTH
+<logic>
+PROC PLACE_OF_BIRTH
 if AGE < 1 then
     skip to MOTHER_ALIVE;
-endif</logic>
+endif;
+</logic>
 
 Note that once we have skipped the field <b>RESIDENCE_ONE_YEAR_AGO</b>, we can't get to it by clicking on it or going back from the following field. CSEntry keeps track of the fact that this field was skipped and won't let us back in until we change the value of <b>AGE</b>. This is an important difference between system controlled and operator controlled data entry mode.
 
@@ -56,7 +58,7 @@ if AGE < 1 then
     skip to MOTHER_ALIVE;
 endif</logic>
 
-Everything on a line after <logiccolor>//</logiccolor> is considered a comment and is ignored by CSPro. You can also use <logiccolor>{}</logiccolor> for multiline comments. It is good practice to use plenty of comments to document your logic.
+Everything on a line after <logiccolor>//</logiccolor> is considered a comment and is ignored by CSPro. You can also use <logiccolor>/* */</logiccolor> for multiline comments. It is good practice to use plenty of comments to document your logic.
 
 <callout><center><b>A note on coding style</b></center>
 When writing if statements, your code will be more readable and easier for others to understand if you indent the statements between the then and the endif. It is also helpful to use consistent capitalization. We recommend all uppercase for dictionary variables like <b>NUMBER_OF_HOUSEHOLD_MEMBERS</b> and all lowercase for CSPro keywords like <logiccolor>if</logiccolor>, <logiccolor>then</logiccolor> and <logiccolor>endif</logiccolor>. Finally, you should use comments as much as possible to help others, and your future self, better understand your code.
@@ -72,9 +74,9 @@ ask if AGE >= 1
 
 The <logiccolor>ask if</logiccolor> statement skips over the question unless the condition <logiccolor>AGE &gt;= 1</logiccolor> is true. In other words, if the age is less than 1, the question will be skipped. Note that when changing from <logiccolor>skip</logiccolor> to <logiccolor>ask if</logiccolor>, the condition was negated by switching from "&lt;" to "&gt;=".
 
-The line <logiccolor>preproc</logiccolor> tells CSPro to execute this logic <i>before</i> asking the question. Our previous examples did not specify <logiccolor>preproc</logiccolor>, so by default the logic was executed in the <logiccolor>postproc</logiccolor>. Postproc logic is executed <i>after</i> the data are entered. Preproc logic is executed before the data are entered. For each variable, you can specify a preproc, a postproc or both. <logiccolor>Ask if</logiccolor> will always be used in the <logiccolor>preproc</logiccolor> of the field being skipped while <logiccolor>skip</logiccolor> can either be in the preproc of the field being skipped or in the postproc of the preceding field.
+The line <logiccolor>preproc</logiccolor> tells CSPro to execute this logic <i>before</i> asking the question. Our previous examples did not specify <logiccolor>preproc</logiccolor>, so by default the logic was executed in the <logiccolor>postproc</logiccolor>. Postproc logic is executed <i>after</i> the data are entered. Preproc logic is executed before the data are entered. For each variable, you can specify a preproc, a postproc or both. The <logiccolor>ask if</logiccolor> statement will always be used in the <logiccolor>preproc</logiccolor> of the field being skipped while <logiccolor>skip</logiccolor> can either be in the preproc of the field being skipped or in the postproc of the preceding field.
 
-<callout><center><b>Group exercise</b></center> 
+<callout><center><b>Group exercise</b></center>
 Implement the skip pattern for questions <b>F10</b> (has a toilet) and <b>F11</b> (type of toilet). If the answer to question F10, have toilet, is "no", skip question <b>F11</b>, type of toilet. You can use either <logiccolor>skip</logiccolor> or <logiccolor>ask if</logiccolor>. Make sure to add a comment to your code and to format your code using correct indentation and capitalization.
 </callout>
 
@@ -111,18 +113,18 @@ In addition to the "or" operator you can also make compound conditions using the
 In addition to "or", CSPro supports the following logical operators:
 
 <table 2>
-<cell><b>Operation</b></cell><cell><b>Keyword</b></cell>
-<cell>Negate an expression</cell><cell>not</cell>
-<cell>True if both expressions are true</cell><cell>and</cell>
-<cell>True if either expression is true</cell><cell>or</cell>
-</table>	
+	<cell><b>Operation</b></cell><cell><b>Keyword</b></cell>
+	<cell>Negate an expression</cell><cell>not</cell>
+	<cell>True if both expressions are true</cell><cell>and</cell>
+	<cell>True if either expression is true</cell><cell>or</cell>
+</table>
 
 You can also use compound conditions with <logiccolor>ask if</logiccolor>. For example we only want to ask question <b>B14</b>, age at first marriage, for those who responded "married" or "widowed" or "divorced" for marital status.
 ~!~
 
 <logic>PROC AGE_AT_FIRST_MARRIAGE
 preproc
-// Only ask age at first marriage for those whose marital status indicates 
+// Only ask age at first marriage for those whose marital status indicates
 // they are/were married
 ask if MARITAL_STATUS = 2 or MARITAL_STATUS = 3 or MARITAL_STATUS = 4;
 </logic>
@@ -133,7 +135,7 @@ We can make our expression even simpler using the "in" operator which checks if 
 
 <logic>PROC AGE_AT_FIRST_MARRIAGE
 preproc
-// Only ask age at first marriage for those whose marital status indicates 
+// Only ask age at first marriage for those whose marital status indicates
 // they are/were married
 ask if MARITAL_STATUS in 2:4;
 </logic>
@@ -142,7 +144,7 @@ ask if MARITAL_STATUS in 2:4;
 A common pattern in CSPro is to use the <logiccolor>ask if</logiccolor> statement to implement other (specify) fields. Let's implement the other (specify) field for question <b>F08</b>, roofing material. First we add a new alpha field to the dictionary to capture the "other" value. We can call it <b>ROOFING_MATERIAL_OTHER</b> and drop it onto the form so that it comes right after <b>ROOFING_MATERIAL</b>. We only want to ask for the "other" value if they selected "other" (code 5) for ROOFING_MATERIAL, otherwise we want to skip it. We can do that using ask if in the preproc for ROOFING_MATERIAL_OTHER.
 
 <logic>PROC ROOFING_MATERIAL_OTHER
-preproc 
+preproc
 
 // ask this question only if "Other (specify)" is picked in roofing material.
 ask if ROOFING_MATERIAL = 5;
@@ -158,7 +160,7 @@ if AGE < 10 then
 endif;
 </logic>
 
-Let's add the skip in section C, education, for those under 3 years of age. We are only supposed to fill in the education section for those aged three years and above. We can use <logiccolor>skip to next</logiccolor> to skip over the education questions if the age is less than three. We need to do this in the preproc of <b>C01</b>, the first field in the education roster, <b>ATTENDED_SCHOOL</b>. 
+Let's add the skip in section C, education, for those under 3 years of age. We are only supposed to fill in the education section for those aged three years and above. We can use <logiccolor>skip to next</logiccolor> to skip over the education questions if the age is less than three. We need to do this in the preproc of <b>C01</b>, the first field in the education roster, <b>ATTENDED_SCHOOL</b>.
 
 Note that since this field already has a <logiccolor>postproc</logiccolor> we need to add the <logiccolor>preproc</logiccolor> first and then add the word <logiccolor>"postproc"</logiccolor> so that the original <logiccolor>postproc</logiccolor> logic does not become part of the <logiccolor>preproc</logiccolor>.
 
@@ -273,6 +275,7 @@ if AGE < 10 then
 endif;
 </logic>
 <pagebreak />
+
 <subheader>Exercises</subheader>
 <list ordered>
 	<li>Skip question <b>F07</b>, monthly rent, if dwelling is not rented in <b>F06</b>.</li>

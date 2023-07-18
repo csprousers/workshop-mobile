@@ -56,12 +56,12 @@ execsystem("camera:/mnt/sdcard/csentry/photo.jpg");
 
 Taking photos is currently only supported on Android. <logiccolor>execsystem</logiccolor> on Windows does not support the camera.
 
-Note that photos do not get saved into the application data file. You need to save them to a folder/file on the device.  The filename you use should make it easy to link the photo back to the interview that it was taken for. The easiest way to do this is to make the name of the photo based on the id-items of the questionnaire:
+Note that photos do not get saved into the application data file. You need to save them to a folder/file on the device. The filename you use should make it easy to link the photo back to the interview that it was taken for. The easiest way to do this is to make the name of the photo based on the ID items of the questionnaire:
 
 <logic>
-string photoFilename = pathname(application) + 
-                maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg", 
-                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+string photoFilename = pathname(application) +
+                maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg",
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,
                                 HOUSEHOLD_NUMBER);
 execsystem(maketext("camera:%s", photoFilename));
 </logic>
@@ -75,9 +75,9 @@ PROC PHOTO
 
 if PHOTO = 1 then
     // Take photo
-    string photoFilename = pathname(application) + 
-               maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg", 
-                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+    string photoFilename = pathname(application) +
+               maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg",
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,
                                 HOUSEHOLD_NUMBER);
     execsystem(maketext("camera:%s", photoFilename));
 elseif PHOTO = 9 then
@@ -90,21 +90,21 @@ This works the first time through the questionnaire but if we go back through th
 <logic>
 PROC PHOTO
 
-string photoFilename = pathname(application) + 
-               maketext("../Data/HouseholdPhotos /photo%v%v%v%v.jpg", 
-                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+string photoFilename = pathname(application) +
+               maketext("../Data/HouseholdPhotos /photo%v%v%v%v.jpg",
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,
                                 HOUSEHOLD_NUMBER);
 
 if PHOTO = 1 then
     // Take/retake photo
     execsystem(maketext("camera:%s", photoFilename));
-    
+
     // reenter so that interview can retake if it is not good.
     reenter;
 elseif PHOTO = 2 then
     // view existing photo
     view(photoFilename);
-    
+
     // reenter so that interview can retake if it is not good.
     reenter;
 elseif PHOTO = 3 then
@@ -121,9 +121,9 @@ This works except that it is possible for the interviewer to select "Keep photo"
 <logic>
 PROC PHOTO
 onfocus
-string photoFilename = pathname(application) + 
-               maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg", 
-                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+string photoFilename = pathname(application) +
+               maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg",
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,
                                 HOUSEHOLD_NUMBER);
 
 // Only show the view and keep options in value set
@@ -145,7 +145,7 @@ gps(open);
 Then you request a GPS reading giving it a timeout in seconds and optionally a desired accuracy in meters:
 
 <logic>
-if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy 
+if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy
     errmsg("Latitude is %f, longitude is %f",gps(latitude),gps(longitude));
 else
     errmsg("GPS signal could not be acquired");
@@ -158,7 +158,8 @@ Finally, you close the GPS:
 gps(close);
 </logic>
 
-In addition to querying the GPS latitude and longitude you can also query the accuracy, number of satellites, and altitude (although on Android altitude is not very accurate). See the help on GPS for details.
+In addition to querying the GPS latitude and longitude you can also query the accuracy, number of satellites, and altitude (although on Android altitude is not very accurate). See the <link https://www.csprousers.org/help/CSPro/gps_function.html>help on GPS</link> for details.
+
 The longitude and latitude reported are in degrees in the WGS84 datum and are returned as decimal numbers.
 
 To save the GPS coordinates in our data file we need to add the appropriate variables to our dictionary. To store the coordinates so that they can cover the entire earth with sufficient precision they should have space for 3 digits before the decimal point, 1 digit for the decimal point, and at least 5 digits after the decimal and a minus sign for a minimum total length of 10. Add the variables LATITUDE and LONGITUDE to the dictionary and to section on the forms.
@@ -169,9 +170,9 @@ Let's add a user bar button to update the GPS coordinates for the household:
 // Capture current household location using GPS
 function getGPS()
     gps(open);
-    if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy 
+    if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy
         LATITUDE = gps(latitude);
-        LONGITUDE = gps(longitude); 
+        LONGITUDE = gps(longitude);
     else
         errmsg("GPS signal could not be acquired");
     endif;
@@ -180,14 +181,14 @@ end;
 </logic>
 
 <subheader>Displaying GPS Points on a Map</subheader>
-If we want to be fancy, we can display the point on the map first so that the interviewer can view it and then decide whether or not to use it. We can do this using a variable of type <logiccolor>map</logiccolor>. Like <logiccolor>valueset</logiccolor> variables, <logiccolor>map</logiccolor> variables have functions that can be called on them using a dot ("."). For example, to add a marker to a map you would call:
+If we want to be fancy, we can display the point on the map first so that the interviewer can view it and then decide whether or not to use it. We can do this using a variable of type <logiccolor>Map</logiccolor>. Like <logiccolor>ValueSet</logiccolor> variables, <logiccolor>Map</logiccolor> variables have functions that can be called on them using a dot ("."). For example, to add a marker to a map you would call:
 
 <logic>
-	map mymap;
+	Map mymap;
 	mymap.addMarker(longitude, latitude);
 </logic>
 
-To display the map, call the <logiccolor map>show()</logiccolor> function. This displays a Google Map containing the marker that was added.
+To display the map, call the <logiccolor Map>show()</logiccolor> function. This displays a Google Map containing the marker that was added.
 
 We can use a map variable to display a map that has a marker at the GPS location that we captured:
 
@@ -195,14 +196,14 @@ We can use a map variable to display a map that has a marker at the GPS location
 // Capture current household location using GPS
 function getGPS()
     gps(open);
-    if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy 
+    if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy
         // Show map so that interviewer can see result
-		map m;
+		Map m;
 		m.addMarker(gps(latitude), gps(longitude));
 		m.show();
         if accept("Save this result", "Yes", "No") = 1 then
             LATITUDE = gps(latitude);
-            LONGITUDE = gps(longitude); 
+            LONGITUDE = gps(longitude);
         endif;
     else
         errmsg("GPS signal could not be acquired");
@@ -211,21 +212,21 @@ function getGPS()
 end;
 </logic>
 
-Variables of type <logiccolor>map</logiccolor> have many other functions that let you customize the map, the markers, add buttons and run logic functions when markers are tapped. You can also use offline base maps for situations where you do not have an internet connection. See the help for maps for details. Note that map functions are only supported on Android.
+Variables of type <logiccolor>Map</logiccolor> have many other functions that let you customize the map, the markers, add buttons and run logic functions when markers are tapped. You can also use offline base maps for situations where you do not have an Internet connection. See the <link https://www.csprousers.org/help/CSPro/Map.html>help for maps</link> for details.
 
 <subheader>Showing the Case Listing on a Map</subheader>
 If you have latitude and longitude variables in your data dictionary for each household you can configure the case listing screen to display the households on a map on Android. To do this, open the Mapping Options dialog from the Options menu in CSPro designer. Check the box "Show the case listing on a map" and choose the latitude and longitude variables from your dictionary. When you run the application on Android, the case listing screen will show a map with a marker for each household. Tapping on a marker launches data entry for that household.
 
 <callout>
 <center>Group Exercise</center>
-Build a CSPro application for the household listing questionnaire. Place your application in the folder Popstan2020/Listing. Treat each household as a separate case. In other words, do not use a repeating record and roster to try to match the paper questionnaire. When creating the listing dictionary use "LI_" as a prefix for the all the variable names so that they will not conflict with the names in the household dictionary. There is no need to validate the id-items using a lookup file like we did for the household questionnaire. We will prefill the id-items from the menu program tomorrow. For each household, automatically record the GPS coordinates in the latitude field. Give the interviewer the option of taking a photo of the household but allow for refusal. Name the photo based on the case id-items and put the photos in the directory Popstan2020/Data/ListingPhotos. Use the Mapping Options dialog to show the case listing on a map for the listing program. Go outside and test your listing application on a tablet.
+Build a CSPro application for the household listing questionnaire. Place your application in the folder Popstan2020/Listing. Treat each household as a separate case. In other words, do not use a repeating record and roster to try to match the paper questionnaire. When creating the listing dictionary use "LI_" as a prefix for the all the variable names so that they will not conflict with the names in the household dictionary. There is no need to validate the ID items using a lookup file like we did for the household questionnaire. We will prefill the ID items from the menu program tomorrow. For each household, automatically record the GPS coordinates in the latitude field. Give the interviewer the option of taking a photo of the household but allow for refusal. Name the photo based on the case ID items and put the photos in the directory Popstan2020/Data/ListingPhotos. Use the Mapping Options dialog to show the case listing on a map for the listing program. Go outside and test your listing application on a tablet.
 </callout>
 
 <subheader>Writing and Viewing Reports</subheader>
 With the <logiccolor>view()</logiccolor> function you can display text files on your device. We can use this to show text documents that we write out from CSPro. To write out files from a CSEntry application we have to first declare a variable of type file :
 
 <logic>
-file tempFile;
+File tempFile;
 </logic>
 
 Then we can use the commands <logiccolor>setfile()</logiccolor>, <logiccolor>filewrite()</logiccolor> and <logiccolor>close()</logiccolor> to open, write to and close the file. Let's create a userbar button to write a simple text report that lists the household members:
@@ -234,16 +235,16 @@ Then we can use the commands <logiccolor>setfile()</logiccolor>, <logiccolor>fil
 // Write out and display household summary report
 function showHouseholdReport()
     string reportFilename = maketext("%sreport.txt", pathname(Application));
-	file tempFile;
+	File tempFile;
     setfile(tempFile, reportFilename, create);
     filewrite(tempFile, "Household Summary Report");
     filewrite(tempFile, "------------------------");
     filewrite(tempFile, "");
-    filewrite(tempFile, "Province %d District %d EA %d Area type %d Household Number %d", 
-                        visualvalue(PROVINCE), 
-                        visualvalue(DISTRICT), 
-                        visualvalue(ENUMERATION_AREA), 
-                        visualvalue(AREA_TYPE), 
+    filewrite(tempFile, "Province %d District %d EA %d Area type %d Household Number %d",
+                        visualvalue(PROVINCE),
+                        visualvalue(DISTRICT),
+                        visualvalue(ENUMERATION_AREA),
+                        visualvalue(AREA_TYPE),
                         visualvalue(HOUSEHOLD_NUMBER));
     filewrite(tempFile, "");
     filewrite(tempFile, "Household Members:");
@@ -257,14 +258,14 @@ function showHouseholdReport()
                             visualvalue(AGE(i)),
                             getlabel(RELATIONSHIP_VS1,
                             visualvalue(RELATIONSHIP(i))));
-    enddo;  
+    enddo;
     close(tempFile);
-	
+
 	view(reportFilename);
 end;
 </logic>
 
-If you are familiar with HTML you can write out HTML and have nicer formatting and pictures. CSPro also has a built in templating engine to generate HTML reports using templates. See "Templated Reports" in the CSPro help for details.
+If you are familiar with HTML you can write out HTML and have nicer formatting and pictures. CSPro also has a built in templating engine to generate HTML reports using templates. See <link https://www.csprousers.org/help/CSPro/templated_reports.html>Templated Reports</link> in the CSPro helps for details.
 
 <subheader>Exercises</subheader>
 <list ordered>

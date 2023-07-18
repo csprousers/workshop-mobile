@@ -1,12 +1,12 @@
 ﻿<title>Session 04: More Logic in Data Entry, Rosters, Subscripts and Loops</title>
 
-At the end of this lesson participants will be able to:
+At the end of this session participants will be able to:
 <list>
 	<li>Implement consistency checks across individuals in the household roster</li>
 	<li>Understand the order of PROCs and where to place edit checks</li>
 	<li>Use subscripts, <logiccolor>totocc()</logiccolor>, <logiccolor>count()</logiccolor>, <logiccolor>seek()</logiccolor> and <logiccolor>curocc()</logiccolor> to work with rosters</li>
-	<li>Use loops (<logiccolor>do while</logiccolor>) to implement edit checks on repeating records/items (rosters)</li>
-	<li>Understand and use "special values" (<logiccolor>notappl</logiccolor>, <logiccolor>missing</logiccolor> and <logiccolor>default</logiccolor>) in logic</li>
+	<li>Use loops (<logiccolor>do, while</logiccolor>) to implement edit checks on repeating records/items (rosters)</li>
+	<li>Understand and use "special values" (<logiccolor>notappl</logiccolor>, <logiccolor>missing</logiccolor>, <logiccolor>refused</logiccolor>, and <logiccolor>default</logiccolor>) in logic</li>
 	<li>Set occurrence labels on rosters from logic</li>
 </list>
 
@@ -22,21 +22,21 @@ PROC MOTHER_LINE_NUMBER
 if not MOTHER_LINE_NUMBER in 87:88 then
 
     if SEX(MOTHER_LINE_NUMBER) = 1 then
-        errmsg("Sex of mother %s is male", 
+        errmsg("Sex of mother %s is male",
                strip(NAME(MOTHER_LINE_NUMBER)))
-               select("Correct mother", 
+               select("Correct mother",
                       MOTHER_LINE_NUMBER,
                       "Correct sex of " +
-                      strip(NAME(MOTHER_LINE_NUMBER)), 
+                      strip(NAME(MOTHER_LINE_NUMBER)),
                       SEX(MOTHER_LINE_NUMBER));
     endif;
-    
+
     if AGE(MOTHER_LINE_NUMBER) <> 999 and AGE(MOTHER_LINE_NUMBER) < 12 then
-        errmsg("Age of mother %s is %d but must be at least 12", 
-               strip(NAME(MOTHER_LINE_NUMBER)), 
+        errmsg("Age of mother %s is %d but must be at least 12",
+               strip(NAME(MOTHER_LINE_NUMBER)),
                AGE(MOTHER_LINE_NUMBER))
                select("Correct mother", MOTHER_LINE_NUMBER,
-                      "Correct age of " + strip(NAME(MOTHER_LINE_NUMBER)), 
+                      "Correct age of " + strip(NAME(MOTHER_LINE_NUMBER)),
                       AGE(MOTHER_LINE_NUMBER));
     endif;
 endif;
@@ -48,25 +48,25 @@ endif;
 What happens if we refer to an occurrence of a row in the section B roster that doesn't exist? Try entering a line number for the mother greater than the number of rows in the section B roster. Our tests for age and sex are not triggered. What are the values of <b>NAME</b>, <b>SEX</b> and <b>AGE</b> when they are empty? Let's print them out using <logiccolor>errmsg</logiccolor> and see.
 
 <logic>
-errmsg("NAME = %s, AGE=%d, SEX=%d", strip(NAME(MOTHER_LINE_NUMBER)), 
+errmsg("NAME = %s, AGE=%d, SEX=%d", strip(NAME(MOTHER_LINE_NUMBER)),
         AGE(MOTHER_LINE_NUMBER), SEX(MOTHER_LINE_NUMBER));
 </logic>
 
 The alphanumeric variable <b>NAME</b> is just empty but the numeric values <b>AGE</b> and <b>SEX</b> are <logiccolor>notappl</logiccolor>. What does this mean? Generally, numeric fields that are blank (skipped or not yet entered) have a special value called <logiccolor>notappl</logiccolor> that can be used in comparisons in logic. For example, to test if the <b>SEX</b> is blank we can use the following comparison:
 
 <logic>
-    if SEX(MOTHERS_LINE_NUMBER) = notappl then
+    if SEX(MOTHER_LINE_NUMBER) = notappl then
         // Sex is blank, must be an empty row in section B roster
-        errmsg("%d is not a valid line in section B", MOTHERS_LINE_NUMBER);
+        errmsg("%d is not a valid line in section B", MOTHER_LINE_NUMBER);
         reenter;
     endif;
 </logic>
 
 There are other special values that are used in CSPro:
 <list>
-	<li><logiccolor>Missing</logiccolor>: can be used as an alias for no response codes (9, 99, 999…). You must create an entry for it in the value set.</li>
-	<li><logiccolor>Refused</logiccolor>: similar to missing but can add special handling to make it more difficult to select. You must create an entry for it in the value set.</li>
-	<li><logiccolor>Default</logiccolor>: results from an error reading from a data file or from a calculation error (like trying to calculate notappl + 2 or dividing by zero) or moving a value into a variable that is too small to hold the value.  For example, if AGE is a two digit field, AGE = 118 will result in <logiccolor>default</logiccolor>.</li>
+	<li><logiccolor>missing</logiccolor>: can be used as an alias for no response codes (9, 99, 999…). You must create an entry for it in the value set.</li>
+	<li><logiccolor>refused</logiccolor>: similar to missing but can add special handling to make it more difficult to select. You must create an entry for it in the value set.</li>
+	<li><logiccolor>default</logiccolor>: results from an error reading from a data file or from a calculation error (like trying to calculate notappl + 2 or dividing by zero) or moving a value into a variable that is too small to hold the value. For example, if AGE is a two digit field, AGE = 118 will result in <logiccolor>default</logiccolor>.</li>
 </list>
 
 <subheader>Getting the size of a roster</subheader>
@@ -75,7 +75,7 @@ In our error message, it would be nice to tell the interviewer what the maximum 
 <logic>
     if MOTHER_LINE_NUMBER > totocc(HOUSEHOLD_MEMBERS_ROSTER) then
         // This is beyond the end of the roster
-        errmsg("%d is not a valid line in section B. Must be between 1 and %d.", 
+        errmsg("%d is not a valid line in section B. Must be between 1 and %d.",
             MOTHER_LINE_NUMBER, totocc(HOUSEHOLD_MEMBERS_ROSTER));
         reenter;
     endif;
@@ -92,17 +92,17 @@ setocclabel(EDUCATION_ROSTER(curocc()), strip(NAME));
 setocclabel(FERTILITY_ROSTER(curocc()), strip(NAME));
 </logic>
 
-This works fine when we are adding a new case, however we open an existing case in modify mode the occurrence labels are not set until we get to the person roster even though the occurrences already exist. In modify mode, while still on the demographics roster you can scroll the case tree to see Demographics (1), Demographics (2)… as we had before. In order to prevent this, we need to set the occurrence labels for the rosters as soon as we open the case. 
+This works fine when we are adding a new case, however we open an existing case in modify mode the occurrence labels are not set until we get to the person roster even though the occurrences already exist. In modify mode, while still on the demographics roster you can scroll the case tree to see Demographics (1), Demographics (2)… as we had before. In order to prevent this, we need to set the occurrence labels for the rosters as soon as we open the case.
 
 <pagebreak />
 
 <subheader>More About Procs</subheader>
-What proc can we use to set the occurrence labels? We could use the preproc of the first field of the first form but there is a better option. It turns out that every element in the form tree has a PROC. Not only do variables have procs but there are procs for forms, rosters, levels and even the application itself. Everything you see in the forms tree can have both a preproc and a postproc. Understanding the order in which procs are executed is important in understanding CSPro logic. 
+What proc can we use to set the occurrence labels? We could use the preproc of the first field of the first form but there is a better option. It turns out that every element in the form tree has a PROC. Not only do variables have procs but there are procs for forms, rosters, levels and even the application itself. Everything you see in the forms tree can have both a preproc and a postproc. Understanding the order in which procs are executed is important in understanding CSPro logic.
 
-The general rule is that 
+The general rule is that
 <list ordered>
 	<li>Parent items have their preproc called first,</li>
-	<li>then the procs of the child items are called</li>
+	<li>then the procs of the child items are called,</li>
 	<li>and finally, the postproc of the parent is called.</li>
 </list>
 
@@ -133,7 +133,7 @@ preproc
 // has existing data (partial save or modify mode). If we don't do
 // this then the case tree will not have correct occurrence labels
 // until after we pass through the household members roster.
-        
+
 do numeric i = 1 while i <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
 	setocclabel(HOUSEHOLD_MEMBERS_ROSTER(i), strip(NAME(i)));
 	setocclabel(DEMOGRAPHICS_ROSTER(i), strip(NAME(i)));
@@ -252,9 +252,9 @@ PROC AGE
 // Compare age of child to age of the head
 if RELATIONSHIP = 3 and AGE(1) - AGE < 12 then
 	errmsg("Child %s is %d years old but head %s is %d. Parent must be at least 12 years older than child.",
-                strip(NAME), 
+                strip(NAME),
                 AGE,
-                strip(NAME(1)), 
+                strip(NAME(1)),
                 AGE(1))
                 select("Correct age of " + strip(NAME), AGE,
                        "Correct age of " + strip(NAME(1)), AGE(1),
@@ -276,12 +276,12 @@ PROC HAVE_CHILDREN_IN_HOUSEHOLD
 numeric womanLineNumber = curocc();
 numeric childLineNumber = seek(MOTHER_LINE_NUMBER = womanLineNumber);
 if childLineNumber > 0 and HAVE_CHILDREN_IN_HOUSEHOLD = 2 then
-	warning("There are children in the household who have listed %s as their mother", STRIP(NAME))
+	warning("There are children in the household who have listed %s as their mother", strip(NAME))
 	select("Correct have children in household", HAVE_CHILDREN_IN_HOUSEHOLD,
 	       "Correct mother line number", MOTHER_LINE_NUMBER(childLineNumber),
 	       "Ignore error", continue);
 elseif childLineNumber = 0 and HAVE_CHILDREN_IN_HOUSEHOLD = 1 then
-	warning("There are no children in the household who have listed %s as their mother", STRIP(NAME))
+	warning("There are no children in the household who have listed %s as their mother", strip(NAME))
 	select("Correct have children in household", HAVE_CHILDREN_IN_HOUSEHOLD,
 	       "Correct mother line number", MOTHER_LINE_NUMBER(1),
 	       "Ignore error", continue);

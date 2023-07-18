@@ -1,0 +1,48 @@
+﻿{
+  "title": "Mobile Data Collection Using CSPro", 
+  "coverPageDocument": "00-cover-page.csdoc", 
+  "settings": {
+    "imageDirectories": [
+      "images"
+    ], 
+    "builds": [
+      {
+        "name": "PDF Documentation", 
+        "outputDirectory": "../Outputs", 
+        "buildType": "PDF", 
+        "wkhtmltopdfFlags": [
+          { "type": "global", "flag": "toc" }, 
+          { "type": "global", "flag": "--disable-smart-shrinking" }, 
+          { "type": "global", "flag": "--print-media-type" }, 
+          { "type": "global", "flag": "--page-offset", "value": "-1" }, 
+          { "type": "global", "flag": "--footer-font-name", "value": "\"Calibri\"" }, 
+          { "type": "global", "flag": "--footer-font-size", "value": "9" }, 
+          { "type": "global", "flag": "--footer-left", "value": "\"Page [page] of [toPage]\"" }, 
+          { "type": "global", "flag": "--footer-right", "value": "\"[section]\"" }, 
+          { "type": "global", "flag": "--footer-spacing", "value": "3" }
+        ]
+      }, 
+      {
+        "name": "CSPro Users Workshop Website", 
+        "outputDirectory": "../Outputs/mobile-workshop", 
+        "buildType": "website"
+      }
+    ]
+  }, 
+  "tableOfContents": {
+    "title": "Mobile Data Collection Using CSPro", 
+    "writeTitleToPdf": false, 
+    "documents": [
+      { "path": "01-overview.csdoc", "~title": "Session 01: Overview of CSPro, Dictionary and Forms" }, 
+      { "path": "02-skips-prefills.csdoc", "~title": "Session 02: Skips and Prefills" }, 
+      { "path": "03-consistency-checks.csdoc", "~title": "Session 03: Consistency Checks" }, 
+      { "path": "04-consistency-checks-rosters.csdoc", "~title": "Session 04: More Logic in Data Entry, Rosters, Subscripts and Loops" }, 
+      { "path": "05-capi.csdoc", "~title": "Session 05: CAPI Features" }, 
+      { "path": "06-lookup-nav-sys-ctrl.csdoc", "~title": "Session 06: Functions, Lookup Files, Navigation & System Control" }, 
+      { "path": "07-multimedia-gps.csdoc", "~title": "Session 07: Multimedia & GPS" }, 
+      { "path": "08-menu-programs.csdoc", "~title": "Session 08: Menu Programs" }, 
+      { "path": "09-sync.csdoc", "~title": "Session 09: Synchronization" }, 
+      { "path": "10-batch-export.csdoc", "~title": "Session 10: Batch Edit and Export" }
+    ]
+  }
+}
