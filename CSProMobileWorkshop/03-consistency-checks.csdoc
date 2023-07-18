@@ -100,7 +100,7 @@ if MARITAL_STATUS in 1,3,4 and RELATIONSHIP = 2 then
 endif;
 </logic>
 
-It would be better if we could include the name of the person in the error message as an additional clue to the interviewer.  Since the name is an alpha variable we use %s instead of  %d. (%d is for decimal value.)
+It would be better if we could include the name of the person in the error message as an additional clue to the interviewer. Since the name is an alpha variable we use %s instead of %d. (%d is for decimal value.)
 
 <pagebreak />
 <logic>
@@ -115,7 +115,7 @@ endif;
 </logic>
 ~!~
 
-Why is there a whole bunch of extra space after the name in the error message? Remember that alpha variables in the dictionary are fixed length.  This means that they get padded with blank spaces. We can remove the trailing blank spaces by using the <logiccolor>strip()</logiccolor> function.
+Why is there a whole bunch of extra space after the name in the error message? Remember that alpha variables in the dictionary are fixed length. This means that they get padded with blank spaces. We can remove the trailing blank spaces by using the <logiccolor>strip()</logiccolor> function.
 
 <logic>
 PROC MARITAL_STATUS
@@ -215,10 +215,10 @@ endif;
 When testing consistency checks involving multiple variables it is important to test all possible combinations of the variables. To do this we can create a test matrix. For example, to test all possible combinations of our consistency check between <b>MARITAL_STATUS</b> and <b>RELATIONSHIP</b> we would use the following matrix that shows the expected result for each combination of the variables involved:
 
 <table 5>
-<cell></cell><cell 4><center><b>Marital Status</b></center></cell>
-<cell><b>Relationship</b></cell><cell>Never married (1)</cell><cell>Married (2)</cell><cell>Divorced (3)</cell><cell>Widowed (4)</cell>
-<cell>Spouse (2)</cell><cell><font red>Error</font></cell><cell><font green>OK</font></cell><cell><font red>Error</font></cell><cell><font red>Error</font></cell>
-<cell>Not-spouse (&lt;&gt; 2)</cell><cell><font green>OK</font></cell><cell><font green>OK</font></cell><cell><font green>OK</font></cell><cell><font green>OK</font></cell>
+	<cell></cell><cell 4><center><b>Marital Status</b></center></cell>
+	<cell><b>Relationship</b></cell><cell>Never married (1)</cell><cell>Married (2)</cell><cell>Divorced (3)</cell><cell>Widowed (4)</cell>
+	<cell>Spouse (2)</cell><cell><font red>Error</font></cell><cell><font green>OK</font></cell><cell><font red>Error</font></cell><cell><font red>Error</font></cell>
+	<cell>Not-spouse (&lt;&gt; 2)</cell><cell><font green>OK</font></cell><cell><font green>OK</font></cell><cell><font green>OK</font></cell><cell><font green>OK</font></cell>
 </table>
 
 Using this matrix, you can test each of the 8 possible combinations and make sure that you get the expected result. This ensures that all possible cases are tested.
@@ -354,6 +354,7 @@ It is possible to combine the declaration and the initialization of the variable
 
 It is tempting to place consistency checks on every question in your application in order to maximize data quality but it is important to realize that every check you add comes at a price. Beyond the time it takes to implement and properly test each check, you also need to consider the additional time required to train and support a more complex application. Every check you add increases the risk that there will be bugs in your application when it gets to the field. Unlike a key from paper application, a bug in the field can mean an enumerator being stuck and abandoning an entire questionnaire. For surveys, you generally have a small sample and better trained enumerators so this is less of a concern. However, for a census, enumerators are not as experienced and supporting them in the field is much more of a challenge. In a census, due to the number of respondents, you can use imputation to correct many inconsistencies with minimal impact on the overall results. In any case, just the fact that the CAPI instrument imposes range checks and skip patterns will be a significant improvement in data quality over a paper census. For a CAPI census application, we recommend only adding consistency checks on the key demographic fields in the household roster and leaving potential inconsistencies in other parts of the questionnaire to be corrected post data collection. In addition, we recommend using mainly "soft" edit checks so that the enumerator is never blocked by the application.
 <pagebreak />
+
 <subheader>Exercises</subheader>
 Implement the following consistency checks from the edit specifications. Test that they are correct. Make sure to test all possible cases (test matrices can help with this).
 <list ordered>
@@ -366,4 +367,3 @@ Implement the following consistency checks from the edit specifications. Test th
 	<li>Check that the date that the death occurred in question <b>E05</b> is within the last five years, since the section should only include deaths occurring in that period. Use the interview date to calculate the number of years since the death occurred. For example, if the interview date is 2016-10-05 and the date of death is 2016-09 then you should show an error message. You can use datediff to calculate the difference between the interview date and the date of death as we did for the age and date of birth check, however you will need to construct a full date from just the month and year of death. Since no day is given, use 1 as the day (assume first day of the month). Note that datediff rounds to the nearest year so to do the check correctly you will need to get the difference in months and compare it to 60 (5 years times 12 months).</li>
 </list>
 <pagebreak />
-

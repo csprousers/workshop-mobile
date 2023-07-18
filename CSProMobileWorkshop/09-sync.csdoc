@@ -2,29 +2,29 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Deploy applications to mobile devices over the internet</li>
+	<li>Deploy applications to mobile devices over the Internet</li>
 	<li>Use the synchronization options dialog to add synchronization to an application</li>
 	<li>Create advanced synchronizations using CSPro logic to synchronize data files and update applications in the field</li>
-	<li>Create peer to peer synchronizations between devices for situations where there is no internet access</li>
+	<li>Create peer to peer synchronizations between devices for situations where there is no Internet access</li>
 </list>
 
 <subheader>Synchronization in CSPro</subheader>
-After collecting data in the field, you need to get the data from the interviewer's devices back to headquarters to create a combined data file. While this can be done manually by connecting each device to a laptop, copying the individual data files and combining them using the Concatenate Data tool, this is rather inconvenient for large surveys. Instead, it is possible to send the data from each device over the internet to a central server that will combine the data into a single data file to be used for further processing. In CSPro this is called synchronization.
+After collecting data in the field, you need to get the data from the interviewer's devices back to headquarters to create a combined data file. While this can be done manually by connecting each device to a laptop, copying the individual data files and combining them using the Concatenate Data tool, this is rather inconvenient for large surveys. Instead, it is possible to send the data from each device over the Internet to a central server that will combine the data into a single data file to be used for further processing. In CSPro this is called synchronization.
 
 <center><image directsync.png width 600 /></center>
 
 <subheader>The Sync Server</subheader>
-In order to use internet synchronization in CSPro you need a server accessible over a network. CSPro supports three types of Synchronization servers:
+In order to use Internet synchronization in CSPro you need a server accessible over a network. CSPro supports three types of Synchronization servers:
 <list>
 	<li>CSWeb: A free web application that can run in a local data center or hosted on a server in the cloud. Best for large surveys. Requires skills in setting up and administering a website and SQL database.</li>
 	<li>Dropbox: A free service for synchronization with servers in the cloud using an account created at www.dropbox.com. Data is stored on the servers managed by Dropbox in the United States. Best for small surveys when the skills and infrastructure for setting up CSWeb are not available.</li>
 	<li>FTP: CSPro can synchronize with any FTP (File Transfer Protocol) server accessible over the network. Best for small surveys when the skills and infrastructure for setting up CSWeb are not available and you don't want your data on the Dropbox servers.</li>
 </list>
 
-For our examples in this workshop we will use a CSWeb server, however using Dropbox or FTP is very similar. Installing the CSWeb server is beyond the scope of this training so we will work with a server that is already installed and running. The process for setting up a CSWeb server is well documented in the CSWeb users guide which is included in the CSPro documentation available from the "Help Menu".
+For our examples in this workshop we will use a CSWeb server, however using Dropbox or FTP is very similar. Installing the CSWeb server is beyond the scope of this training so we will work with a server that is already installed and running. The process for setting up a CSWeb server is well documented in the <link https://www.csprousers.org/help/CSWeb/introduction_to_csweb.html>CSWeb User's Guide.</link>
 
 <subheader>Deploying Applications</subheader>
-Instead of copying our application to a mobile device using a USB connection we can download it from a server. Before we do that we need to use the Deploy Applications tool to upload the application to the server. We saw in session 8 how to use the Deploy Applications tool to deploy to a local folder. To deploy to a server simply change the "Deploy To" to the type of server to upload to. You can deploy to a CSWeb server, Dropbox or FTP. The deploy tool will upload all of the files that you have dropped onto the files list to the server. It will also upload some or all of the dictionaries in your application to the server. Uploading a dictionary to the server is required before you can synchronize the data file associated with that dictionary.
+Instead of copying our application to a mobile device using a USB connection we can download it from a server. Before we do that we need to use the Deploy Application tool to upload the application to the server. We saw in session 8 how to use the Deploy Application tool to deploy to a local folder. To deploy to a server simply change the "Deploy To" to the type of server to upload to. You can deploy to a CSWeb server, Dropbox or FTP. The deploy tool will upload all of the files that you have dropped onto the files list to the server. It will also upload some or all of the dictionaries in your application to the server. Uploading a dictionary to the server is required before you can synchronize the data file associated with that dictionary.
 
 Once you have uploaded the application to the server you can download to a mobile device by choosing "Add Application" from the menu in the applications listing screen. This will ask you for the server details and then display a list of applications available on the server. Once you download an application it is copied to the CSEntry directory of your device.
 
@@ -45,7 +45,7 @@ In the dropdown, you have three choices for how to synchronize the main data fil
 
 In most cases you will want to choose either the first or third option. Use the third option if you want to share cases between multiple devices in the field as this will download every case on the server onto the local device. For a survey operation with a large number of interviewers you may want to avoid this as it will cause you to download a lot of data. For our test, we will use the first option.
 
-In addition to synchronizing the data file you can also download the pen and pff files from the server. This provides a way to do remote updates to the application while interviewers are in the field. In order for this to work you must place a copy of the pen and pff files on the server. For CSWeb these must be placed in the <i>csweb/files/</i> on the server. For Dropbox, they may be placed anywhere in the Dropbox folder. For FTP they must be placed in the home directory of the user that will be used to log into the server. Enter the path on the server where the files were placed under "Path to application on server". We will place these files in the directory <i>/Popstan2020Census</i> on the server. Note that this is an alternative to using the Deploy Applications tool and Add Application to update the application. The advantage of this approach is that it combines the data synchronization with the application update in a single operation. The disadvantage is that you have to copy the .pen and .pff files to the server manually instead of using the Deploy Applications tool.
+In addition to synchronizing the data file you can also download the pen and pff files from the server. This provides a way to do remote updates to the application while interviewers are in the field. In order for this to work you must place a copy of the pen and pff files on the server. For CSWeb these must be placed in the <i>csweb/files/</i> on the server. For Dropbox, they may be placed anywhere in the Dropbox folder. For FTP they must be placed in the home directory of the user that will be used to log into the server. Enter the path on the server where the files were placed under "Path to application on server". We will place these files in the directory <i>/Popstan2020Census</i> on the server. Note that this is an alternative to using the Deploy Application tool and Add Application to update the application. The advantage of this approach is that it combines the data synchronization with the application update in a single operation. The disadvantage is that you have to copy the .pen and .pff files to the server manually instead of using the Deploy Application tool.
 
 Once the sync settings are complete, regenerate the pen file. The sync settings are stored in the pen file so if it is not updated you won't be able to sync. Copy the pen and pff file into the Popstan2020Census directory under the files directory on the server so that it will be downloaded to the local device during sync.
 
@@ -137,11 +137,11 @@ It is important to ensure the security of your server and data. Computer and net
 
 <b>Use HTTPS on the web server for data transfer</b>
 
-This encrypts the data transmission that goes over the internet. It requires purchasing and installing an SSL certificate on the server. Without SSL, server passwords are sent unencrypted and are vulnerable to hackers.
+This encrypts the data transmission that goes over the Internet. It requires purchasing and installing an SSL certificate on the server. Without SSL, server passwords are sent unencrypted and are vulnerable to hackers.
 
 <b>Use a private network</b>
 
-For censuses and large surveys you may be able to work with the telecom provider to create a private network that only your devices can access. This avoids putting your server on the public internet where it could be vulnerable to attacks. This also makes it possible to limit your devices to only be able to access your server and not other websites that you don't want your interviewers to use.
+For censuses and large surveys you may be able to work with the telecom provider to create a private network that only your devices can access. This avoids putting your server on the public Internet where it could be vulnerable to attacks. This also makes it possible to limit your devices to only be able to access your server and not other websites that you don't want your interviewers to use.
 
 <b>Use device encryption on Android devices</b>
 
@@ -163,7 +163,7 @@ This will only synchronize cases whose case IDs start with "102". This limits th
 This is useful when there are a large number of interviewers and you don't want every interviewer to download the data from every other interviewer. You can specify the geographic area assigned to the interviewer as the universe so that only cases in the interviewer's area are synced.
 
 <subheader>Peer to Peer Synchronization Using Bluetooth</subheader>
-In some places, interviewers do not have reliable internet access and cannot synchronize directly with the server. In this case, you can use peer to peer to synchronization. Interviewers synchronize with a supervisor's tablet or laptop over Bluetooth. Later, the supervisor goes to a location where they can connect to the internet and they synchronize with the central server.
+In some places, interviewers do not have reliable Internet access and cannot synchronize directly with the server. In this case, you can use peer to peer to synchronization. Interviewers synchronize with a supervisor's tablet or laptop over Bluetooth. Later, the supervisor goes to a location where they can connect to the Internet and they synchronize with the central server.
 
 <center><image peertopeersync.png width 600 /></center>
 <pagebreak />

@@ -2,17 +2,17 @@
 
 At the end of this session participants will be able to:
 <list>
-<li>Identify different CSPro modules and tools and their roles in the survey workflow</li>
-<li>Create a simple data entry application including dictionary and forms</li>
-<li>Run a data entry application on Windows</li>
-<li>Run a data entry application on mobile and retrieve the data entered</li>
-<li>View data using DataViewer</li>
+	<li>Identify different CSPro modules and tools and their roles in the survey workflow</li>
+	<li>Create a simple data entry application including dictionary and forms</li>
+	<li>Run a data entry application on Windows</li>
+	<li>Run a data entry application on mobile and retrieve the data entered</li>
+	<li>View data using Data Viewer</li>
 </list>
 
 <subheader>CSPro Overview</subheader>
 CSPro is a suite of software tools for census and survey data processing that includes modules for data collection, editing, tabulation, and dissemination.
 
-CSPro has a long history. It was first released in 2000 and has been used in over 100 countries worldwide. It has been used for censuses all over the world as well as for many large and complex household surveys including the Demographic and Health Survey (USAID), Multiple Indicator Cluster Survey (UNICEF) and Living Standards Measurement Study (World Bank). The first Android version was released in 2014.  CSPro Android has been used in production for household surveys and population censuses in multiple countries.
+CSPro has a long history. It was first released in 2000 and has been used in over 100 countries worldwide. It has been used for censuses all over the world as well as for many large and complex household surveys including the Demographic and Health Survey (USAID), Multiple Indicator Cluster Survey (UNICEF) and Living Standards Measurement Study (World Bank). The first Android version was released in 2014. CSPro Android has been used in production for household surveys and population censuses in multiple countries.
 
 CSPro is free software developed by the US Census Bureau and funded by USAID. The Census Bureau provides free email customer support. You can send questions to cspro@lists.census.gov. There is also a user forum where you can post questions and see answers to questions posted by other users at <link https://www.csprousers.org/forum>https://www.csprousers.org/forum</link>.
 
@@ -39,9 +39,11 @@ For most of the examples in this workshop, we will be creating a data entry appl
 
 While CSPro data entry programs can be run on Android and Windows tablets and phones, to develop a survey or census application in CSPro you will use the CSPro Designer which runs on Windows PCs. When you launch CSPro Designer you are given the choice of "Data Entry Application" for key from paper (PAPI) and "CAPI Data Entry Application" for electronic data collection using phones/tablets/laptops. The differences are:
 
-<list><li>System controlled (tightly controlled path)</li>
-<li>CAPI question text</li>
-<li>Extended controls (radio buttons, checkboxes, date picker, …)</li></list>
+<list>
+	<li>System controlled (tightly controlled path)</li>
+	<li>CAPI question text</li>
+	<li>Extended controls (radio buttons, checkboxes, date picker, …)</li>
+</list>
 
 <pagebreak />
 Since we are creating a CAPI application we will choose "CAPI Data Entry Application". We will name the application "Popstan2020" and we will use the same name for the dictionary. Since we will eventually add other applications such as the listing questionnaire and the menu, we will create the following folder structure:
@@ -62,68 +64,84 @@ What are the ID items for the example questionnaire?
 Why not include GPS, interview date, start and end time since they are in the same section of the questionnaire?  Because they are not part of the codes needed to uniquely identify the questionnaire.
 
 Add the ID items to the dictionary
-<list><li>Province (numeric, length 1)</li>
-<li>District (numeric, length 2)</li>
-<li>Enumeration area (numeric, length 3)</li>
-<li>Area type (numeric, length 1)</li>
-<li>Household number (numeric, length 3)</li></list>
+<list>
+	<li>Province (numeric, length 1)</li>
+	<li>District (numeric, length 2)</li>
+	<li>Enumeration area (numeric, length 3)</li>
+	<li>Area type (numeric, length 1)</li>
+	<li>Household number (numeric, length 3)</li>
+</list>
 
 <pagebreak />
 Properties of dictionary items:
-<list><li><b>Label:</b> text displayed to interviewers (not the full question text, we will see where to put that in a later lesson)</li>
-<li><b>Name:</b> used to refer to variable in CSPro logic (interviewers will never see this)</li>
-<li><b>Start:</b> column number of first digit (character) of variable</li>
-<li><b>Len:</b> number of characters/digits used to store variable</li>
-<li><b>Data type:</b> alpha for names and other text, numeric for numbers and coded responses</li>
-<li><b>Item type:</b> whether variable is item or sub-item</li>
-<li><b>Occ:</b> number of occurrences for variables that are repeated in record</li>
-<li><b>Dec:</b> for numbers with fractional parts, number of digits after decimal point</li>
-<li><b>Dec char:</b> whether or not to include decimal point in decimal numbers</li>
-<li><b>Zero fill:</b> for numeric values; whether to add zeros or blanks to left of number when number of digits in value is less than the length of the variable. Using this will avoid problems when dealing with subitems. We can enable zero fill by default on the options menu.</li></list>
+<list>
+	<li><b>Label:</b> text displayed to interviewers (not the full question text, we will see where to put that in a later lesson)</li>
+	<li><b>Name:</b> used to refer to variable in CSPro logic (interviewers will never see this)</li>
+	<li><b>Start:</b> column number of first digit (character) of variable</li>
+	<li><b>Len:</b> number of characters/digits used to store variable</li>
+	<li><b>Data type:</b> alpha for names and other text, numeric for numbers and coded responses</li>
+	<li><b>Item type:</b> whether variable is item or subitem</li>
+	<li><b>Occ:</b> number of occurrences for variables that are repeated in record</li>
+	<li><b>Dec:</b> for numbers with fractional parts, number of digits after decimal point</li>
+	<li><b>Dec char:</b> whether or not to include decimal point in decimal numbers</li>
+	<li><b>Zero fill:</b> for numeric values; whether to add zeros or blanks to left of number when number of digits in value is less than the length of the variable. Using this will avoid problems when dealing with subitems. We can enable zero fill by default on the options menu.</li>
+</list>
 
 <callout>Tip: Note that you can toggle showing names or labels in the dictionary tree on the left side of the screen using the View menu. You can also select "Append names to labels in tree" to show both at the same time.</callout>
 
 What are the records used in our survey?
-<table 3 header><cell>Record Type</cell><cell>Record Name</cell><cell>Section(s) of the Questionnaire</cell>
-<cell>A</cell>	<cell>INTERVIEW_REC</cell>	<cell>A. Non id-items (A6-A10)</cell>
-<cell>B</cell>	<cell>PERSON_REC</cell>	<cell>B. Demographics, C. Education, D. Fertility,</cell>
-<cell>E</cell>	<cell>DEATHS_REC</cell>	<cell>E. Deaths of Household Members in the Past 5 years</cell>
-<cell>F</cell>	<cell>HOUSING_REC</cell>	<cell>F. Housing Characteristics</cell>
-<cell>G</cell>	<cell>POSSESSIONS_REC</cell>	<cell>G. Household Possessions</cell></table>
+<table 3 header>
+	<cell>Record Type</cell><cell>Record Name</cell><cell>Section(s) of the Questionnaire</cell>
+	<cell>A</cell><cell>INTERVIEW_REC</cell><cell>A. Non ID items (A6-A10)</cell>
+	<cell>B</cell><cell>PERSON_REC</cell><cell>B. Demographics, C. Education, D. Fertility,</cell>
+	<cell>E</cell><cell>DEATHS_REC</cell><cell>E. Deaths of Household Members in the Past 5 years</cell>
+	<cell>F</cell><cell>HOUSING_REC</cell><cell>F. Housing Characteristics</cell>
+	<cell>G</cell><cell>POSSESSIONS_REC</cell><cell>G. Household Possessions</cell>
+</table>
 
 Note that we could have separate records for education and fertility but instead we will combine them with the person record. This will simplify analysis later on since we will not have to link the records together. Later on, we will see that even with the records combined we can still put education and fertility into separate rosters on our forms.
 
 Let's start by just creating the housing and person records.
 
 Properties of records:
-<list><li>Label/name: same as for variables.</li>
-<li>Type Value: to distinguish between different records in the data file.</li>
-<li>Required: whether or not the record must be entered for the questionnaire to be complete.</li>
-<li>Max: for multiply occurring records the maximum number of occurrences allowed. Generally 1 for singly occurring records (like housing) and a larger number for repeating records (like 50 for household members). Note that CSPro doesn't allocate space in the data file for occurrences that are not used so it is better to err on the side of caution and allow extra occurrences.</li></list>
+<list>
+	<li>Label/name: same as for variables.</li>
+	<li>Type Value: to distinguish between different records in the data file.</li>
+	<li>Required: whether or not the record must be entered for the questionnaire to be complete.</li>
+	<li>Max: for multiply occurring records the maximum number of occurrences allowed. Generally 1 for singly occurring records (like housing) and a larger number for repeating records (like 50 for household members). Note that CSPro doesn't allocate space in the data file for occurrences that are not used so it is better to err on the side of caution and allow extra occurrences.</li>
+</list>
 
 What are the properties of the housing record?
-<list><li>Type value: F (can use anything but nice to use something meaningful like section letter)</li>
-<li>Required: no (we will not collect section F for vacant/refusal)</li>
-<li>Max: 1</li></list>
+<list>
+	<li>Type value: F (can use anything but nice to use something meaningful like section letter)</li>
+	<li>Required: no (we will not collect section F for vacant/refusal)</li>
+	<li>Max: 1</li>
+</list>
 <pagebreak />
 for the person record?
 
-<list><li>Type value: B</li>
-<li>Required: no (we can have empty households)</li>
-<li>Max: 30 (questionnaire has limit of 10 but no penalty for adding a few extra just in case)</li></list>
+<list>
+	<li>Type value: B</li>
+	<li>Required: no (we can have empty households)</li>
+	<li>Max: 30 (questionnaire has limit of 10 but no penalty for adding a few extra just in case)</li>
+</list>
 
 Now add some fields to the person record:
 
-<list><li>Person number (numeric length 2)<sup>1</sup></li>
-<li>Name (alpha length 30)</li>
-<li>Relationship (numeric length 1)</li>
-<li>Sex (numeric length 1)</li>
-<li>Age (numeric length 3)</li></list>
+<list>
+	<li>Person number (numeric length 2)<sup>1</sup></li>
+	<li>Name (alpha length 30)</li>
+	<li>Relationship (numeric length 1)</li>
+	<li>Sex (numeric length 1)</li>
+	<li>Age (numeric length 3)</li>
+</list>
 
 And to the housing record:
 
-<list><li>Number of rooms (numeric length 2)</li>
-<li>Type of main dwelling (numeric length 1)</li></list>
+<list>
+	<li>Number of rooms (numeric length 2)</li>
+	<li>Type of main dwelling (numeric length 1)</li>
+</list>
 
 <callout><center><b>A note on variable naming</b></center>
 Different people have different styles of naming dictionary variables. Some use a descriptive name such as "PLACE_OF_BIRTH" others prefer to use the question number such as "B07" and others prefer a combination such as "B07_PLACE_OF_BIRTH". Whichever approach you choose just make sure that it will be easy for users of your application and your data to understand. Will everyone working on the logic for your application know what B07 is?</callout>
@@ -132,22 +150,24 @@ For each of our variables we need to add the possible responses (value sets). Th
 
 Define the value sets for some of our variables based on the response codes on the questionnaire:
 
-<list><li>Area type (1- Urban, 2- Peri-urban, 3- rural)</li>
-<li>Province (copy/paste from Excel)</li>
-<li>Person number (range: 1-30, use "1-30" as the label for the range)</li>
-<li>Name (no value set)</li>
-<li>Sex (1- Male, 2-Female)</li>
-<li>Relationship (see questionnaire)</li>
-<li>Age (use a range: 0-120, plus don't know code 999). We can set the entry for 999 to the special value "missing". This tells CSPro that this is a special code indicating that the response is unknown. We will see later how we can take advantage of this when doing consistency checks</li>
-<li>Number of rooms (use generate value set to generate the codes 1-20)</li>
-<li>Type of main dwelling (use codes from questionnaire)</li></list>
+<list>
+	<li>Area type (1- Urban, 2- Peri-urban, 3- rural)</li>
+	<li>Province (copy/paste from Excel)</li>
+	<li>Person number (range: 1-30, use "1-30" as the label for the range)</li>
+	<li>Name (no value set)</li>
+	<li>Sex (1- Male, 2-Female)</li>
+	<li>Relationship (see questionnaire)</li>
+	<li>Age (use a range: 0-120, plus don't know code 999). We can set the entry for 999 to the special value "missing". This tells CSPro that this is a special code indicating that the response is unknown. We will see later how we can take advantage of this when doing consistency checks</li>
+	<li>Number of rooms (use generate value set to generate the codes 1-20)</li>
+	<li>Type of main dwelling (use codes from questionnaire)</li>
+</list>
 
 <html><hr/></html>
 <font 0.8><sup>1</sup>The line number is not needed in CSPro itself as there are ways to determine the row number using logic, however, when exporting the data to other packages it is often useful to have it. We will see later how to fill this in automatically during data entry.</font>
 <pagebreak />
 
 <subheader>Dictionary Macros</subheader>
-There are some useful functions for working with dictionaries that you can access by right-clicking on the dictionary in the tree on the left side of the screen and choosing "Dictionary Macros".  In particular you can copy/paste all value sets or all item names/labels from the dictionary to/from Excel. This can be used to create codebooks to share with people who do not have access to CSPro. It can also be used to do bulk modifications on dictionary items such as renumbering values in value sets or adding prefixes to item names.
+There are some useful functions for working with dictionaries that you can access by right-clicking on the dictionary in the tree on the left side of the screen and choosing "Dictionary Macros". In particular you can copy/paste all value sets or all item names/labels from the dictionary to/from Excel. This can be used to create codebooks to share with people who do not have access to CSPro. It can also be used to do bulk modifications on dictionary items such as renumbering values in value sets or adding prefixes to item names.
 
 <subheader>Forms</subheader>
 Before we can enter data, we need to create data entry forms. To start, click on the yellow stack of forms on the toolbar. To follow the look of the paper questionnaire we will create one form for each page of the paper questionnaire.
@@ -171,7 +191,17 @@ The csdb extension is new in CSPro 7.0. In earlier versions of CSPro, the notes,
 
 When you launch a CSPro data entry application you can select the data file name and the type of data file that you want to use:
 
-<table 2><cell><image data_file_types.png width 350 /></cell><cell><list><li><b>CSPro DB:</b> This is a CSPro Data Base File. It contains the data and metadata.</li><li><b>Encrypted CSPro DB:</b> A CSPro DB file with encrypted data requiring a password to open.</li><li><b>None:</b> There is no associated data file.  This is useful when building menus.</li><li><b>Text:</b> This is a UTF-8 Text file. This is what CSPro has used in previous versions and is provided for compatability.</li></list></cell></table>
+<table 2>
+	<cell><image data_file_types.png width 350 /></cell>
+	<cell>
+		<list>
+		<li><b>CSPro DB:</b> This is a CSPro Data Base File. It contains the data and metadata.</li>
+		<li><b>Encrypted CSPro DB:</b> A CSPro DB file with encrypted data requiring a password to open.</li>
+		<li><b>None:</b> There is no associated data file. This is useful when building menus.</li>
+		<li><b>Text:</b> This is a UTF-8 Text file. This is what CSPro has used in previous versions and is provided for compatability.</li>
+		</list>
+	</cell>
+</table>
 
 <pagebreak />
 <subheader>Controlling the size of the roster</subheader>
@@ -207,9 +237,11 @@ In addition to the data entry options, there are other useful settings in the "D
 
 <subheader>Subitems</subheader>
 Let's add the <b>Date of Birth (B06)</b> to the application. In order to be able to look at both the date as an 8-digit number and look at the day, month and year individually we can create an item with subitems. Subitems are items that are made up of a subset of the digits of their parent item. Add the item for date of birth and the following subitems:
-<list><li>year of birth (length 4)</li>
-<li>month of birth (length 2)</li>
-<li>day of birth (length 2)</li></list>
+<list>
+	<li>year of birth (length 4)</li>
+	<li>month of birth (length 2)</li>
+	<li>day of birth (length 2)</li>
+</list>
 
 We are putting year first then month and day because this format will work better with other CSPro features that we will see later. Click on <b>Layout</b> in the toolbar to ensure that the item and subitem overlap. Add the subitems to the form, add the value sets for each subitem and test the application. Note that when we add the subitems to the form we do not need keep the same order that we have in the dictionary. On the form we can put the day, month then the year.
 
@@ -228,12 +260,14 @@ We could also use a multiply occurring item for question <b>B11</b>, disabilitie
 In CSPro multiple response questions are implemented as alpha variables whose length is the same as the number of options that can be selected at the same time. The value set has a value for each option which is usually a single letter. The resulting value is a string containing the values for each of the selected items.
 
 For disabilities we will use the following value set:
-<indent><table 2><cell>Visual</cell><cell>A</cell>
-<cell>Hearing</cell><cell>B</cell>
-<cell>Speech</cell><cell>C</cell>
-<cell>Physical</cell><cell>D</cell>
-<cell>Mental</cell><cell>E</cell>
-<cell>Self-care</cell><cell>F</cell></table></indent>
+<indent><table 2>
+	<cell>Visual</cell><cell>A</cell>
+	<cell>Hearing</cell><cell>B</cell>
+	<cell>Speech</cell><cell>C</cell>
+	<cell>Physical</cell><cell>D</cell>
+	<cell>Mental</cell><cell>E</cell>
+	<cell>Self-care</cell><cell>F</cell>
+</table></indent>
 
 If the interviewer checks the boxes for Visual, Physical and Mental the value for the variable will be "ADE". We will see later how can convert the alpha value into a series of yes/no values to simplify analysis.
 
@@ -250,7 +284,7 @@ If you right click on the disabilities field on the form and choose "Field Prope
 When you drag an item on the form, CSPro sets the capture type based on the value set for that item. If there is no value set when you drop the item, the capture type will be set to text box. You can always change the capture using the Field Properties dialog.
 
 <subheader>Date Fields</subheader>
-Let's add the interview date to the identification section. Which record should it go on? It could go on any singly occurring record such as housing but let's create a new record called INTERVIEW_REC to hold the section A items that are not part of the ID items and add it there. We can add an eight-digit item for the interview date. We can also add sub-items for the year, month and day of the interview. Drag the date item onto the form. When dragging don't use the sub-items, just the items. Now change the capture type for the interview date to be Date and set the date format to be YYYYMMDD to match the order of the sub-items year, month and day.
+Let's add the interview date to the identification section. Which record should it go on? It could go on any singly occurring record such as housing but let's create a new record called INTERVIEW_REC to hold the section A items that are not part of the ID items and add it there. We can add an eight-digit item for the interview date. We can also add subitems for the year, month and day of the interview. Drag the date item onto the form. When dragging don't use the subitems, just the items. Now change the capture type for the interview date to be Date and set the date format to be YYYYMMDD to match the order of the subitems year, month and day.
 
 <subheader>Filling in Names First</subheader>
 Currently the interviewer has to fill in all the demographic information for the first person before moving on to the next person in the household. In practice, it is simpler to have them fill in just the name, age, sex and relationship of all the household members first and then fill in the remaining details only after all the basic information has been entered. To do this we need to pull just the <b>PERSON_NUMBER</b>,  <b>NAME</b>, <b>SEX</b>, <b>RELATIONSHIP</b>, <b>AGE</b> and <b>DATE_OF_BIRTH</b> into a separate roster. Delete them from the existing <b>DEMOGRAPHICS_ROSTER</b>, create a new form before the <b>DEMOGRAPHICS_FORM</b> called <b>HOUSEHOLD_MEMBERS_FORM</b> and drop <b>PERSON_NUMBER</b> onto it to make a new roster. Rename this roster "<b>HOUSEHOLD_MEMBERS_ROSTER</b>". Drop <b>NAME</b> from the dictionary on top of the <b>HOUSEHOLD_MEMBERS_ROSTER</b> to add it to the roster. Note that when you drop an item from a repeating record on top of an existing roster it gets added to that roster but if you drop it outside the roster it creates a new roster. Drop the <b>SEX</b>, <b>RELATIONSHIP</b>, <b>AGE</b> and <b>DATE_OF_BIRTH</b> variables onto the new roster. Remove the <b>NUMBER_OF_HOUSEHOLD_MEMBERS</b> field from the <b>DEMOGRAPHICS_FORM</b> and drop it onto the <b>HOUSEHOLD_MEMBERS_FORM</b>. In the forms tree, move <b>NUMBER_OF_HOUSEHOLD</b> members so that it comes before the <b>HOUSEHOLD_MEMBERS_ROSTER</b>. Set the occurrence control field for <b>HOUSEHOLD_MEMBERS_ROSTER</b> to be <b>NUMBER_OF_HOUSEHOLD_MEMBERS</b>.
@@ -269,7 +303,7 @@ Let's add a block to group date fields. To create a new block, select day, month
 	<li>Add the remaining fields from the demographics section (B) of the questionnaire to the dictionary and to the demographics form. Make sure to add the appropriate value sets. For Language(B15) use checkboxes.</li>
 	<li>Add the fields for section C, Education, to the dictionary. Add them to the person record. Create a new form for section C and drop the education items onto to it to create a roster. Set the occurrence control field for the roster to the number of household members.</li>
 	<li>Add the start and end times of the interview to the identification form after the interview date. Use subitems for the hours and minutes. Add appropriate value sets.</li>
-	<li>Add a new record and form for section G, household possessions. Since G01 (quantity and value) repeat, put these items in their own repeating record but do not include G02. This roster should include the possession code (1-10), quantity and value per unit. Set the occurrence labels in the roster for G01 to the names of the possessions.  Make G02 a singly occurring checkbox field and put it in the housing record since it does not repeat. The value set for G02 should have the possession names as labels with codes "A", "B", "C"…</li>
+	<li>Add a new record and form for section G, household possessions. Since G01 (quantity and value) repeat, put these items in their own repeating record but do not include G02. This roster should include the possession code (1-10), quantity and value per unit. Set the occurrence labels in the roster for G01 to the names of the possessions. Make G02 a singly occurring checkbox field and put it in the housing record since it does not repeat. The value set for G02 should have the possession names as labels with codes "A", "B", "C"…</li>
 </list>
 
 <i>Make sure to test your application on both Windows and Android.</i>

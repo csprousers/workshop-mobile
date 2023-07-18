@@ -10,7 +10,7 @@ At the end of this session participants will be able to:
 
 <subheader>What is a Menu Program?</subheader>
 
-A menu program is a CSPro data entry application that is used to manage the data entry workflow. A menu program is not used for capturing any interview data itself. Instead, it launches other data entry programs for interviews.  Menu programs generally have some or all of following functions:
+A menu program is a CSPro data entry application that is used to manage the data entry workflow. A menu program is not used for capturing any interview data itself. Instead, it launches other data entry programs for interviews. Menu programs generally have some or all of following functions:
 
 <list>
 	<li>Launches other CSPro applications to do data collection (often pre-filling ID items)</li>
@@ -38,7 +38,7 @@ Each menu screen will be a different variable in the dictionary. The value set f
 
 We will keep the default ID item that CSPro creates for us. The menu program dictionary doesn't really need an ID item since we do not need to save our menu choices to the data file. However, CSPro requires that we have at least one ID item so we will keep it.
 
-Create the items in the dictionary and then create a form and drop the items onto the form.  Do not drop the ID item onto the form. We can leave it off the form since we will never actually write out a completed case from the menu program. Unlike typical data entry applications, menu programs tend not to have a linear flow. As a result, the order of the variables on the form is less important. We will use skips and reenters to move from one menu to another.
+Create the items in the dictionary and then create a form and drop the items onto the form. Do not drop the ID item onto the form. We can leave it off the form since we will never actually write out a completed case from the menu program. Unlike typical data entry applications, menu programs tend not to have a linear flow. As a result, the order of the variables on the form is less important. We will use skips and reenters to move from one menu to another.
 
 <subheader>Menu Program Logic</subheader>
 The logic for processing the menu choice for each screen goes in the postproc of the variable for the menu. For example, to process the login menu field in our example we would have the following logic:
@@ -134,7 +134,7 @@ When we exit the household application, we want to return to the menu but the me
 <subheader>Deploying multiple applications on Mobile</subheader>
 When you copy your application to your phone or tablet it is important that you preserve the same folder structure as you have on the PC. In our case we must create a separate menu folder to contain the pen and pff files for the menu and this menu folder must be in the same parent directory as the Household folder so that when we use "../Household/" from the menu application it points to the folder containing the entry application we are launching. When you have multiple applications like we do, it can be time consuming to create the .pen files for each application and then copy only the .pen and .pff files to the mobile device.
 
-To simplify deployment use the Deploy Applications tool from the Tools menu. This tool automates the process of publishing and deployment. Drag the whole Popstan2020 folder to the Files window. The tool will add the entry applications (.ent files) and .pff files found in the folder and its subfolders to the list of files to deploy. By default it does not add data files since data files are often just used for testing. However, for our application we need to add the lookup files for the districts and possession limits. We can do this by dragging the individual files onto the files window.
+To simplify deployment use the Deploy Application tool from the Tools menu. This tool automates the process of publishing and deployment. Drag the whole Popstan2020 folder to the Files window. The tool will add the entry applications (.ent files) and .pff files found in the folder and its subfolders to the list of files to deploy. By default it does not add data files since data files are often just used for testing. However, for our application we need to add the lookup files for the districts and possession limits. We can do this by dragging the individual files onto the files window.
 
 Once the files have been added, enter the name and an optional description for the application. Under <i>Deploy To</i> choose <i>Local Folder</i> and click on "..." to choose the folder to deploy to. Click the <i>Deploy</i> button. This will automatically create .pen files for each data entry application and copy them, along with any other files from the Files window, into the deployment folder chosen. The deployment folder can then be copied directly to the mobile device. The folder structure of the deployment folder will match the folder structure we are using for development and testing on the desktop so there will be no problems with paths.
 
@@ -142,7 +142,7 @@ Once the files have been added, enter the name and an optional description for t
 
 Once you have set up the deployment the first time you can save the deployment specification file to simplify the process for future deployments.
 
-In the next session we will learn how to use this tool to deploy applications to a server for deployment over the internet.
+In the next session we will learn how to use this tool to deploy applications to a server for deployment over the Internet.
 
 <subheader>Tidying up the Menu Program</subheader>
 Currently the menu program shows up in the applications list on Android as "Menu" instead of something like "Popstan 2020 Census". In addition, when we tap on Menu we have to then tap "Start New Case" which doesn't make sense for a menu. We can fix both of these problems by modifying the pff file for the menu. Right click on the Menu.pff and choose "Edit with pff editor". Change "Start mode" to "Add" so that we won't have to tap "Start New Case". Enter "Popstan 2020 Census" for the description to change what shows in the application listing. While we are at it, open the Menu program in the CSPro designer and in data entry options turn off the display of the case tree since the case tree is not useful for menu programs. Finally, in the data entry options, check "Automatically advance on selection". This way the interviewer will not have to tap next to move from one field to another in the menu program.
@@ -271,16 +271,16 @@ Rather than have the user choose their role, lets assign each interviewer and su
 
 <table 6>
 	<cell>Staff code</cell><cell>Name</cell><cell>Role (1=interviewer, 2=supervisor)</cell><cell>Province</cell><cell>District</cell><cell>EA</cell>
-<cell>001</cell><cell>Shemika Rothenberger</cell><cell>2</cell><cell>1</cell><cell>1</cell><cell></cell>
-<cell>002</cell><cell>Andrew Benninger</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>1</cell>
-<cell>003</cell><cell>Angelica Swenson</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>2</cell>
-<cell>004</cell><cell>Zelma Hawke</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>3</cell>
-<cell>005</cell><cell>Willis Catron</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>4</cell>
+	<cell>001</cell><cell>Shemika Rothenberger</cell><cell>2</cell><cell>1</cell><cell>1</cell><cell></cell>
+	<cell>002</cell><cell>Andrew Benninger</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>1</cell>
+	<cell>003</cell><cell>Angelica Swenson</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>2</cell>
+	<cell>004</cell><cell>Zelma Hawke</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>3</cell>
+	<cell>005</cell><cell>Willis Catron</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>4</cell>
 </table>
 
 Note that for the supervisor we leave the enumeration area blank since they are assigned to an entire district and not to an enumeration area. The supervisor will supervise all of the enumerators in their district.
 
-Let's create a new external dictionary in the menu program for this file and use Excel2CSPro to convert the spreadsheet to a data file named staff.dat.
+Let's create a new external dictionary in the menu program for this file and use Excel to CSPro to convert the spreadsheet to a data file named staff.dat.
 
 Let's modify the login field so that the user enters the staff code instead of picking the role. We will need to increase the size of the field and delete value set. In the postproc we now need to look up the staff code in the staff file, validate it, and then skip to the appropriate menu based on the role.
 

@@ -66,7 +66,7 @@ There are other special values that are used in CSPro:
 <list>
 	<li><logiccolor>missing</logiccolor>: can be used as an alias for no response codes (9, 99, 999…). You must create an entry for it in the value set.</li>
 	<li><logiccolor>refused</logiccolor>: similar to missing but can add special handling to make it more difficult to select. You must create an entry for it in the value set.</li>
-	<li><logiccolor>default</logiccolor>: results from an error reading from a data file or from a calculation error (like trying to calculate notappl + 2 or dividing by zero) or moving a value into a variable that is too small to hold the value.  For example, if AGE is a two digit field, AGE = 118 will result in <logiccolor>default</logiccolor>.</li>
+	<li><logiccolor>default</logiccolor>: results from an error reading from a data file or from a calculation error (like trying to calculate notappl + 2 or dividing by zero) or moving a value into a variable that is too small to hold the value. For example, if AGE is a two digit field, AGE = 118 will result in <logiccolor>default</logiccolor>.</li>
 </list>
 
 <subheader>Getting the size of a roster</subheader>

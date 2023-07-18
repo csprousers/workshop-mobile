@@ -5,7 +5,7 @@ At the end of this session participants will be able to:
 	<li>Implement consistency checks in a batch edit application</li>
 	<li>Use batch edit to add calculated variables and recoded variables</li>
 	<li>Use batch edit to convert checkbox values to yes/no variables for analysis</li>
-	<li>Use the export data tool to take data from CSPro to other software packages</li>
+	<li>Use the Export Data tool to take data from CSPro to other software packages</li>
 </list>
 
 <subheader>Creating a Batch Edit Application</subheader>
@@ -27,7 +27,7 @@ if AGE_AT_FIRST_MARRIAGE > AGE then
 endif;
 </logic>
 
-Next we run the application but first we need a test data file. You can use the file Popstan2020Raw.csdb.  Run the application against this test data. After the application runs, we see the log file.  The log file reports that we have a case where this error exists.
+Next we run the application but first we need a test data file. You can use the file Popstan2020Raw.csdb. Run the application against this test data. After the application runs, we see the log file. The log file reports that we have a case where this error exists.
 
 <html><pre>
 Process Messages
@@ -195,7 +195,7 @@ endif;
 The remaining languages follow the same pattern.
 
 <subheader>The Export Data Tool</subheader>
-The CSPro export data tool is available from the Tools menu. When you first start Export Data you are prompted to provide a data dictionary. Choose the Popstan2020 dictionary. From the main export screen, you can choose which records/variables to export using the checkboxes next to each one. To start with let's just pick the ID items and the first few fields from section F. At the bottom of the export window you can choose the file format to export to. For this exercise we will choose CSV which can be easily opened in Excel. To run the export, click on the traffic light. You are prompted to choose the data file. We will use the Popstan2020Edited.csdb data file. Finally, you are prompted for the name(s) of the exported files. Once the export completes the exported files are displayed in Text Viewer. Let's open them in Excel and see what we have. Note that each household is saved in a separate line in the Excel file.
+The CSPro Export Data tool is available from the Tools menu. When you first start Export Data you are prompted to provide a data dictionary. Choose the Popstan2020 dictionary. From the main export screen, you can choose which records/variables to export using the checkboxes next to each one. To start with let's just pick the ID items and the first few fields from section F. At the bottom of the export window you can choose the file format to export to. For this exercise we will choose CSV which can be easily opened in Excel. To run the export, click on the traffic light. You are prompted to choose the data file. We will use the Popstan2020Edited.csdb data file. Finally, you are prompted for the name(s) of the exported files. Once the export completes the exported files are displayed in Text Viewer. Let's open them in Excel and see what we have. Note that each household is saved in a separate line in the Excel file.
 
 <center><image export-id-housing.png width 600 /></center>
 
@@ -226,7 +226,7 @@ It is not possible to join multiple records to other multiple records from expor
 Note that in some cases it may be easier to do the export of the single and multiple records without joining and then do the join in the software that you have imported the data into.
 
 <subheader>Importing Data into SAS, SPSS, Stata and R</subheader>
-When exporting data to statistical packages, CSPro generates both a data file and script to run inside the statistical software itself to run the import. For details in how to run this script for each package see the online help for Export Data and look under "How to…".
+When exporting data to statistical packages, CSPro generates both a data file and script to run inside the statistical software itself to run the import. For details on how to run this script for each package, see the helps for <link https://www.csprousers.org/help/CSExport/introduction_to_export_data.html>Export Data</link> and look under "Loading Exported Data Into…".
 
 <subheader>Saving your Export Specification</subheader>
 You can save your export settings as CSPro export specification file (.exf). You can later double click on this file or open it from the Export Data Tool to retrieve all the selections that were made.

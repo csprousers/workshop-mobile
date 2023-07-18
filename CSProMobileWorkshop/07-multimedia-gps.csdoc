@@ -158,7 +158,8 @@ Finally, you close the GPS:
 gps(close);
 </logic>
 
-In addition to querying the GPS latitude and longitude you can also query the accuracy, number of satellites, and altitude (although on Android altitude is not very accurate). See the help on GPS for details.
+In addition to querying the GPS latitude and longitude you can also query the accuracy, number of satellites, and altitude (although on Android altitude is not very accurate). See the <link https://www.csprousers.org/help/CSPro/gps_function.html>help on GPS</link> for details.
+
 The longitude and latitude reported are in degrees in the WGS84 datum and are returned as decimal numbers.
 
 To save the GPS coordinates in our data file we need to add the appropriate variables to our dictionary. To store the coordinates so that they can cover the entire earth with sufficient precision they should have space for 3 digits before the decimal point, 1 digit for the decimal point, and at least 5 digits after the decimal and a minus sign for a minimum total length of 10. Add the variables LATITUDE and LONGITUDE to the dictionary and to section on the forms.
@@ -211,7 +212,7 @@ function getGPS()
 end;
 </logic>
 
-Variables of type <logiccolor>Map</logiccolor> have many other functions that let you customize the map, the markers, add buttons and run logic functions when markers are tapped. You can also use offline base maps for situations where you do not have an internet connection. See the help for maps for details. Note that map functions are only supported on Android.
+Variables of type <logiccolor>Map</logiccolor> have many other functions that let you customize the map, the markers, add buttons and run logic functions when markers are tapped. You can also use offline base maps for situations where you do not have an Internet connection. See the <link https://www.csprousers.org/help/CSPro/Map.html>help for maps</link> for details.
 
 <subheader>Showing the Case Listing on a Map</subheader>
 If you have latitude and longitude variables in your data dictionary for each household you can configure the case listing screen to display the households on a map on Android. To do this, open the Mapping Options dialog from the Options menu in CSPro designer. Check the box "Show the case listing on a map" and choose the latitude and longitude variables from your dictionary. When you run the application on Android, the case listing screen will show a map with a marker for each household. Tapping on a marker launches data entry for that household.
@@ -264,7 +265,7 @@ function showHouseholdReport()
 end;
 </logic>
 
-If you are familiar with HTML you can write out HTML and have nicer formatting and pictures. CSPro also has a built in templating engine to generate HTML reports using templates. See "Templated Reports" in the CSPro help for details.
+If you are familiar with HTML you can write out HTML and have nicer formatting and pictures. CSPro also has a built in templating engine to generate HTML reports using templates. See <link https://www.csprousers.org/help/CSPro/templated_reports.html>Templated Reports</link> in the CSPro helps for details.
 
 <subheader>Exercises</subheader>
 <list ordered>

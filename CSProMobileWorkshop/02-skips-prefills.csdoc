@@ -30,13 +30,13 @@ This will skip directly to TENURE for individuals who answer "no" to OTHER_HOUSI
 In addition to "=" to check if two values are equal, you can use the following operators:
 
 <indent><table 2>
-<cell><b>Operation</b></cell><cell><b>Symbol</b></cell>
-<cell>Equal to</cell><cell>=</cell>
-<cell>Not equal to</cell><cell>&lt;&gt;</cell>
-<cell>Less than</cell><cell>&lt;</cell>
-<cell>Less than or equal to</cell><cell>&lt;=</cell>
-<cell>Greater than</cell><cell>&gt;</cell>
-<cell>Greater than or equal to</cell><cell>&gt;=</cell>
+	<cell><b>Operation</b></cell><cell><b>Symbol</b></cell>
+	<cell>Equal to</cell><cell>=</cell>
+	<cell>Not equal to</cell><cell>&lt;&gt;</cell>
+	<cell>Less than</cell><cell>&lt;</cell>
+	<cell>Less than or equal to</cell><cell>&lt;=</cell>
+	<cell>Greater than</cell><cell>&gt;</cell>
+	<cell>Greater than or equal to</cell><cell>&gt;=</cell>
 </table></indent>
 
 For example, to skip over <b>B08</b>, residence one year ago, for those less than one year of age we could add the following logic to the PROC of the preceding question:
@@ -58,7 +58,7 @@ if AGE < 1 then
     skip to MOTHER_ALIVE;
 endif</logic>
 
-Everything on a line after <logiccolor>//</logiccolor> is considered a comment and is ignored by CSPro. You can also use <logiccolor>{}</logiccolor> for multiline comments. It is good practice to use plenty of comments to document your logic.
+Everything on a line after <logiccolor>//</logiccolor> is considered a comment and is ignored by CSPro. You can also use <logiccolor>/* */</logiccolor> for multiline comments. It is good practice to use plenty of comments to document your logic.
 
 <callout><center><b>A note on coding style</b></center>
 When writing if statements, your code will be more readable and easier for others to understand if you indent the statements between the then and the endif. It is also helpful to use consistent capitalization. We recommend all uppercase for dictionary variables like <b>NUMBER_OF_HOUSEHOLD_MEMBERS</b> and all lowercase for CSPro keywords like <logiccolor>if</logiccolor>, <logiccolor>then</logiccolor> and <logiccolor>endif</logiccolor>. Finally, you should use comments as much as possible to help others, and your future self, better understand your code.
@@ -113,10 +113,10 @@ In addition to the "or" operator you can also make compound conditions using the
 In addition to "or", CSPro supports the following logical operators:
 
 <table 2>
-<cell><b>Operation</b></cell><cell><b>Keyword</b></cell>
-<cell>Negate an expression</cell><cell>not</cell>
-<cell>True if both expressions are true</cell><cell>and</cell>
-<cell>True if either expression is true</cell><cell>or</cell>
+	<cell><b>Operation</b></cell><cell><b>Keyword</b></cell>
+	<cell>Negate an expression</cell><cell>not</cell>
+	<cell>True if both expressions are true</cell><cell>and</cell>
+	<cell>True if either expression is true</cell><cell>or</cell>
 </table>
 
 You can also use compound conditions with <logiccolor>ask if</logiccolor>. For example we only want to ask question <b>B14</b>, age at first marriage, for those who responded "married" or "widowed" or "divorced" for marital status.
@@ -275,6 +275,7 @@ if AGE < 10 then
 endif;
 </logic>
 <pagebreak />
+
 <subheader>Exercises</subheader>
 <list ordered>
 	<li>Skip question <b>F07</b>, monthly rent, if dwelling is not rented in <b>F06</b>.</li>

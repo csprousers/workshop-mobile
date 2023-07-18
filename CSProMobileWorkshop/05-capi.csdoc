@@ -11,7 +11,7 @@ At the end of this session participants will be able to:
 </list>
 
 <subheader>Question Text</subheader>
-We can add text to each question in our survey by clicking on "CAPI Questions" in the toolbar. This allows us to enter literal question text for the questionnaire that the interviewer will read verbatim.  Additionally, we can add interviewer instructions. Let's start with the first few questions in section B.
+We can add text to each question in our survey by clicking on "CAPI Questions" in the toolbar. This allows us to enter literal question text for the questionnaire that the interviewer will read verbatim. Additionally, we can add interviewer instructions. Let's start with the first few questions in section B.
 
 For <b>RELATIONSHIP</b>, enter "What is (name's) relationship to the head of the household?" For <b>SEX</b> enter "Is (name) a male or a female?". Run the application on Windows and then on mobile to see how the question text is displayed.
 
@@ -58,7 +58,7 @@ It is possible to specify any logic expression in the condition column to determ
 It is possible to add question text, dictionary labels and error messages in multiple languages.
 
 <subheader>Multiple Languages for Question Text</subheader>
-To have multiple languages for question text you first need to define the languages.  This is done from the CAPI Options Menu.  Select <b>"Define CAPI Languages"</b>. This will bring up the "Language" dialog box.  Click on "Add" to add a language, specify the name and label to use for the language and click "OK". The label is what the interviewer will see when choosing a language and the name is what will be used in logic to refer to the language. The name should be a two letter abbreviation for the language from the <link https://www.loc.gov/standards/iso639-2/php/code_list.php>ISO 639-1</link> standard such as EN, FR and ES. While you may use any language name, if you use one of the ISO 639-1 codes then CSPro will automatically set the language of your application to the language set in the system settings of your mobile device.
+To have multiple languages for question text you first need to define the languages. This is done from the CAPI Options Menu. Select <b>"Define CAPI Languages"</b>. This will bring up the "Language" dialog box. Click on "Add" to add a language, specify the name and label to use for the language and click "OK". The label is what the interviewer will see when choosing a language and the name is what will be used in logic to refer to the language. The name should be a two letter abbreviation for the language from the <link https://www.loc.gov/standards/iso639-2/php/code_list.php>ISO 639-1</link> standard such as EN, FR and ES. While you may use any language name, if you use one of the ISO 639-1 codes then CSPro will automatically set the language of your application to the language set in the system settings of your mobile device.
 
 <center><image langdialog.png /></center>
 
@@ -75,18 +75,18 @@ For example, to add French translations for the sex, relationship and age questi
 <indent><i>Entrez l'âge en années révolues (entrez 0 pour les enfants âgés de moins de 1 an)</i>. Si inconnu entrez 999.</indent>
 
 Now that you have created the question text in the specified languages, they can be selected during data entry.
-In Windows, we can go to the "Options" Menu and select "Change Language" and a menu of the languages we defined will be displayed.  Click on the desired language and the question text will be displayed in that language. On mobile devices you will find "Change Language" on the menu during data entry.
+In Windows, we can go to the "Options" Menu and select "Change Language" and a menu of the languages we defined will be displayed. Click on the desired language and the question text will be displayed in that language. On mobile devices you will find "Change Language" on the menu during data entry.
 
 <subheader>Multiple Languages for Dictionary Items</subheader>
-To have multiple language in value sets, you first need to define the languages.  This is similar to the process we did to define multiple languages for question text; however, for dictionary items you define languages from the Edit menu of the dictionary. Make sure you are in the dictionary editor (you may need to click on the little blue book in the toolbar) and choose "Edit" and then "Languages". This dialog is identical to the one used for adding languages to question text. You should make sure to use the same names and labels for languages in this dialog as you entered for question text.
+To have multiple language in value sets, you first need to define the languages. This is similar to the process we did to define multiple languages for question text; however, for dictionary items you define languages from the Edit menu of the dictionary. Make sure you are in the dictionary editor (you may need to click on the little blue book in the toolbar) and choose "Edit" and then "Languages". This dialog is identical to the one used for adding languages to question text. You should make sure to use the same names and labels for languages in this dialog as you entered for question text.
 
 Once you have added additional languages to the dictionary you will see a language dropdown on the toolbar. To add a translation for a dictionary label or value set label, choose the language in the dropdown and edit the label as you normally would. This will set the label for the language you chose.
 
 <subheader>Multiple Language Error Messages</subheader>
-To add translations of text specified in program logic, such as arguments to <logiccolor>errmsg()</logiccolor>, we can provide translations in the message file. To do this we add the messages to the messages tab at the bottom of the logic editor. Instead of putting the message text in the logic we tag each message with a number and use that number in the logic.  In the message tab we list the message numbers followed by the message text. This allows us to supply multiple versions of the message; one for each language. Mark different languages in the file using "Language=" followed by the language name.
+To add translations of text specified in program logic, such as arguments to <logiccolor>errmsg()</logiccolor>, we can provide translations in the message file. To do this we add the messages to the messages tab at the bottom of the logic editor. Instead of putting the message text in the logic we tag each message with a number and use that number in the logic. In the message tab we list the message numbers followed by the message text. This allows us to supply multiple versions of the message; one for each language. Mark different languages in the file using "Language=" followed by the language name.
 
 <message>
-{Application 'POPSTAN2020' message file generated by CSPro}
+/* Application 'POPSTAN2020' message file generated by CSPro */
 Language=EN
 100 Head of household must be at least 15 years old
 101 Correct age
@@ -195,10 +195,11 @@ We will fill in the ValueSet object with names and line numbers of the eligible 
 
 We would fill in the ValueSet object as follows:
 
-<table 3 header><cell>Subscript</cell><cell>Codes</cell><cell>Labels</cell>
-<cell>1</cell><cell>1</cell><cell>John Brown</cell>
-<cell>2</cell><cell>2</cell><cell>Mary Brown</cell>
-<cell>3</cell><cell>4</cell><cell>Jane Brown</cell>
+<table 3 header>
+	<cell>Subscript</cell><cell>Codes</cell><cell>Labels</cell>
+	<cell>1</cell><cell>1</cell><cell>John Brown</cell>
+	<cell>2</cell><cell>2</cell><cell>Mary Brown</cell>
+	<cell>3</cell><cell>4</cell><cell>Jane Brown</cell>
 </table>
 
 To create the value set from the household roster we need the second form of setvalueset that takes a ValueSet object. This will allow us to create the list of names in logic instead of in the dictionary.
