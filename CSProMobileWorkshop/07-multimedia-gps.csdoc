@@ -56,7 +56,7 @@ execsystem("camera:/mnt/sdcard/csentry/photo.jpg");
 
 Taking photos is currently only supported on Android. <logiccolor>execsystem</logiccolor> on Windows does not support the camera.
 
-Note that photos do not get saved into the application data file. You need to save them to a folder/file on the device.  The filename you use should make it easy to link the photo back to the interview that it was taken for. The easiest way to do this is to make the name of the photo based on the id-items of the questionnaire:
+Note that photos do not get saved into the application data file. You need to save them to a folder/file on the device. The filename you use should make it easy to link the photo back to the interview that it was taken for. The easiest way to do this is to make the name of the photo based on the ID items of the questionnaire:
 
 <logic>
 string photoFilename = pathname(application) +
@@ -218,7 +218,7 @@ If you have latitude and longitude variables in your data dictionary for each ho
 
 <callout>
 <center>Group Exercise</center>
-Build a CSPro application for the household listing questionnaire. Place your application in the folder Popstan2020/Listing. Treat each household as a separate case. In other words, do not use a repeating record and roster to try to match the paper questionnaire. When creating the listing dictionary use "LI_" as a prefix for the all the variable names so that they will not conflict with the names in the household dictionary. There is no need to validate the id-items using a lookup file like we did for the household questionnaire. We will prefill the id-items from the menu program tomorrow. For each household, automatically record the GPS coordinates in the latitude field. Give the interviewer the option of taking a photo of the household but allow for refusal. Name the photo based on the case id-items and put the photos in the directory Popstan2020/Data/ListingPhotos. Use the Mapping Options dialog to show the case listing on a map for the listing program. Go outside and test your listing application on a tablet.
+Build a CSPro application for the household listing questionnaire. Place your application in the folder Popstan2020/Listing. Treat each household as a separate case. In other words, do not use a repeating record and roster to try to match the paper questionnaire. When creating the listing dictionary use "LI_" as a prefix for the all the variable names so that they will not conflict with the names in the household dictionary. There is no need to validate the ID items using a lookup file like we did for the household questionnaire. We will prefill the ID items from the menu program tomorrow. For each household, automatically record the GPS coordinates in the latitude field. Give the interviewer the option of taking a photo of the household but allow for refusal. Name the photo based on the case ID items and put the photos in the directory Popstan2020/Data/ListingPhotos. Use the Mapping Options dialog to show the case listing on a map for the listing program. Go outside and test your listing application on a tablet.
 </callout>
 
 <subheader>Writing and Viewing Reports</subheader>

@@ -1,6 +1,6 @@
 ﻿<title>Session 04: More Logic in Data Entry, Rosters, Subscripts and Loops</title>
 
-At the end of this lesson participants will be able to:
+At the end of this session participants will be able to:
 <list>
 	<li>Implement consistency checks across individuals in the household roster</li>
 	<li>Understand the order of PROCs and where to place edit checks</li>
@@ -55,9 +55,9 @@ errmsg("NAME = %s, AGE=%d, SEX=%d", strip(NAME(MOTHER_LINE_NUMBER)),
 The alphanumeric variable <b>NAME</b> is just empty but the numeric values <b>AGE</b> and <b>SEX</b> are <logiccolor>notappl</logiccolor>. What does this mean? Generally, numeric fields that are blank (skipped or not yet entered) have a special value called <logiccolor>notappl</logiccolor> that can be used in comparisons in logic. For example, to test if the <b>SEX</b> is blank we can use the following comparison:
 
 <logic>
-    if SEX(MOTHERS_LINE_NUMBER) = notappl then
+    if SEX(MOTHER_LINE_NUMBER) = notappl then
         // Sex is blank, must be an empty row in section B roster
-        errmsg("%d is not a valid line in section B", MOTHERS_LINE_NUMBER);
+        errmsg("%d is not a valid line in section B", MOTHER_LINE_NUMBER);
         reenter;
     endif;
 </logic>

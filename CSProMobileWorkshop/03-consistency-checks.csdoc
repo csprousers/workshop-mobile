@@ -1,6 +1,6 @@
 ﻿<title>Session 03: Consistency Checks</title>
 
-At the end of this lesson participants will be able to:
+At the end of this session participants will be able to:
 <list>
 	<li>Use the command <logiccolor>errmsg</logiccolor> to display messages to the interviewer</li>
 	<li>Use the errmsg with <logiccolor>select</logiccolor> keyword</li>

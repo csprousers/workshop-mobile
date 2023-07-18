@@ -152,13 +152,13 @@ By setting a PIN code on your Android tablet or phone you enable encryption of f
 It is more convenient to have a single password that is shared by all devices and is hardcoded in the pen file however it is more secure to use a different username/password for each interviewer and have them enter it for every sync. For a large number of interviewers managing passwords and resetting passwords for those who have forgotten their passwords could be a significant management burden. You will need to find the right balance of security and convenience. If you want to hardcode the password in your pen file you can pass the username and password in the call to <logiccolor>syncconnect()</logiccolor>. If you do not provide a username and password in this call, the interviewer is prompted to enter the password the first time they sync with the device. After that the username and password are saved on the device so they do not need to be entered for synchronizations. If you don't want the password saved on the device, you can use the <logiccolor>prompt()</logiccolor> function to have the interviewer enter the password before each sync and then pass the password received from the call to <logiccolor>prompt()</logiccolor> to <logiccolor>syncconnect()</logiccolor>.
 
 <subheader>Synchronization with a Universe</subheader>
-The <logiccolor>syncdata()</logiccolor> command has an optional third parameter, the universe. This is a string that CSPro tries to match to the concatenated case-id items to limit the data transferred. If a universe is provided, then only cases who case-ids match the universe are synchronized. For example, to limit synchronization to only province 1, district 2 we would call:
+The <logiccolor>syncdata()</logiccolor> command has an optional third parameter, the universe. This is a string that CSPro tries to match to the concatenated case ID items to limit the data transferred. If a universe is provided, then only cases who case IDs match the universe are synchronized. For example, to limit synchronization to only province 1, district 2 we would call:
 
 <logic>
 syncdata(BOTH, HOUSEHOLDQUESTIONNAIRE_DICT, "102");
 </logic>
 
-This will only synchronize cases whose case-ids start with "102". This limits the sync to cases in province 1 and district 2. Similarly, if we used "1" as the universe all cases in province 1 would be synced.
+This will only synchronize cases whose case IDs start with "102". This limits the sync to cases in province 1 and district 2. Similarly, if we used "1" as the universe all cases in province 1 would be synced.
 
 This is useful when there are a large number of interviewers and you don't want every interviewer to download the data from every other interviewer. You can specify the geographic area assigned to the interviewer as the universe so that only cases in the interviewer's area are synced.
 

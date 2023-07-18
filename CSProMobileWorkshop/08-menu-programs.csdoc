@@ -13,7 +13,7 @@ At the end of this session participants will be able to:
 A menu program is a CSPro data entry application that is used to manage the data entry workflow. A menu program is not used for capturing any interview data itself. Instead, it launches other data entry programs for interviews.  Menu programs generally have some or all of following functions:
 
 <list>
-	<li>Launches other CSPro applications to do data collection (often pre-filling id items)</li>
+	<li>Launches other CSPro applications to do data collection (often pre-filling ID items)</li>
 	<li>Show reports on progress, summary statistics</li>
 	<li>Manage user access through usernames/passwords</li>
 	<li>Manage household listing and interview assignments</li>
@@ -36,9 +36,9 @@ Each menu screen will be a different variable in the dictionary. The value set f
 	<li>SUPERVISOR_MAIN_MENU (value set: Completion report - 1, Logout - 9).</li>
 </list>
 
-We will keep the default id-item that CSPro creates for us. The menu program dictionary doesn't really need an id-item since we do not need to save our menu choices to the data file. However, CSPro requires that we have at least one id-item so we will keep it.
+We will keep the default ID item that CSPro creates for us. The menu program dictionary doesn't really need an ID item since we do not need to save our menu choices to the data file. However, CSPro requires that we have at least one ID item so we will keep it.
 
-Create the items in the dictionary and then create a form and drop the items onto the form.  Do not drop the id-item onto the form. We can leave it off the form since we will never actually write out a completed case from the menu program. Unlike typical data entry applications, menu programs tend not to have a linear flow. As a result, the order of the variables on the form is less important. We will use skips and reenters to move from one menu to another.
+Create the items in the dictionary and then create a form and drop the items onto the form.  Do not drop the ID item onto the form. We can leave it off the form since we will never actually write out a completed case from the menu program. Unlike typical data entry applications, menu programs tend not to have a linear flow. As a result, the order of the variables on the form is less important. We will use skips and reenters to move from one menu to another.
 
 <subheader>Menu Program Logic</subheader>
 The logic for processing the menu choice for each screen goes in the postproc of the variable for the menu. For example, to process the login menu field in our example we would have the following logic:
@@ -150,9 +150,9 @@ Currently the menu program shows up in the applications list on Android as "Menu
 Now that we have the menu program to launch the household data entry program, we don't want the household application to appear in the list of applications on the mobile device. By default, CSPro creates the list of applications from all of the pff files in the CSEntry directory on the device. To prevent an application from being listed you can edit the pff file in the pff editor and choose "Hidden by Default" or "Never" for "Show in Application Listing".
 
 <subheader>Creating a Dynamic Menu</subheader>
-When the interviewer launches the data entry application, they can currently enter any id-items but we would like to restrict them to only interviewing households that have already been listed. We can do this by displaying the households from the listing file in a dynamic value set and having the interviewer choose which one to interview.
+When the interviewer launches the data entry application, they can currently enter any ID items but we would like to restrict them to only interviewing households that have already been listed. We can do this by displaying the households from the listing file in a dynamic value set and having the interviewer choose which one to interview.
 
-In order to read the listing file, we need to add the listing dictionary as an external dictionary in the menu application. We will also need to add a new menu item to list the households. This will be a new variable in the dictionary named <b>CHOOSE_HOUSEHOLD</b>. We will make it 10 digits long to hold the full set of id-items (province, district, EA, area type and household number). It will be an alpha field as this will be easier to work with later on. The interviewer menu will need to be modified to skip to this new field instead of calling launchHouseholdDataEntry().
+In order to read the listing file, we need to add the listing dictionary as an external dictionary in the menu application. We will also need to add a new menu item to list the households. This will be a new variable in the dictionary named <b>CHOOSE_HOUSEHOLD</b>. We will make it 10 digits long to hold the full set of ID items (province, district, EA, area type and household number). It will be an alpha field as this will be easier to work with later on. The interviewer menu will need to be modified to skip to this new field instead of calling launchHouseholdDataEntry().
 
 <logic>
 PROC INTERVIEWER_MAIN_MENU
@@ -237,7 +237,7 @@ setvalueset($, householdVSet);
 <pagebreak />
 
 <subheader>Setting the "Key" attribute in the pff</subheader>
-The next step is to handle the menu choice in the postproc to launch the household data entry program using the id-items for the household that was chosen. In order to do this, we will need to pass the id-items of the selected household to household application as the "Key" attribute of the pff file. The household data entry program will then automatically read the value from the pff and prefill the id items once it is launched. To set the "Key" attribute in the pff file call the setproperty() function of the pff variable and pass it the attribute name and attribute value. The value for the key should be the entire caseid string picked in the field CHOOSE_HOUSEHOLD.
+The next step is to handle the menu choice in the postproc to launch the household data entry program using the ID items for the household that was chosen. In order to do this, we will need to pass the ID items of the selected household to household application as the "Key" attribute of the pff file. The household data entry program will then automatically read the value from the pff and prefill the ID items once it is launched. To set the "Key" attribute in the pff file call the setproperty() function of the pff variable and pass it the attribute name and attribute value. The value for the key should be the entire caseid string picked in the field CHOOSE_HOUSEHOLD.
 
 <logic>
 // Launch household questionnaire data entry application
@@ -249,7 +249,7 @@ function launchHouseholdDataEntry()
 end;
 </logic>
 
-CSEntry prefills the id items using the caseid string passed in the "Key" attribute. Let's also make the field protected if it is prefilled. We can do this using <logiccolor>setproperty</logiccolor>.
+CSEntry prefills the ID items using the string passed in the "Key" attribute. Let's also make the field protected if it is prefilled. We can do this using <logiccolor>protect</logiccolor>.
 
 <logic>
 PROC PROVINCE

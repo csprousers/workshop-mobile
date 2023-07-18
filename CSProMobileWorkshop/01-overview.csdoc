@@ -1,6 +1,6 @@
 ﻿<title>Session 01: Overview of CSPro, Dictionary and Forms</title>
 
-At the end of this lesson participants will be able to:
+At the end of this session participants will be able to:
 <list>
 <li>Identify different CSPro modules and tools and their roles in the survey workflow</li>
 <li>Create a simple data entry application including dictionary and forms</li>
@@ -14,7 +14,7 @@ CSPro is a suite of software tools for census and survey data processing that in
 
 CSPro has a long history. It was first released in 2000 and has been used in over 100 countries worldwide. It has been used for censuses all over the world as well as for many large and complex household surveys including the Demographic and Health Survey (USAID), Multiple Indicator Cluster Survey (UNICEF) and Living Standards Measurement Study (World Bank). The first Android version was released in 2014.  CSPro Android has been used in production for household surveys and population censuses in multiple countries.
 
-CSPro is free software developed by the US Census Bureau and funded by USAID. The Census Bureau provides free email customer support. You can send questions to cspro@lists.census.gov. There is also a user forum where you can post questions and see answers to questions posted by other users at https://www.csprousers.org/forum/.
+CSPro is free software developed by the US Census Bureau and funded by USAID. The Census Bureau provides free email customer support. You can send questions to cspro@lists.census.gov. There is also a user forum where you can post questions and see answers to questions posted by other users at <link https://www.csprousers.org/forum>https://www.csprousers.org/forum</link>.
 
 CSPro can be used for both the traditional PAPI (pencil and paper interview) workflow as well as the computer aided personal interview (CAPI) workflow. In this workshop, we will focus on data collection in CSPro using a CAPI workflow.
 
@@ -53,15 +53,15 @@ The first step in creating the application is to define the data dictionary. The
 
 <center><image dictionary_hierarchy.png width 600 /></center>
 
-Before defining the record and items we first create ID-items. ID-items uniquely define each case (each questionnaire). Usually these are geographic codes.
+Before defining the record and items we first create ID items. ID items uniquely define each case (each questionnaire). Usually these are geographic codes.
 
-What are the ID-items for the example questionnaire?
+What are the ID items for the example questionnaire?
 
 <indent><i>Province, District, Enumeration Area, Area Type, and Household Number.</i></indent>
 
 Why not include GPS, interview date, start and end time since they are in the same section of the questionnaire?  Because they are not part of the codes needed to uniquely identify the questionnaire.
 
-Add the id-items to the dictionary
+Add the ID items to the dictionary
 <list><li>Province (numeric, length 1)</li>
 <li>District (numeric, length 2)</li>
 <li>Enumeration area (numeric, length 3)</li>
@@ -152,7 +152,7 @@ There are some useful functions for working with dictionaries that you can acces
 <subheader>Forms</subheader>
 Before we can enter data, we need to create data entry forms. To start, click on the yellow stack of forms on the toolbar. To follow the look of the paper questionnaire we will create one form for each page of the paper questionnaire.
 
-<b>Create a form for section A: Identification.</b> Drag and drop the id-items onto the form. Note that we can drag and drop individual items or entire records. By right clicking on the form in the forms tree on left side of the screen we can change the label and name of the form. Let's make the label "A: Identification" and make the name "IDENTIFICATION_FORM".
+<b>Create a form for section A: Identification.</b> Drag and drop the ID items onto the form. Note that we can drag and drop individual items or entire records. By right clicking on the form in the forms tree on left side of the screen we can change the label and name of the form. Let's make the label "A: Identification" and make the name "IDENTIFICATION_FORM".
 
 <b>Create a form for section B: Demographics.</b> Drag drop the items from the person record. Let's give the form label "B: Demographics" and name "DEMOGRAPHICS_FORM". Note that when we drop the record we have the option to put the items in a roster or a repeating form. If we drop the items on the household identification form, we can only roster since the household identification isn't repeated. For our example let's use a roster.
 
@@ -165,9 +165,9 @@ For paper and pencil surveys, we would spend a lot of time on the layout, adding
 Click on the green light icon on the toolbar to run the data entry application on your PC. Enter the name of the data file. For data files CSPro uses the file extension ".csdb". Let's name our data file "Household.csdb".
 
 <subheader>Data File Types</subheader>
-By default CSPro stores data in a CSPro database file with the extension .csdb. This file not only contains the data itself but it also contains the notes, the index, the partial save status and metadata used for data synchronization. CSPro database files can be viewed by double clicking on them or using the DataViewer tool from the tools menu.
+By default CSPro stores data in a CSPro database file with the extension .csdb. This file not only contains the data itself but it also contains the notes, the index, the partial save status and metadata used for data synchronization. CSPro database files can be viewed by double clicking on them or using the Data Viewer tool from the tools menu.
 
-The csdb extension is new in CSPro 7.0. In earlier versions of CSPro, the notes, index and partial save were stored in extra files that accompanied the data file itself. Unlike the text file used by earlier versions of CSPro, this is a binary file that cannot be viewed using TextViewer. While it is still possible to use text files in CSPro 7.0, it is highly recommended to use CSPro DB instead. There are new features such as smart sync and case labels that are not supported using text files.
+The csdb extension is new in CSPro 7.0. In earlier versions of CSPro, the notes, index and partial save were stored in extra files that accompanied the data file itself. Unlike the text file used by earlier versions of CSPro, this is a binary file that cannot be viewed using Text Viewer. While it is still possible to use text files in CSPro 7.0, it is highly recommended to use CSPro DB instead. There are new features such as smart sync and case labels that are not supported using text files.
 
 When you launch a CSPro data entry application you can select the data file name and the type of data file that you want to use:
 
@@ -192,8 +192,8 @@ When we copied the application to the tablet we copied the pen and the pff file.
 
 On Android, the list of available applications on the device is constructed by finding all the pff files in the CSEntry directory and subdirectories so a pen file without a pff will not show up in the list.
 
-<subheader>DataViewer</subheader>
-Double-clicking on the file household.csdb opens the file in the DataViewer tool. DataViewer provides a simple way to view the data that was entered.
+<subheader>Data Viewer</subheader>
+Double-clicking on the file household.csdb opens the file in the Data Viewer tool. Data Viewer provides a simple way to view the data that was entered.
 
 <callout><center><b>Group exercise</b></center>
 Add a new record to the dictionary for section E of the questionnaire (deaths). Name this record "Deaths". How many occurrences should it have? Don't include E01 and E02 in the new record as they do not have the same number of occurrences as the other variables in this section. Instead, add them to the housing record. Create a new form for section E and add the fields onto it to create a roster. Use E02 as an occurrence control field to the roster to limit the number of rows to the number of deaths in the household. Test the application on both Windows and on Android.
@@ -250,7 +250,7 @@ If you right click on the disabilities field on the form and choose "Field Prope
 When you drag an item on the form, CSPro sets the capture type based on the value set for that item. If there is no value set when you drop the item, the capture type will be set to text box. You can always change the capture using the Field Properties dialog.
 
 <subheader>Date Fields</subheader>
-Let's add the interview date to the identification section. Which record should it go on? It could go on any singly occurring record such as housing but let's create a new record called INTERVIEW_REC to hold the section A items that are not part of the id-items and add it there. We can add an eight-digit item for the interview date. We can also add sub-items for the year, month and day of the interview. Drag the date item onto the form. When dragging don't use the sub-items, just the items. Now change the capture type for the interview date to be Date and set the date format to be YYYYMMDD to match the order of the sub-items year, month and day.
+Let's add the interview date to the identification section. Which record should it go on? It could go on any singly occurring record such as housing but let's create a new record called INTERVIEW_REC to hold the section A items that are not part of the ID items and add it there. We can add an eight-digit item for the interview date. We can also add sub-items for the year, month and day of the interview. Drag the date item onto the form. When dragging don't use the sub-items, just the items. Now change the capture type for the interview date to be Date and set the date format to be YYYYMMDD to match the order of the sub-items year, month and day.
 
 <subheader>Filling in Names First</subheader>
 Currently the interviewer has to fill in all the demographic information for the first person before moving on to the next person in the household. In practice, it is simpler to have them fill in just the name, age, sex and relationship of all the household members first and then fill in the remaining details only after all the basic information has been entered. To do this we need to pull just the <b>PERSON_NUMBER</b>,  <b>NAME</b>, <b>SEX</b>, <b>RELATIONSHIP</b>, <b>AGE</b> and <b>DATE_OF_BIRTH</b> into a separate roster. Delete them from the existing <b>DEMOGRAPHICS_ROSTER</b>, create a new form before the <b>DEMOGRAPHICS_FORM</b> called <b>HOUSEHOLD_MEMBERS_FORM</b> and drop <b>PERSON_NUMBER</b> onto it to make a new roster. Rename this roster "<b>HOUSEHOLD_MEMBERS_ROSTER</b>". Drop <b>NAME</b> from the dictionary on top of the <b>HOUSEHOLD_MEMBERS_ROSTER</b> to add it to the roster. Note that when you drop an item from a repeating record on top of an existing roster it gets added to that roster but if you drop it outside the roster it creates a new roster. Drop the <b>SEX</b>, <b>RELATIONSHIP</b>, <b>AGE</b> and <b>DATE_OF_BIRTH</b> variables onto the new roster. Remove the <b>NUMBER_OF_HOUSEHOLD_MEMBERS</b> field from the <b>DEMOGRAPHICS_FORM</b> and drop it onto the <b>HOUSEHOLD_MEMBERS_FORM</b>. In the forms tree, move <b>NUMBER_OF_HOUSEHOLD</b> members so that it comes before the <b>HOUSEHOLD_MEMBERS_ROSTER</b>. Set the occurrence control field for <b>HOUSEHOLD_MEMBERS_ROSTER</b> to be <b>NUMBER_OF_HOUSEHOLD_MEMBERS</b>.

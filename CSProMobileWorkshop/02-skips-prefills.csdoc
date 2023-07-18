@@ -1,6 +1,6 @@
 ﻿<title>Session 02: Skips and Prefills</title>
 
-At the end of this lesson participants will be able to:
+At the end of this session participants will be able to:
 <list>
 	<li>Use the commands <logiccolor>skip</logiccolor> and <logiccolor>ask if</logiccolor> to skip fields</li>
 	<li>Use <logiccolor>if then else</logiccolor> statements to implement skip patterns</li>

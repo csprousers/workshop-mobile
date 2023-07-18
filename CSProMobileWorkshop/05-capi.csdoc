@@ -1,6 +1,6 @@
 ﻿<title>Session 05: CAPI Features</title>
 
-At the end of this lesson participants will be able to:
+At the end of this session participants will be able to:
 <list>
 	<li>Add question text and help text</li>
 	<li>Add fills in question text</li>
@@ -136,7 +136,7 @@ We can use these occurrence labels in the question text for <b>F05</b>:
 Anytime you use <b>~~getocclabel()~~</b> in question text it is replaced by the occurrence label of the current occurrence. With the above, the question text for the first occurrence will be "How many traditional round hut units are in this household?" and the text for the second occurrence will be "How many detached house units are in this household?" …
 
 <subheader>Case Labels</subheader>
-By default, the case listing screen shows the id-items concatenated together. This is not very easy for an interviewer to read. You can customize the case listing for a case using the <logiccolor>setcaselabel</logiccolor> command. As an example let's set the case label to the string "province-district-ea-household number: name of head of household". Since we need to have the name of the head of household to do this, we can add it in the postproc of <b>NAME</b>. In order to format the case label from the variables we can use the function <logiccolor>maketext()</logiccolor> which works like <logiccolor>errmsg()</logiccolor> but returns a string instead of displaying it on the screen.
+By default, the case listing screen shows the ID items concatenated together. This is not very easy for an interviewer to read. You can customize the case listing for a case using the <logiccolor>setcaselabel</logiccolor> command. As an example let's set the case label to the string "province-district-ea-household number: name of head of household". Since we need to have the name of the head of household to do this, we can add it in the postproc of <b>NAME</b>. In order to format the case label from the variables we can use the function <logiccolor>maketext()</logiccolor> which works like <logiccolor>errmsg()</logiccolor> but returns a string instead of displaying it on the screen.
 
 <logic>
 PROC NAME
