@@ -204,9 +204,9 @@ function totalBirths()
 end;           
 </logic>
 
-In the question text we can simply add the function call surrounded by %:
+In the question text we can simply add the function call surrounded by ~~:
 
-<indent>Just to make sure that I have this right, %NAME% has had in total %totalBirths()% births during her life. Is this correct?</indent>
+<indent>Just to make sure that I have this right, ~~NAME~~ has had in total ~~totalBirths()~~ births during her life. Is this correct?</indent>
 
 What happens when one of the fields in this calculation is skipped? The value becomes <logiccolor>notappl</logiccolor> which messes up the entire calculation. We need to be a little smarter in calculating our total to exclude the skipped values.
 
@@ -493,7 +493,7 @@ endif;
 </logic>
 
 If we don't need to display the start and end times on the form we can avoid using visualvalue. We can simply remove the variables from the form and keep them in the dictionary. When we set the values of these variables in logic and the case is saved the values are saved to the data file just like variables that are on the form. Unlike variables on the form, however, variables that are not on the form are always considered "on path" so you do not need to worry about using visualvalue.
-
+<pagebreak />
 <subheader>Exercises</subheader>
 <list ordered>
 	<li>Modify the question text for <b>E01</b> to say "Has any member of this household passed away in the past years, that is since (year)?" where year is replaced by the year of the interview minus 5. For example, if the year of the interview is 2018 it should read "Has any member of this household passed away in the past years, that is since 2013?". Use the the interview date from question <b>A6</b> to compute the value to insert.</li>

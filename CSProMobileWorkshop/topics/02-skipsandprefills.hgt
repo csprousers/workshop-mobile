@@ -237,16 +237,14 @@ There is also the <logiccolor>endlevel</logiccolor> command which is similar to 
 <subheader>Skipping Based on Checkboxes</subheader>
 We only want to ask question <b>B12</b>, sign language, if the household member is hearing disabled. We want to skip question <b>B12</b> if hearing disabled is not checked in question <b>B11</b>. How can we tell in logic if hearing disabled is checked? Hearing disabled is option B in the value set so we need to determine if the set of all checked options contains the letter B.
 
-In CSPro logic we can use the function <logiccolor>pos()</logiccolor> which returns the position of one string within another. For example <logiccolor>pos("C", "CSPro")</logiccolor> will be one, <logiccolor>pos("P", "CSPro")</logiccolor> will be three and <logiccolor>pos("o", "CSPro"</logiccolor>) will be five. If the search string is not found, <logiccolor>pos()</logiccolor> will return zero. In our case, the letter B is not always at the same position in the string. If the interviewer chooses just option B then B will be the first character in the string but if the interviewer chooses A and B then the result will be "AB" and B will be in position two. However, all we care about is whether or not B is in the result string at all. For this we can check the result of <logiccolor>pos()</logiccolor>. If the result of <logiccolor>pos()</logiccolor> is nonzero then B is in the string and if the result is zero, B is not in the string.
-
-Using <logiccolor>pos()</logiccolor> the logic for skipping sign language if hearing is not checked is:
+In CSPro logic we can use the function <logiccolor>ischecked()</logiccolor> which returns true if a value is one of the selected values in a checkbox variable. Using <logiccolor>ischecked()</logiccolor> the logic for skipping sign language if hearing is not checked is:
 
 <logic>
 PROC SIGN_LANGUAGE
 
 preproc
 //ask this question only if hearing disabled (option B) is checked
-ask if pos("B", DISABILITIES) > 0;
+ask if ischecked("B", DISABILITIES);
 </logic>
 
 Note that since we are adding a preproc to a variable that already has a postproc we need to explicitly add the <logiccolor>postproc</logiccolor>.
@@ -256,7 +254,7 @@ PROC SIGN_LANGUAGE
 
 preproc
 //ask this question only if hearing disabled (option B) is checked
-ask if pos("B", DISABILITIES) > 0;
+ask if ischecked("B", DISABILITIES);
 
 postproc
 // Skip to next person for household members under 10 years of age
