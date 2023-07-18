@@ -33,15 +33,17 @@ Note that we put our logic in the proc for <b>NUMBER_OF_BEDROOMS</b> and not in 
 
 Let's take a look at another example, the edit specifications call for the following control:
 
-<indent>•	If <b>RELATIONSHIP</b> is spouse, then <b>MARITAL_STATUS</b> should not be coded 1 (never married), 2 (divorced) or 3 (widowed).</indent>
+<list>
+	<li>If <b>RELATIONSHIP</b> is spouse, then <b>MARITAL_STATUS</b> should not be coded 1 (never married), 2 (divorced) or 3 (widowed).</li>
+</list>
 
-Which proc should we put this check in? Since <b>MARITAL_STATUS</b> comes after <b>RELATIONSHIP</b> we will put it in the proc for <b>MARITAL_STATUS</b>. 
+Which proc should we put this check in? Since <b>MARITAL_STATUS</b> comes after <b>RELATIONSHIP</b> we will put it in the proc for <b>MARITAL_STATUS</b>.
 
 <logic>
 PROC MARITAL_STATUS
 
 // Ensure that spouse is not single, divorced or widowed
-if (MARITAL_STATUS = 1 or MARITAL_STATUS = 3 or MARITAL_STATUS = 4) 
+if (MARITAL_STATUS = 1 or MARITAL_STATUS = 3 or MARITAL_STATUS = 4)
    and RELATIONSHIP = 2 then
     errmsg("Marital status of spouse cannot be single, divorced or widowed");
     reenter;
@@ -86,7 +88,7 @@ if NUMBER_OF_BEDROOMS > NUMBER_OF_ROOMS then
 endif;
 </logic>
 
-The "%d"s in the message are replaced by the values of the variables that follow in the order that they are listed. 
+The "%d"s in the message are replaced by the values of the variables that follow in the order that they are listed.
 
 Let's do the same for the check on marital status and relationship:
 
@@ -106,7 +108,7 @@ PROC MARITAL_STATUS
 
 // Ensure that spouse is not single
 if MARITAL_STATUS in 1,3,4 and RELATIONSHIP = 2 then
-    errmsg("%s has relationship spouse and marital status %d. Spouse cannot be single, divorced or widowed.", 
+    errmsg("%s has relationship spouse and marital status %d. Spouse cannot be single, divorced or widowed.",
            NAME, MARITAL_STATUS);
     reenter;
 endif;
@@ -120,7 +122,7 @@ PROC MARITAL_STATUS
 
 // Ensure that spouse is not single
 if MARITAL_STATUS in 1,3,4 and RELATIONSHIP = 2 then
-    errmsg("%s has relationship spouse and marital status %d. Spouse cannot be single, divorced or widowed.", 
+    errmsg("%s has relationship spouse and marital status %d. Spouse cannot be single, divorced or widowed.",
            strip(NAME), MARITAL_STATUS);
     reenter;
 endif;
@@ -129,11 +131,11 @@ endif;
 Finally, rather than show the numeric value of the marital status it would be nicer to show the label from the value set. We can do this using %l instead of %d. This will display the label from the value set rather than the numeric code.
 
 <logic>
-PROC MARITAL_STATUS 
+PROC MARITAL_STATUS
 
 // Ensure that spouse is not single
 if MARITAL_STATUS in 1,3,4 and RELATIONSHIP = 2 then
-    errmsg("%s has relationship spouse and marital status %l. Spouse cannot be single, divorced or widowed.",       
+    errmsg("%s has relationship spouse and marital status %l. Spouse cannot be single, divorced or widowed.",
 		strip(NAME), MARITAL_STATUS);
     reenter;
 endif;
@@ -148,7 +150,7 @@ PROC NUMBER_OF_BEDROOMS
 // Ensure that number of bedrooms does not exceed number of rooms.
 if NUMBER_OF_BEDROOMS > NUMBER_OF_ROOMS then
     errmsg("Number of bedrooms, %d, exceeds number of rooms, %d.",
-           NUMBER_OF_BEDROOMS, NUMBER_OF_ROOMS) 
+           NUMBER_OF_BEDROOMS, NUMBER_OF_ROOMS)
            select("Fix number of rooms", NUMBER_OF_ROOMS,
                   "Fix number of bedrooms", NUMBER_OF_BEDROOMS);
 endif;
@@ -164,7 +166,7 @@ Let's add a select to the relationship-marital status check too:
 <logic>
 // Ensure that spouse is not single
 if MARITAL_STATUS in 1,3,4 and RELATIONSHIP = 2 then
-    errmsg("%s has relationship spouse and marital status %l. Spouse cannot be single, divorced or widowed.", 
+    errmsg("%s has relationship spouse and marital status %l. Spouse cannot be single, divorced or widowed.",
            strip(NAME), MARITAL_STATUS)
     select("Fix marital status", MARITAL_STATUS,
            "Fix relationship", RELATIONSHIP);
@@ -180,7 +182,7 @@ PROC NUMBER_OF_BEDROOMS
 // Ensure that number of bedrooms does not exceed number of rooms.
 if NUMBER_OF_BEDROOMS > NUMBER_OF_ROOMS then
     errmsg("The number of bedrooms, %d, is greater than the number of rooms, %d.",
-           NUMBER_OF_BEDROOMS, NUMBER_OF_ROOMS) 
+           NUMBER_OF_BEDROOMS, NUMBER_OF_ROOMS)
            select("Fix number of rooms", ROOMS,
                   "Fix number of bedrooms", NUMBER_OF_BEDROOMS,
                   "Ignore error", continue);
@@ -199,7 +201,7 @@ PROC NUMBER_OF_BEDROOMS
 // Ensure that number of bedrooms does not exceed number of rooms.
 if NUMBER_OF_BEDROOMS > NUMBER_OF_ROOMS then
     warning("The number of bedrooms, %d, is greater than the number of rooms, %d.",
-           NUMBER_OF_BEDROOMS, NUMBER_OF_ROOMS) 
+           NUMBER_OF_BEDROOMS, NUMBER_OF_ROOMS)
            select("Fix number of rooms", ROOMS,
                   "Fix number of bedrooms", NUMBER_OF_BEDROOMS,
                   "Ignore error", continue);
@@ -224,7 +226,7 @@ Using this matrix, you can test each of the 8 possible combinations and make sur
 By combining the test matrices from all the consistency checks in the application, you can create a test plan for the survey/census application to verify the application works correctly when changes are made. Often times changes to one part of the questionnaire can have unintended effects on skips and consistency checks in other parts of the questionnaire so it is important to have a test plan that is used after every set of changes to ensure that no problems are introduced.
 
 <subheader>Calculations</subheader>
-In question <b>D02</b> the respondent gives the number of boys living in the household, girls living in the household and the total number of children living in the household. Let's check that the sum of the girls and the boys is equal to the total. 
+In question <b>D02</b> the respondent gives the number of boys living in the household, girls living in the household and the total number of children living in the household. Let's check that the sum of the girls and the boys is equal to the total.
 
 <logic>
 if BOYS_IN_HOUSEHOLD + GIRLS_IN_HOUSEHOLD <> CHILDREN_IN_HOUSEHOLD then
@@ -269,7 +271,7 @@ PROC DOB_BLOCK
 
 // Ensure that age matches date of birth
 if datediff(DATE_OF_BIRTH, DATE_OF_INTERVIEW, "y") <> AGE then
-    errmsg("Age (%d) doesn't match date of birth (%d). Based on date of birth age should be %d", 
+    errmsg("Age (%d) doesn't match date of birth (%d). Based on date of birth age should be %d",
         AGE, DATE_OF_BIRTH, datediff(DATE_OF_BIRTH,
 		DATE_OF_INTERVIEW, "y"))
         select("Correct Age", AGE, "Correct date of birth", YEAR_OF_BIRTH);
@@ -284,10 +286,10 @@ PROC DOB_BLOCK
 // Ensure that age matches date of birth
 if AGE <> 999 and DATE_OF_BIRTH <> 99999999 then
     if datediff(DATE_OF_BIRTH, DATE_OF_INTERVIEW, "y") <> AGE then
-        errmsg("Age (%d) doesn't match date of birth (%d). Based on date of birth age should be %d", 
-            AGE, DATE_OF_BIRTH, 
+        errmsg("Age (%d) doesn't match date of birth (%d). Based on date of birth age should be %d",
+            AGE, DATE_OF_BIRTH,
             datediff(DATE_OF_BIRTH, DATE_OF_INTERVIEW, "y"))
-            select("Correct Age", AGE, "Correct date of birth", 
+            select("Correct Age", AGE, "Correct date of birth",
                    YEAR_OF_BIRTH);
     endif;
 endif;
@@ -299,10 +301,10 @@ Making sure we have the correct number of 9s is a bit tricky. Since we used the 
 // Ensure that age matches date of birth
 if AGE <> missing and DATE_OF_BIRTH <> missing then
     if datediff(DATE_OF_BIRTH, DATE_OF_INTERVIEW, "y") <> AGE then
-        errmsg("Age (%d) doesn't match date of birth (%d). Based on date of birth age should be %d", 
-            AGE, DATE_OF_BIRTH, 
+        errmsg("Age (%d) doesn't match date of birth (%d). Based on date of birth age should be %d",
+            AGE, DATE_OF_BIRTH,
             datediff(DATE_OF_BIRTH, DATE_OF_INTERVIEW, "y"))
-            select("Correct Age", AGE, "Correct date of birth", 
+            select("Correct Age", AGE, "Correct date of birth",
                    YEAR_OF_BIRTH);
     endif;
 endif;
@@ -338,7 +340,7 @@ Now we can use that variable in place of the datediff:
 
 <logic>
 if calculatedAge <> AGE then
-    errmsg("Age (%d) does not match date of birth (%d). Based on date of birth age should be %d", 
+    errmsg("Age (%d) does not match date of birth (%d). Based on date of birth age should be %d",
         AGE, DATE_OF_BIRTH, calculatedAge)
         select("Correct Age", AGE, "Correct date of birth", YEAR_OF_BIRTH);
 endif;
@@ -350,7 +352,7 @@ It is possible to combine the declaration and the initialization of the variable
 
 <subheader>When to Use Consistency Checks</subheader>
 
-It is tempting to place consistency checks on every question in your application in order to maximize data quality but it is important to realize that every check you add comes at a price. Beyond the time it takes to implement and properly test each check, you also need to consider the additional time required to train and support a more complex application. Every check you add increases the risk that there will be bugs in your application when it gets to the field. Unlike a key from paper application, a bug in the field can mean an enumerator being stuck and abandoning an entire questionnaire. For surveys, you generally have a small sample and better trained enumerators so this is less of a concern. However, for a census, enumerators are not as experienced and supporting them in the field is much more of a challenge. In a census, due to the number of respondents, you can use imputation to correct many inconsistencies with minimal impact on the overall results. In any case, just the fact that the CAPI instrument imposes range checks and skip patterns will be a significant improvement in data quality over a paper census. For a CAPI census application, we recommend only adding consistency checks on the key demographic fields in the household roster and leaving potential inconsistencies in other parts of the questionnaire to be corrected post data collection. In addition, we recommend using mainly "soft" edit checks so that the enumerator is never blocked by the application. 
+It is tempting to place consistency checks on every question in your application in order to maximize data quality but it is important to realize that every check you add comes at a price. Beyond the time it takes to implement and properly test each check, you also need to consider the additional time required to train and support a more complex application. Every check you add increases the risk that there will be bugs in your application when it gets to the field. Unlike a key from paper application, a bug in the field can mean an enumerator being stuck and abandoning an entire questionnaire. For surveys, you generally have a small sample and better trained enumerators so this is less of a concern. However, for a census, enumerators are not as experienced and supporting them in the field is much more of a challenge. In a census, due to the number of respondents, you can use imputation to correct many inconsistencies with minimal impact on the overall results. In any case, just the fact that the CAPI instrument imposes range checks and skip patterns will be a significant improvement in data quality over a paper census. For a CAPI census application, we recommend only adding consistency checks on the key demographic fields in the household roster and leaving potential inconsistencies in other parts of the questionnaire to be corrected post data collection. In addition, we recommend using mainly "soft" edit checks so that the enumerator is never blocked by the application.
 <pagebreak />
 <subheader>Exercises</subheader>
 Implement the following consistency checks from the edit specifications. Test that they are correct. Make sure to test all possible cases (test matrices can help with this).

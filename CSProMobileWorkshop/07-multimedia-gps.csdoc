@@ -59,9 +59,9 @@ Taking photos is currently only supported on Android. <logiccolor>execsystem</lo
 Note that photos do not get saved into the application data file. You need to save them to a folder/file on the device.  The filename you use should make it easy to link the photo back to the interview that it was taken for. The easiest way to do this is to make the name of the photo based on the id-items of the questionnaire:
 
 <logic>
-string photoFilename = pathname(application) + 
-                maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg", 
-                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+string photoFilename = pathname(application) +
+                maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg",
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,
                                 HOUSEHOLD_NUMBER);
 execsystem(maketext("camera:%s", photoFilename));
 </logic>
@@ -75,9 +75,9 @@ PROC PHOTO
 
 if PHOTO = 1 then
     // Take photo
-    string photoFilename = pathname(application) + 
-               maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg", 
-                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+    string photoFilename = pathname(application) +
+               maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg",
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,
                                 HOUSEHOLD_NUMBER);
     execsystem(maketext("camera:%s", photoFilename));
 elseif PHOTO = 9 then
@@ -90,21 +90,21 @@ This works the first time through the questionnaire but if we go back through th
 <logic>
 PROC PHOTO
 
-string photoFilename = pathname(application) + 
-               maketext("../Data/HouseholdPhotos /photo%v%v%v%v.jpg", 
-                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+string photoFilename = pathname(application) +
+               maketext("../Data/HouseholdPhotos /photo%v%v%v%v.jpg",
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,
                                 HOUSEHOLD_NUMBER);
 
 if PHOTO = 1 then
     // Take/retake photo
     execsystem(maketext("camera:%s", photoFilename));
-    
+
     // reenter so that interview can retake if it is not good.
     reenter;
 elseif PHOTO = 2 then
     // view existing photo
     view(photoFilename);
-    
+
     // reenter so that interview can retake if it is not good.
     reenter;
 elseif PHOTO = 3 then
@@ -121,9 +121,9 @@ This works except that it is possible for the interviewer to select "Keep photo"
 <logic>
 PROC PHOTO
 onfocus
-string photoFilename = pathname(application) + 
-               maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg", 
-                                PROVINCE, DISTRICT, ENUMERATION_AREA,   
+string photoFilename = pathname(application) +
+               maketext("../Data/HouseholdPhotos/photo%v%v%v%v.jpg",
+                                PROVINCE, DISTRICT, ENUMERATION_AREA,
                                 HOUSEHOLD_NUMBER);
 
 // Only show the view and keep options in value set
@@ -145,7 +145,7 @@ gps(open);
 Then you request a GPS reading giving it a timeout in seconds and optionally a desired accuracy in meters:
 
 <logic>
-if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy 
+if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy
     errmsg("Latitude is %f, longitude is %f",gps(latitude),gps(longitude));
 else
     errmsg("GPS signal could not be acquired");
@@ -169,9 +169,9 @@ Let's add a user bar button to update the GPS coordinates for the household:
 // Capture current household location using GPS
 function getGPS()
     gps(open);
-    if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy 
+    if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy
         LATITUDE = gps(latitude);
-        LONGITUDE = gps(longitude); 
+        LONGITUDE = gps(longitude);
     else
         errmsg("GPS signal could not be acquired");
     endif;
@@ -180,14 +180,14 @@ end;
 </logic>
 
 <subheader>Displaying GPS Points on a Map</subheader>
-If we want to be fancy, we can display the point on the map first so that the interviewer can view it and then decide whether or not to use it. We can do this using a variable of type <logiccolor>map</logiccolor>. Like <logiccolor>valueset</logiccolor> variables, <logiccolor>map</logiccolor> variables have functions that can be called on them using a dot ("."). For example, to add a marker to a map you would call:
+If we want to be fancy, we can display the point on the map first so that the interviewer can view it and then decide whether or not to use it. We can do this using a variable of type <logiccolor>Map</logiccolor>. Like <logiccolor>ValueSet</logiccolor> variables, <logiccolor>Map</logiccolor> variables have functions that can be called on them using a dot ("."). For example, to add a marker to a map you would call:
 
 <logic>
-	map mymap;
+	Map mymap;
 	mymap.addMarker(longitude, latitude);
 </logic>
 
-To display the map, call the <logiccolor map>show()</logiccolor> function. This displays a Google Map containing the marker that was added.
+To display the map, call the <logiccolor Map>show()</logiccolor> function. This displays a Google Map containing the marker that was added.
 
 We can use a map variable to display a map that has a marker at the GPS location that we captured:
 
@@ -195,14 +195,14 @@ We can use a map variable to display a map that has a marker at the GPS location
 // Capture current household location using GPS
 function getGPS()
     gps(open);
-    if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy 
+    if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy
         // Show map so that interviewer can see result
-		map m;
+		Map m;
 		m.addMarker(gps(latitude), gps(longitude));
 		m.show();
         if accept("Save this result", "Yes", "No") = 1 then
             LATITUDE = gps(latitude);
-            LONGITUDE = gps(longitude); 
+            LONGITUDE = gps(longitude);
         endif;
     else
         errmsg("GPS signal could not be acquired");
@@ -211,7 +211,7 @@ function getGPS()
 end;
 </logic>
 
-Variables of type <logiccolor>map</logiccolor> have many other functions that let you customize the map, the markers, add buttons and run logic functions when markers are tapped. You can also use offline base maps for situations where you do not have an internet connection. See the help for maps for details. Note that map functions are only supported on Android.
+Variables of type <logiccolor>Map</logiccolor> have many other functions that let you customize the map, the markers, add buttons and run logic functions when markers are tapped. You can also use offline base maps for situations where you do not have an internet connection. See the help for maps for details. Note that map functions are only supported on Android.
 
 <subheader>Showing the Case Listing on a Map</subheader>
 If you have latitude and longitude variables in your data dictionary for each household you can configure the case listing screen to display the households on a map on Android. To do this, open the Mapping Options dialog from the Options menu in CSPro designer. Check the box "Show the case listing on a map" and choose the latitude and longitude variables from your dictionary. When you run the application on Android, the case listing screen will show a map with a marker for each household. Tapping on a marker launches data entry for that household.
@@ -225,7 +225,7 @@ Build a CSPro application for the household listing questionnaire. Place your ap
 With the <logiccolor>view()</logiccolor> function you can display text files on your device. We can use this to show text documents that we write out from CSPro. To write out files from a CSEntry application we have to first declare a variable of type file :
 
 <logic>
-file tempFile;
+File tempFile;
 </logic>
 
 Then we can use the commands <logiccolor>setfile()</logiccolor>, <logiccolor>filewrite()</logiccolor> and <logiccolor>close()</logiccolor> to open, write to and close the file. Let's create a userbar button to write a simple text report that lists the household members:
@@ -234,16 +234,16 @@ Then we can use the commands <logiccolor>setfile()</logiccolor>, <logiccolor>fil
 // Write out and display household summary report
 function showHouseholdReport()
     string reportFilename = maketext("%sreport.txt", pathname(Application));
-	file tempFile;
+	File tempFile;
     setfile(tempFile, reportFilename, create);
     filewrite(tempFile, "Household Summary Report");
     filewrite(tempFile, "------------------------");
     filewrite(tempFile, "");
-    filewrite(tempFile, "Province %d District %d EA %d Area type %d Household Number %d", 
-                        visualvalue(PROVINCE), 
-                        visualvalue(DISTRICT), 
-                        visualvalue(ENUMERATION_AREA), 
-                        visualvalue(AREA_TYPE), 
+    filewrite(tempFile, "Province %d District %d EA %d Area type %d Household Number %d",
+                        visualvalue(PROVINCE),
+                        visualvalue(DISTRICT),
+                        visualvalue(ENUMERATION_AREA),
+                        visualvalue(AREA_TYPE),
                         visualvalue(HOUSEHOLD_NUMBER));
     filewrite(tempFile, "");
     filewrite(tempFile, "Household Members:");
@@ -257,9 +257,9 @@ function showHouseholdReport()
                             visualvalue(AGE(i)),
                             getlabel(RELATIONSHIP_VS1,
                             visualvalue(RELATIONSHIP(i))));
-    enddo;  
+    enddo;
     close(tempFile);
-	
+
 	view(reportFilename);
 end;
 </logic>

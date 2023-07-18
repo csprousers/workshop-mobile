@@ -23,12 +23,12 @@ A menu program is a CSPro data entry application that is used to manage the data
 <subheader>Designing the Screens and Flow</subheader>
 Once you decide on which functions you want your menu program to perform, the next step is to design the screens and how they link together. This is most easily done as a diagram like the one below for a fairly simple menu program.
 
-<center><html><img src="menu-screens.png" width="550" /></html></center>
+<center><image menu-screens.png width 550 /></center>
 
 <subheader>Creating the Dictionary and Forms</subheader>
 Once you have the screens, the next step is to create a new data entry application for your menu program. Let's name ours Menu and put it in the folder <i>Popstan2020/Menu</i>.
 
-Each menu screen will be a different variable in the dictionary. The value set for the variable will show the available menu choices to the enumerator on that screen. In the menu example above we will have three variables: 
+Each menu screen will be a different variable in the dictionary. The value set for the variable will show the available menu choices to the enumerator on that screen. In the menu example above we will have three variables:
 
 <list>
 	<li>LOGIN (value set: Interviewer - 1, Supervisor - 2)</li>
@@ -56,7 +56,7 @@ endif;
 
 If the user selects to login as an interviewer we skip to the interviewer main menu field to show the interviewer menu, otherwise we skip to the supervisor main menu field to show the supervisor menu.
 
-Handling the interviewer menu is similar. Here we will create user defined functions to launch the listing and household programs.
+Handling the interviewer menu is similar. Here we will create user-defined functions to launch the listing and household programs.
 
 <logic>
 PROC INTERVIEWER_MAIN_MENU
@@ -113,16 +113,16 @@ reenter;
 </logic>
 
 <subheader>Launching one CSPro Application from Another</subheader>
-Let's fill in the function to launch the household data entry program. We can launch other CSPro programs from within our data entry program using a variable of type <logiccolor>pff</logiccolor>. A <logiccolor>pff</logiccolor> variable represents a pff file. You can load the contents of an existing pff file into a <logiccolor>pff</logiccolor> variable using the  load() function and passing it the path to the file. You can then run the associated CSPro application by calling the exec() function. This will start the application using the parameters in the pff file.
+Let's fill in the function to launch the household data entry program. We can launch other CSPro programs from within our data entry program using a variable of type <logiccolor>Pff</logiccolor>. A <logiccolor>Pff</logiccolor> variable represents a pff file. You can load the contents of an existing pff file into a <logiccolor>Pff</logiccolor> variable using the  load() function and passing it the path to the file. You can then run the associated CSPro application by calling the exec() function. This will start the application using the parameters in the pff file.
 
 The following logic will launch a data entry application using the pff file Popstan2020.pff in the sibling directory to the menu program directory.
 
 <logic>
 function launchHouseholdDataEntry()
 
-	pff householdPff;
+	Pff householdPff;
 	householdPff.load("../Household/Popstan2020.pff");
-	householdPff.exec();	
+	householdPff.exec();
 end;
 </logic>
 
@@ -138,7 +138,7 @@ To simplify deployment use the Deploy Applications tool from the Tools menu. Thi
 
 Once the files have been added, enter the name and an optional description for the application. Under <i>Deploy To</i> choose <i>Local Folder</i> and click on "..." to choose the folder to deploy to. Click the <i>Deploy</i> button. This will automatically create .pen files for each data entry application and copy them, along with any other files from the Files window, into the deployment folder chosen. The deployment folder can then be copied directly to the mobile device. The folder structure of the deployment folder will match the folder structure we are using for development and testing on the desktop so there will be no problems with paths.
 
-<center><html><img src="deploy-to-folder.png" width="400" /></html></center>
+<center><image deploy-to-folder.png width 400 /></center>
 
 Once you have set up the deployment the first time you can save the deployment specification file to simplify the process for future deployments.
 
@@ -180,20 +180,20 @@ In the onfocus proc for <b>CHOOSE_HOUSEHOLD</b> we need to loop through every ca
 PROC CHOOSE_HOUSEHOLD
 onfocus
 
-valueset string householdVSet;
+ValueSet string householdVSet;
 
 // Loop through all cases in listing file
 // to build dynamic value set.
 forcase LISTING_DICT do
     // Values are household ids concatenated together
-    string code = maketext("%v%v%v%v", 
+    string code = maketext("%v%v%v%v",
         LI_PROVINCE, LI_DISTRICT, LI_ENUMERATION_AREA,
         LI_HOUSEHOLD_NUMBER);
-        
+
     // Labels have househould number and name of head
-    string label = maketext("%v: (%s)", LI_HOUSEHOLD_NUMBER, 
+    string label = maketext("%v: (%s)", LI_HOUSEHOLD_NUMBER,
                             strip(LI_NAME_OF_HEAD_OF_HOUSEHOLD));
-    
+
     householdVSet.add(label, code);
 endfor;
 
@@ -208,21 +208,21 @@ While the dynamic value set works correctly when there are households that have 
 PROC CHOOSE_HOUSEHOLD
 onfocus
 
-valueset string householdVSet;
+ValueSet string householdVSet;
 string code, label;
 
 // Loop through all cases in listing file
 // to build dynamic value set.
 forcase LISTING_DICT do
     // Values are household ids concatenated together
-    code = maketext("v%v%v%v%v", 
+    code = maketext("v%v%v%v%v",
         LI_PROVINCE, LI_DISTRICT, LI_ENUMERATION_AREA,
         LI_AREA_TYPE, LI_HOUSEHOLD_NUMBER);
-        
+
     // Labels have househould number and name of head
-    label = maketext("%v: (%v)", LI_HOUSEHOLD_NUMBER, 
+    label = maketext("%v: (%v)", LI_HOUSEHOLD_NUMBER,
                             strip(LI_NAME_OF_HEAD_OF_HOUSEHOLD));
-    
+
     householdVSet.add(label, code);
 endfor;
 
@@ -242,10 +242,10 @@ The next step is to handle the menu choice in the postproc to launch the househo
 <logic>
 // Launch household questionnaire data entry application
 function launchHouseholdDataEntry()
-	pff householdPff;
+	Pff householdPff;
 	householdPff.load("../Household/Popstan2020.pff");
-	householdPff.setproperty("Key", CHOOSE_HOUSEHOLD);
-	householdPff.exec();	
+	householdPff.setProperty("Key", CHOOSE_HOUSEHOLD);
+	householdPff.exec();
 end;
 </logic>
 
@@ -371,15 +371,15 @@ The parameter section in the pff file allows you to pass any value to your data 
 <logic>
 // Launch household questionnaire data entry application
 function launchHouseholdDataEntry()
-	pff householdPff;
+	Pff householdPff;
 	householdPff.load("../Household/Popstan2020.pff");
-	householdPff.setproperty("Key", CHOOSE_HOUSEHOLD);
-	householdPff.setproperty("INTERVIEWER_CODE", maketext("%v", STAFF_CODE));
-	householdPff.exec();	
+	householdPff.setProperty("Key", CHOOSE_HOUSEHOLD);
+	householdPff.setProperty("INTERVIEWER_CODE", maketext("%v", STAFF_CODE));
+	householdPff.exec();
 end;
 </logic>
 
-The next step is to modify the household data entry application to prefill the interviewer code using the parameter in the pff file. This can be done using the <logiccolor>sysparm()</logiccolor> command which retrieves a parameter by name from the pff file. We can do this in the preproc of the INTERVIEWER_CODE in the household application. <logiccolor>sysparm</logiccolor> always returns the result as a string so we need to convert it to a number. 
+The next step is to modify the household data entry application to prefill the interviewer code using the parameter in the pff file. This can be done using the <logiccolor>sysparm()</logiccolor> command which retrieves a parameter by name from the pff file. We can do this in the preproc of the INTERVIEWER_CODE in the household application. <logiccolor>sysparm</logiccolor> always returns the result as a string so we need to convert it to a number.
 
 <logic>
 PROC INTERVIEWER_CODE
@@ -387,7 +387,7 @@ PROC INTERVIEWER_CODE
 preproc
 if sysparm("INTERVIEWER_CODE") <> "" then
 	$ = tonumber(sysparm("INTERVIEWER_CODE"));
-	
+
 	// make field protected
 	protect($, true);
 endif;
@@ -417,14 +417,14 @@ To generate this report, we need to loop through all the cases in the household 
 // for all cases in the supervisor's district.
 function showCompletionReport()
     string reportFilename = maketext("%sreport.txt", pathname(Application));
-	file tempFile;
+	File tempFile;
     setfile(tempFile, reportFilename, create);
-    
+
     filewrite(tempFile, "Completion Report");
     filewrite(tempFile, "-----------------");
     filewrite(tempFile, "");
-    filewrite(tempFile, "Province %v District %v", 
-                        STAFF_PROVINCE, 
+    filewrite(tempFile, "Province %v District %v",
+                        STAFF_PROVINCE,
                         STAFF_DISTRICT);
     filewrite(tempFile, "");
     filewrite(tempFile, "Interview Status");
@@ -435,7 +435,7 @@ function showCompletionReport()
     numeric vacant = 0;
     numeric refused = 0;
     numeric partial = 0;
-    
+
     forcase POPSTAN2020_DICT do
         if INTERVIEW_STATUS = 1 then
             complete = complete + 1;
@@ -449,15 +449,15 @@ function showCompletionReport()
             partial = partial + 1;
         endif;
     endfor;
-    
+
     filewrite(tempFile, "Completed: %d", complete);
     filewrite(tempFile, "Non-contact: %d", nonContact);
     filewrite(tempFile, "Vacant: %d", vacant);
     filewrite(tempFile, "Refused: %d", refused);
     filewrite(tempFile, "Partially complete: %d", partial);
-    filewrite(tempFile, "Total: %d", complete + nonContact + 
+    filewrite(tempFile, "Total: %d", complete + nonContact +
                                      vacant + refused + partial);
-    
+
     close(tempFile);
     view(reportFilename);
 end;

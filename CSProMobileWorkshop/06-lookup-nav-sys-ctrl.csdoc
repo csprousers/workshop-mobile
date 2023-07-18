@@ -3,7 +3,7 @@
 At the end of this session participants will be able to:
 <list>
 	<li>Use lookup files in data entry</li>
-	<li>Create user defined functions in CSPro</li>
+	<li>Create user-defined functions in CSPro</li>
 	<li>Extend the interface of CSEntry with userbar buttons</li>
 	<li>Use the commands <logiccolor>advance</logiccolor> and <logiccolor>move</logiccolor> to navigate through the questionnaire</li>
 	<li>Use the function <logiccolor>visualvalue</logiccolor> to get the value of variables that are "off path"</li>
@@ -15,14 +15,14 @@ It is currently possible for the interviewer to enter a district code that is no
 
 First, we need to create a dictionary for our lookup file. For this task, we want to be able to query if the combination of the province and district codes is a valid district. In annex 2 of the questionnaire we have a table with the province code, district code and district name. We can use this as a lookup file where the keys are the province and district code and the value is the district name. We can create a dictionary for this using the Excel2CSPro tool from the tools menu. Select the "Create CSPro dictionary from Excel File" tab, click "Select Excel File" and browse to the file QuestionnaireAnnexes.xlsx. Choose "ANN2 – District Codes" and click "Analyze Worksheet". This detects the dictionary variables to create from the columns of the spreadsheet. The tool will show four variables, one for each column and will set the default names to column headers of the spreadsheet. Our lookup file dictionary will have the province code and district code as the id-items and province and district names as regular variables. Next to the province and district codes check the "ID" box to indicate that these should be ID items. In order to avoid name conflicts with the main dictionary we can use DI_PROVINCE_CODE, DI_DISTRICT_CODE, DI_PROVINCE_NAME, and DI_DISTRICT_NAME as the variable names. Modify them in the Excel to CSPro tool.
 
-<center><html><img src="excel2csprodict.png" width="600" /></html></center>
+<center><image excel2csprodict.png width 600 /></center>
 
 We must make sure that the lengths and zero-fill settings of the id-items exactly match those in the main dictionary otherwise we won't be able to use the variables from the main dictionary as keys for the lookup. Verify that the length of the province and district codes match those in the main dictionary and check the box "Zero fill numerics" to make sure that the id-items are zero filled. Once all settings are correct, click create dictionary to generate the CSPro dictionary file. Save it as "Districts.dcf" in the household folder.
 
-<center><html><img src="excel2csprodata.png" width="600" /></html></center>
+<center><image excel2csprodata.png width 600 /></center>
 
-Once we have the dictionary we need to convert the Excel spreadsheet into a CSPro data file. We can use the first tab of the Excel2CSPro tool to do this. Select the QuestionnaireAnnexes.xlsx file again along with the Districts dictionary that we just created. Specify a new output data file to write the lookup file to. Under "Record to Worksheet Mapping" choose the second worksheet "ANN 2-District Codes". Under the "Item to Column Mapping" link the dictionary variables to the appropriate columns in the Excel spreadsheet: DI_PROVINCE_CODE to "Column B: Province Code", DI_DISTRICT_CODE to "Column D: District Code", etc… Finally, click "Create CSPro Data File" to generate the file. Save it in the Data folder. Verify the file in DataViewer to make it sure it was converted correctly. 
- 
+Once we have the dictionary we need to convert the Excel spreadsheet into a CSPro data file. We can use the first tab of the Excel2CSPro tool to do this. Select the QuestionnaireAnnexes.xlsx file again along with the Districts dictionary that we just created. Specify a new output data file to write the lookup file to. Under "Record to Worksheet Mapping" choose the second worksheet "ANN 2-District Codes". Under the "Item to Column Mapping" link the dictionary variables to the appropriate columns in the Excel spreadsheet: DI_PROVINCE_CODE to "Column B: Province Code", DI_DISTRICT_CODE to "Column D: District Code", etc… Finally, click "Create CSPro Data File" to generate the file. Save it in the Data folder. Verify the file in DataViewer to make it sure it was converted correctly.
+
 Finally, in the district proc use the <logiccolor>loadcase()</logiccolor> command to lookup the province and district codes in the file. Loadcase takes the name of the dictionary (<b>DISTRICT_DICT</b>) and the values to use as keys (id-items) for the lookup. For example, to lookup province 3, district 6 we would do:
 
 <logic>
@@ -37,7 +37,7 @@ We can use this to test if the province and district codes are valid in the <b>D
 PROC DISTRICT
 
 // Verify that the district code is valid for the province selected.
-if loadcase(DISTRICT_DICT, PROVINCE, DISTRICT)  = 0 then
+if loadcase(DISTRICT_DICT, PROVINCE, DISTRICT) = 0 then
     errmsg("District code %d is not valid for province %l",
            DISTRICT, PROVINCE);
     reenter;
@@ -79,17 +79,17 @@ An alternative to using the lookup file to check the district and province codes
 PROC DISTRICT
 onfocus
 // Create dynamic value set of districts for selected province using lookup file
-valueset districtsVSet;
+ValueSet districtsVSet;
 forcase DISTRICT_DICT where DI_PROVINCE_CODE = PROVINCE do
     districtsVSet.add(DI_DISTRICT_NAME, DI_DISTRICT_CODE);
 endfor;
 setvalueset(DISTRICT, districtsVSet);
 </logic>
 
-<subheader>User defined functions</subheader>
-Often you find you have identical blocks of logic in multiple procs in your application. This can cause problems if you later change the code in one place to fix a bug and forget to change it in the other. In such situations it is better to put the logic in a user defined function which you can then call from all the procs where it is used. User defined functions are defined in the PROC GLOBAL. Anything declared in the PROC global is available in all the PROCs in your program. If you declare a logic variable inside the PROC of a dictionary variable or group, it is only available inside that PROC but if you declare it in the PROC GLOBAL you can use it anywhere. To view the proc GLOBAL, in the logic view, click on the first item in the form tree. This shows all of the program logic at once: the proc GLOBAL plus all the other procs. Clicking on any other item in the form tree shows just the procs for that item.
+<subheader>User-defined functions</subheader>
+Often you find you have identical blocks of logic in multiple procs in your application. This can cause problems if you later change the code in one place to fix a bug and forget to change it in the other. In such situations it is better to put the logic in a user-defined function which you can then call from all the procs where it is used. User-defined functions are defined in the PROC GLOBAL. Anything declared in the PROC global is available in all the PROCs in your program. If you declare a logic variable inside the PROC of a dictionary variable or group, it is only available inside that PROC but if you declare it in the PROC GLOBAL you can use it anywhere. To view the proc GLOBAL, in the logic view, click on the first item in the form tree. This shows all of the program logic at once: the proc GLOBAL plus all the other procs. Clicking on any other item in the form tree shows just the procs for that item.
 
-User defined functions can take arguments and return values just like built in functions. You call them the same way you call built in CSPro functions. Let's define a function that we can use in all the places where we check if a household member is a woman of childbearing age. This function will be passed the index (row number) of the household member in the household roster and it will return one if the person is a woman over 12 years old and zero otherwise. This way if we later decide that we should be using 13 or 14 as a minimum age we only have to make the change in one place.
+User-defined functions can take arguments and return values just like built in functions. You call them the same way you call built in CSPro functions. Let's define a function that we can use in all the places where we check if a household member is a woman of childbearing age. This function will be passed the index (row number) of the household member in the household roster and it will return one if the person is a woman over 12 years old and zero otherwise. This way if we later decide that we should be using 13 or 14 as a minimum age we only have to make the change in one place.
 
 <pagebreak />
 
@@ -112,7 +112,7 @@ PROC MOTHER_LINE_NUMBER
 onfocus
 // Create the value set for child mother from all eligible women
 // in household roster.
-valueset motherVSet;
+ValueSet motherVSet;
 do numeric indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
     if isChildbearingWoman(indexRoster) = 1 and indexRoster <> curocc() then
         motherVSet.add(NAME(indexRoster), indexRoster);
@@ -128,7 +128,7 @@ PROC MOTHER_OF_DECEASED_LINE_NUMBER
 onfocus
 // Create the value set for deceased mother from all eligible women
 // in household roster
-valueset motherVSet;
+ValueSet motherVSet;
 do numeric indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
     if isChildbearingWoman(indexRoster) = 1 then
 		motherVSet.add(NAME(indexRoster), indexRoster);
@@ -144,13 +144,13 @@ Looking at these two procs we could probably move the shared code that creates t
 
 <logic>
 // Create a value set of all household members that are eligible to be
-// mothers by filling in the valueset motherVSet that is passed as 
+// mothers by filling in the ValueSet motherVSet that is passed as
 // the first argument.
-// Labels are names of household members and codes are the corresponding 
+// Labels are names of household members and codes are the corresponding
 // line numbers.
-// The household member in row excludeIndex will not be included in the value 
+// The household member in row excludeIndex will not be included in the value
 // set. This can be used to exclude someone from being their own mother.
-function createMothersValueSet(valueset motherVSet, excludeIndex)
+function createMothersValueSet(ValueSet motherVSet, excludeIndex)
     do numeric indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
         if isEligibleMother(indexRoster) = 1 and indexRoster <> excludeIndex then
             motherVSet.add(NAME(indexRoster), indexRoster);
@@ -164,21 +164,21 @@ onfocus
 // Create the value set for child mother from all eligible
 // women in household roster. Exclude current occurrence so
 // that person cannot be their own mother.
-valueset motherVSet;
+ValueSet motherVSet;
 createMothersValueSet(motherVSet, curocc());
 
 // Add additional entries for non-resident and deceased
 motherVSet.add("Non-resident",87);
 motherVSet.add("Deceased",88);
 
-// Update the value set with values in valueset object
+// Update the value set with values in ValueSet object
 setvalueset(MOTHER_LINE_NUMBER, motherVSet);
 
 PROC MOTHER_OF_DECEASED_LINE_NUMBER
 onfocus
 // Create the value set for child mother from all eligible
 // women in household roster
-valueset motherVSet;
+ValueSet motherVSet;
 createMothersValueSet(motherVSet, 0);
 
 // Add additional entry for not in household
@@ -191,7 +191,7 @@ setvalueset($, motherVSet);
 <pagebreak />
 
 <subheader>Functions in Question Text</subheader>
-Another use for user defined functions is for fills in question that require some calculation. For example, for question <b>D05</b> we want to double check that the total of the children living with the women, living elsewhere and deceased equals the number of total births. We do this by asking the question:
+Another use for user-defined functions is for fills in question that require some calculation. For example, for question <b>D05</b> we want to double check that the total of the children living with the women, living elsewhere and deceased equals the number of total births. We do this by asking the question:
 
 <indent>Just to make sure that I have this right, (name) has had in total (total number) births during her life. Is this correct?</indent>
 
@@ -200,8 +200,8 @@ We can use the question text for this but we don't have a dictionary variable fo
 <logic>
 // Compute totalBirths to display in question text in fertility section
 function totalBirths()
-	totalBirths = CHILDREN_IN_HOUSEHOLD + CHILDREN_ELSEWHERE + CHILDREN_DECEASED
-end;           
+	totalBirths = CHILDREN_IN_HOUSEHOLD + CHILDREN_ELSEWHERE + CHILDREN_DECEASED;
+end;
 </logic>
 
 In the question text we can simply add the function call surrounded by ~~:
@@ -215,15 +215,15 @@ What happens when one of the fields in this calculation is skipped? The value be
 function totalBirths()
 
 	numeric total = 0;
-	
+
 	if CHILDREN_IN_HOUSEHOLD <> notappl then
 		total = total + CHILDREN_IN_HOUSEHOLD;
 	endif;
-	
+
 	if CHILDREN_ELSEWHERE <> notappl then
 		total = total + CHILDREN_ELSEWHERE;
 	endif;
-	
+
 	if CHILDREN_DECEASED <> notappl then
 		total = total + CHILDREN_DECEASED;
 	endif;
@@ -258,9 +258,9 @@ Let's try a more interesting example. Let's add a "Go To…" button that will le
 <logic>
 // Userbar function for navigating directly to different parts of questionnaire.
 function goto()
-    numeric section = accept("Go to?", 
-                             "Identification", 
-                             "Household members", 
+    numeric section = accept("Go to?",
+                             "Identification",
+                             "Household members",
                              "Demographics");
     if section = 1 then
         skip to IDENTIFICATION_FORM;
@@ -284,9 +284,9 @@ The above will let the interviewer jump from one section to another but using <l
 <logic>
 // Userbar function for navigating directly to different parts of questionnaire.
 function goto()
-    numeric section = accept("Go to?", 
-                             "Identification", 
-                             "Households", 
+    numeric section = accept("Go to?",
+                             "Identification",
+                             "Households",
                              "Demographics");
     if section = 1 then
         advance to IDENTIFICATION_FORM;
@@ -303,9 +303,9 @@ This stops the function from skipping over data when navigating, however it stil
 <logic>
 // Userbar function for navigating directly to different parts of questionnaire.
 function goto()
-    numeric section = accept("Go to?", 
-                             "Identification", 
-                             "Household members", 
+    numeric section = accept("Go to?",
+                             "Identification",
+                             "Household members",
                              "Demographics");
     if section = 1 then
         move to IDENTIFICATION_FORM advance;
@@ -317,18 +317,18 @@ function goto()
 end;
 </logic>
 
-Let's extend our goto function to let the interviewer navigate directly to an individual in the household roster. If they choose "household members" then instead of going to the first person in the roster, we will show them a list of all household members in the roster and the let them choose which one to goto. For this we can use the function <logiccolor>showarray()</logiccolor>. This function takes an array of values and displays them in a grid in a dialog box and returns the row number that the user picks. 
+Let's extend our goto function to let the interviewer navigate directly to an individual in the household roster. If they choose "household members" then instead of going to the first person in the roster, we will show them a list of all household members in the roster and the let them choose which one to goto. For this we can use the function <logiccolor>showarray()</logiccolor>. This function takes an array of values and displays them in a grid in a dialog box and returns the row number that the user picks.
 
 An array logic variable is similar to a dictionary item with occurrences. A numeric array of length seven stores seven numbers, each of which is accessed through subscripts.
 
 <logic>
-array numeric codes(7);
+Array numeric codes(7);
 </logic>
 
 <logiccolor>showarray()</logiccolor> takes a two-dimensional array. You can think of a two-dimensional array as a grid of variables or as a matrix. You declare a two-dimensional array the same way you declare a one-dimensional array except that you specify the size in both dimensions: number of rows and number of columns.
 
 <logic>
-array string householdMembersArray(30, 3);
+Array string householdMembersArray(30, 3);
 </logic>
 
 In our case we want up to 30 rows, one for each person, and we will use 3 columns so that we can display the name, sex and relationship for each person.
@@ -344,7 +344,7 @@ In our examples we will loop through the members in the household roster and add
 
 <logic>
 // Show list of entries in household roster in a dialog and let interviewer pick
-// one. Returns the row number of the person that was picked or zero if the 
+// one. Returns the row number of the person that was picked or zero if the
 // dialog was canceled.
 function pickFromHouseholdRoster()
     numeric i;
@@ -354,7 +354,7 @@ function pickFromHouseholdRoster()
         householdMembersArray(i, 3) = getlabel(RELATIONSHIP, RELATIONSHIP(i));
     enddo;
     householdMembersArray(i, 1) = ""; // Mark end
-    numeric picked = showarray(householdMembersArray, title("Name", "Sex", 
+    numeric picked = showarray(householdMembersArray, title("Name", "Sex",
 	                                                        "Relationship"));
     pickFromHouseholdRoster = picked;
 end;
@@ -362,9 +362,9 @@ end;
 // Userbar function for navigating
 // directly to different parts of questionnaire.
 function goto()
-    numeric section = accept("Go to?", 
-                             "Identification", 
-                             "Household members", 
+    numeric section = accept("Go to?",
+                             "Identification",
+                             "Household members",
                              "Demographics");
     if section = 1 then
         move to IDENTIFICATION_FORM advance;
@@ -382,16 +382,16 @@ end;
 Note that for sex and relationship we want the value set labels so we use the function getlabel(). This function returns the label from value set as an alpha value. It takes the name of the variable (or value set) and the value to use. For example <logiccolor>getlabel(SEX, 1)</logiccolor> will return "Male". Inside our loop, <logiccolor>getlabel(SEX, SEX(i))</logiccolor> will return the label for the sex of the ith household member.
 
 <subheader>Path and Visualvalue</subheader>
-Our goto() function works when we are in section B or C but when we are in section A the sex and relationship are blank. What is going on? In system controlled mode, CSEntry keeps track of which variables are on and off the "path". Variables that you have entered are considered "on path" but those that have been skipped, even if there was a value in them before they were skipped, are considered "off path". As we have seen before, variables that are "off path" are considered blank (<logiccolor>notappl</logiccolor>) in logic. It turns out that variables that are ahead of the current field are also considered "off path" until you pass through them. The idea is that these fields have not yet been validated by running their preproc and postproc with the current values of all preceding fields and therefore cannot be considered final. The effect of this is that the values of all fields ahead of the current field in the questionnaire are <logiccolor>notappl</logiccolor> in logic. 
+Our goto() function works when we are in section B or C but when we are in section A the sex and relationship are blank. What is going on? In system controlled mode, CSEntry keeps track of which variables are on and off the "path". Variables that you have entered are considered "on path" but those that have been skipped, even if there was a value in them before they were skipped, are considered "off path". As we have seen before, variables that are "off path" are considered blank (<logiccolor>notappl</logiccolor>) in logic. It turns out that variables that are ahead of the current field are also considered "off path" until you pass through them. The idea is that these fields have not yet been validated by running their preproc and postproc with the current values of all preceding fields and therefore cannot be considered final. The effect of this is that the values of all fields ahead of the current field in the questionnaire are <logiccolor>notappl</logiccolor> in logic.
 
 Interestingly, as we can see from our current code, this only applies to numeric items. Our code works just fine for the <b>NAME</b> field.
 
 You can see which fields are "on path" by looking at the background color of the field:
 <list>
 	<li>Green: on path</li>
-	<li>Dark Grey: skipped</li>
+	<li>Dark Gray: skipped</li>
 	<li>White: not yet been filled in</li>
-	<li>Light grey: protected</li>
+	<li>Light Gray: protected</li>
 </list>
 
 Note that the field coloring scheme is different in operator controlled mode.
@@ -404,11 +404,11 @@ function pickFromHouseholdRoster()
     do i = 1 while i <= totocc(HOUSEHOLD_MEMBERS_ROSTER);
         householdMembersArray(i, 1) = strip(NAME(i));
         householdMembersArray(i, 2) = getlabel(SEX, visualvalue(SEX(i)));
-        householdMembersArray(i, 3) = getlabel(RELATIONSHIP,   
+        householdMembersArray(i, 3) = getlabel(RELATIONSHIP,
                                                visualvalue(RELATIONSHIP(i)));
     enddo;
     householdMembersArray(i, 1) = ""; // Mark end
-    numeric picked = showarray(householdMembersArray, 
+    numeric picked = showarray(householdMembersArray,
                                title("Name", "Sex", "Relationship"));
     pickFromHouseholdRoster = picked;
 end;
@@ -418,12 +418,12 @@ All that is left now is to use the appropriate relationship for the sex of the h
 
 <logic>
 if visualvalue(SEX(i)) = 1 then
-    householdMembersArray (i, 3) = getlabel(RELATIONSHIP_MALE, 
-                                 visualvalue(RELATIONSHIP(i)));
+    householdMembersArray(i, 3) = getlabel(RELATIONSHIP_MALE,
+										   visualvalue(RELATIONSHIP(i)));
 else
-    householdMembersArray (i, 3) = getlabel(RELATIONSHIP_FEMALE, 
-                                 visualvalue(RELATIONSHIP(i)));
-endif;      
+    householdMembersArray(i, 3) = getlabel(RELATIONSHIP_FEMALE,
+										   visualvalue(RELATIONSHIP(i)));
+endif;
 </logic>
 
 <subheader>Setting field values only once</subheader>
@@ -447,7 +447,7 @@ if INTERVIEW_START_HOURS = notappl then
 endif;
 </logic>
 
-But this doesn't seem to work. Why? Is <b>INTERVIEW_START_HOURS</b> on path when we are in the preproc of <b>INTERVIEW_START_HOURS</b>? It is not. We have to get to the postproc for the variable to be on path. However, we can use <logiccolor>visualvalue()</logiccolor> to get the value of the field in the preproc: 
+But this doesn't seem to work. Why? Is <b>INTERVIEW_START_HOURS</b> on path when we are in the preproc of <b>INTERVIEW_START_HOURS</b>? It is not. We have to get to the postproc for the variable to be on path. However, we can use <logiccolor>visualvalue()</logiccolor> to get the value of the field in the preproc:
 
 <logic>
 PROC INTERVIEW_START_HOURS
@@ -470,9 +470,9 @@ if INTERVIEW_END_TIME = notappl then
 endif;
 </logic>
 
-We should make this field protected. However, if we do that we get an error when we don't fill it in while in section A of the questionnaire. While we don't normally want to allow a field to be left blank, in this case we need to make an exception. We can do that by changing the validation method in the field properties to "Allow out of range without confirmation". With this setting, you are allowed to leave a field blank or to enter a value outside the value set with no error. 
+We should make this field protected. However, if we do that we get an error when we don't fill it in while in section A of the questionnaire. While we don't normally want to allow a field to be left blank, in this case we need to make an exception. We can do that by changing the validation method in the field properties to "Allow out of range without confirmation". With this setting, you are allowed to leave a field blank or to enter a value outside the value set with no error.
 
-Having captured the interview start and end time as hours and minutes we can calculate the total interview time by subtracting the start time from the end time. However, this calculation is tricky because we have to handle the case where the end minutes are less than the start minutes. It would be easier if instead of using <logiccolor>systime()</logiccolor> we used the function <logiccolor>timestamp()</logiccolor> which gives the time in total seconds since January 1, 1970. If we subtract the start timestamp from the end timestamp we get the total interview time in seconds. Let's add new protected variables for start timestamp, end timestamp and interview duration and fill them in. Since these fields will be on the section A form but will not be filled until the end of the questionnaire, set the validation method to "Allow out of range without confirmation" as we did with INTERVIEW_END_TIME. 
+Having captured the interview start and end time as hours and minutes we can calculate the total interview time by subtracting the start time from the end time. However, this calculation is tricky because we have to handle the case where the end minutes are less than the start minutes. It would be easier if instead of using <logiccolor>systime()</logiccolor> we used the function <logiccolor>timestamp()</logiccolor> which gives the time in total seconds since January 1, 1970. If we subtract the start timestamp from the end timestamp we get the total interview time in seconds. Let's add new protected variables for start timestamp, end timestamp and interview duration and fill them in. Since these fields will be on the section A form but will not be filled until the end of the questionnaire, set the validation method to "Allow out of range without confirmation" as we did with INTERVIEW_END_TIME.
 
 <logic>
 PROC INTERVIEW_START_TIMESTAMP
@@ -494,6 +494,7 @@ endif;
 
 If we don't need to display the start and end times on the form we can avoid using visualvalue. We can simply remove the variables from the form and keep them in the dictionary. When we set the values of these variables in logic and the case is saved the values are saved to the data file just like variables that are on the form. Unlike variables on the form, however, variables that are not on the form are always considered "on path" so you do not need to worry about using visualvalue.
 <pagebreak />
+
 <subheader>Exercises</subheader>
 <list ordered>
 	<li>Modify the question text for <b>E01</b> to say "Has any member of this household passed away in the past years, that is since (year)?" where year is replaced by the year of the interview minus 5. For example, if the year of the interview is 2018 it should read "Has any member of this household passed away in the past years, that is since 2013?". Use the the interview date from question <b>A6</b> to compute the value to insert.</li>
