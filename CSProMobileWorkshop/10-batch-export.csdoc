@@ -2,10 +2,10 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Implement consistency checks in a batch edit application</li>
-	<li>Use batch edit to add calculated variables and recoded variables</li>
-	<li>Use batch edit to convert checkbox values to yes/no variables for analysis</li>
-	<li>Use the Export Data tool to take data from CSPro to other software packages</li>
+    <li>Implement consistency checks in a batch edit application</li>
+    <li>Use batch edit to add calculated variables and recoded variables</li>
+    <li>Use batch edit to convert checkbox values to yes/no variables for analysis</li>
+    <li>Use the Export Data tool to take data from CSPro to other software packages</li>
 </list>
 
 <subheader>Creating a Batch Edit Application</subheader>
@@ -83,11 +83,11 @@ PROC AGE_AT_FIRST_MARRIAGE
 if AGE >= 10 and MARITAL_STATUS in 2:4 then
     numHHMembers10AndOverEverMarried = numHHMembers10AndOverEverMarried + 1;
 
-	// Check for age at first marriage less than current age
-	if AGE_AT_FIRST_MARRIAGE > AGE then
-		errmsg("Age at first marriage greater than age") summary
-				denom = numHHMembers10AndOverEverMarried;
-	endif;
+    // Check for age at first marriage less than current age
+    if AGE_AT_FIRST_MARRIAGE > AGE then
+        errmsg("Age at first marriage greater than age") summary
+                denom = numHHMembers10AndOverEverMarried;
+    endif;
 endif;
 </logic>
 
@@ -149,14 +149,14 @@ PROC CHILD_HEADED_HOUSEHOLD
 
 // Set calculated variable child headed based on age of head
 if AGE(1) < 18 then
-	// Head under 18, child headed
-	impute(CHILD_HEADED_HOUSEHOLD, 1);
+    // Head under 18, child headed
+    impute(CHILD_HEADED_HOUSEHOLD, 1);
 elseif AGE(1)  = 999 then
-	// Head age unknown
-	impute(CHILD_HEADED_HOUSEHOLD, 9);
+    // Head age unknown
+    impute(CHILD_HEADED_HOUSEHOLD, 9);
 else
-	// Head over 18, not child headed
-	impute(CHILD_HEADED_HOUSEHOLD, 2);
+    // Head over 18, not child headed
+    impute(CHILD_HEADED_HOUSEHOLD, 2);
 endif;
 </logic>
 
@@ -172,23 +172,23 @@ For each of these new variables we want to set the value to yes if the correspon
 <logic>
 PROC LANGUAGE_ENGLISH_SPOKEN
 if pos("A", LANGUAGES_SPOKEN) > 0 then
-	LANGUAGE_ENGLISH_SPOKEN = 1;
+    LANGUAGE_ENGLISH_SPOKEN = 1;
 else
-	LANGUAGE_ENGLISH_SPOKEN = 2;
+    LANGUAGE_ENGLISH_SPOKEN = 2;
 endif;
 
 PROC LANGUAGE_FRENCH_SPOKEN
 if pos("B", LANGUAGES_SPOKEN) > 0 then
-	LANGUAGE_FRENCH_SPOKEN = 1;
+    LANGUAGE_FRENCH_SPOKEN = 1;
 else
-	LANGUAGE_FRENCH_SPOKEN = 2;
+    LANGUAGE_FRENCH_SPOKEN = 2;
 endif;
 
 PROC LANGUAGE_SPANISH_SPOKEN
 if pos("C", LANGUAGES_SPOKEN) > 0 then
-	LANGUAGE_SPANISH_SPOKEN = 1;
+    LANGUAGE_SPANISH_SPOKEN = 1;
 else
-	LANGUAGE_SPANISH_SPOKEN = 2;
+    LANGUAGE_SPANISH_SPOKEN = 2;
 endif;
 </logic>
 
@@ -235,10 +235,10 @@ You can save your export settings as CSPro export specification file (.exf). You
 
 <subheader>Exercises</subheader>
 <list ordered>
-	<li>Modify the batch edit application to add a check for someone with relationship of spouse but marital status that is not married. Print a message for each case found. This should be done in the batch edit application NOT in the data entry application.</li>
-	<li>Modify the batch edit application to add a check that the total number of rooms (<b>F01</b>) is greater than the number of bedrooms (<b>F02</b>)</li>
-	<li>Modify the batch edit application to add a check that the type of main dwelling (<b>F03</b>) is consistent with the total numbers of each dwelling type in <b>F05</b>. For example, if the main dwelling in <b>F03</b> is detached house then the total number of detached houses in <b>F05</b> must not be zero.</li>
-	<li>Modify the batch edit application to convert the disabilities (<b>B11</b>) from alpha (used for checkboxes) to a set of numeric yes/no variables. Create the new variables in the dictionary and write logic to set the value of each of the new variables based on the selections in <b>B11</b>.</li>
-	<li>Using the test data, export the household members along with the ID items to the package of your choice (Excel, SPSS, Stata, SAS or R). Use that package to determine the total number of people by sex (total, males, females) and also the number of people by sex for district 01.</li>
-	<li>Export the deaths record and the person record along with the ID items into the package of your choice. You should export all the records at once, not one by one. How many households have more than one death? How many households have children under 5 years of age?</li>
+    <li>Modify the batch edit application to add a check for someone with relationship of spouse but marital status that is not married. Print a message for each case found. This should be done in the batch edit application NOT in the data entry application.</li>
+    <li>Modify the batch edit application to add a check that the total number of rooms (<b>F01</b>) is greater than the number of bedrooms (<b>F02</b>)</li>
+    <li>Modify the batch edit application to add a check that the type of main dwelling (<b>F03</b>) is consistent with the total numbers of each dwelling type in <b>F05</b>. For example, if the main dwelling in <b>F03</b> is detached house then the total number of detached houses in <b>F05</b> must not be zero.</li>
+    <li>Modify the batch edit application to convert the disabilities (<b>B11</b>) from alpha (used for checkboxes) to a set of numeric yes/no variables. Create the new variables in the dictionary and write logic to set the value of each of the new variables based on the selections in <b>B11</b>.</li>
+    <li>Using the test data, export the household members along with the ID items to the package of your choice (Excel, SPSS, Stata, SAS or R). Use that package to determine the total number of people by sex (total, males, females) and also the number of people by sex for district 01.</li>
+    <li>Export the deaths record and the person record along with the ID items into the package of your choice. You should export all the records at once, not one by one. How many households have more than one death? How many households have children under 5 years of age?</li>
 </list>

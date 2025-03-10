@@ -2,12 +2,12 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Use images in value sets</li>
-	<li>View external documents and media files from a data entry application</li>
-	<li>Take photos in a data entry application</li>
-	<li>Capture GPS coordinates in a data entry application</li>
-	<li>Display captured GPS points on a map</li>
-	<li>Generate and view reports from a data entry application</li>
+    <li>Use images in value sets</li>
+    <li>View external documents and media files from a data entry application</li>
+    <li>Take photos in a data entry application</li>
+    <li>Capture GPS coordinates in a data entry application</li>
+    <li>Display captured GPS points on a map</li>
+    <li>Generate and view reports from a data entry application</li>
 </list>
 
 <subheader>Value Set Images</subheader>
@@ -184,8 +184,8 @@ end;
 If we want to be fancy, we can display the point on the map first so that the interviewer can view it and then decide whether or not to use it. We can do this using a variable of type <logiccolor>Map</logiccolor>. Like <logiccolor>ValueSet</logiccolor> variables, <logiccolor>Map</logiccolor> variables have functions that can be called on them using a dot ("."). For example, to add a marker to a map you would call:
 
 <logic>
-	Map mymap;
-	mymap.addMarker(longitude, latitude);
+    Map mymap;
+    mymap.addMarker(longitude, latitude);
 </logic>
 
 To display the map, call the <logiccolor Map>show()</logiccolor> function. This displays a Google Map containing the marker that was added.
@@ -198,9 +198,9 @@ function getGPS()
     gps(open);
     if gps(read, 60, 10)  then // Read up to 60 seconds, try for 10m accuracy
         // Show map so that interviewer can see result
-		Map m;
-		m.addMarker(gps(latitude), gps(longitude));
-		m.show();
+        Map m;
+        m.addMarker(gps(latitude), gps(longitude));
+        m.show();
         if accept("Save this result", "Yes", "No") = 1 then
             LATITUDE = gps(latitude);
             LONGITUDE = gps(longitude);
@@ -235,7 +235,7 @@ Then we can use the commands <logiccolor>setfile()</logiccolor>, <logiccolor>fil
 // Write out and display household summary report
 function showHouseholdReport()
     string reportFilename = maketext("%sreport.txt", pathname(Application));
-	File tempFile;
+    File tempFile;
     setfile(tempFile, reportFilename, create);
     filewrite(tempFile, "Household Summary Report");
     filewrite(tempFile, "------------------------");
@@ -261,7 +261,7 @@ function showHouseholdReport()
     enddo;
     close(tempFile);
 
-	view(reportFilename);
+    view(reportFilename);
 end;
 </logic>
 
@@ -269,7 +269,7 @@ If you are familiar with HTML you can write out HTML and have nicer formatting a
 
 <subheader>Exercises</subheader>
 <list ordered>
-	<li>Add a button to the userbar that shows your website using the view() function.</li>
-	<li>Add the following additional information to the summary report. a.	Total number of household members, total males, total females. b. List of household assets from section G with quantity. Do not list assets where the quantity is zero.</li>
+    <li>Add a button to the userbar that shows your website using the view() function.</li>
+    <li>Add the following additional information to the summary report. a.  Total number of household members, total males, total females. b. List of household assets from section G with quantity. Do not list assets where the quantity is zero.</li>
 </list>
 <pagebreak />

@@ -2,12 +2,12 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Implement consistency checks across individuals in the household roster</li>
-	<li>Understand the order of PROCs and where to place edit checks</li>
-	<li>Use subscripts, <logiccolor>totocc()</logiccolor>, <logiccolor>count()</logiccolor>, <logiccolor>seek()</logiccolor> and <logiccolor>curocc()</logiccolor> to work with rosters</li>
-	<li>Use loops (<logiccolor>do, while</logiccolor>) to implement edit checks on repeating records/items (rosters)</li>
-	<li>Understand and use "special values" (<logiccolor>notappl</logiccolor>, <logiccolor>missing</logiccolor>, <logiccolor>refused</logiccolor>, and <logiccolor>default</logiccolor>) in logic</li>
-	<li>Set occurrence labels on rosters from logic</li>
+    <li>Implement consistency checks across individuals in the household roster</li>
+    <li>Understand the order of PROCs and where to place edit checks</li>
+    <li>Use subscripts, <logiccolor>totocc()</logiccolor>, <logiccolor>count()</logiccolor>, <logiccolor>seek()</logiccolor> and <logiccolor>curocc()</logiccolor> to work with rosters</li>
+    <li>Use loops (<logiccolor>do, while</logiccolor>) to implement edit checks on repeating records/items (rosters)</li>
+    <li>Understand and use "special values" (<logiccolor>notappl</logiccolor>, <logiccolor>missing</logiccolor>, <logiccolor>refused</logiccolor>, and <logiccolor>default</logiccolor>) in logic</li>
+    <li>Set occurrence labels on rosters from logic</li>
 </list>
 
 <subheader>Groups and Subscripts</subheader>
@@ -64,9 +64,9 @@ The alphanumeric variable <b>NAME</b> is just empty but the numeric values <b>AG
 
 There are other special values that are used in CSPro:
 <list>
-	<li><logiccolor>missing</logiccolor>: can be used as an alias for no response codes (9, 99, 999…). You must create an entry for it in the value set.</li>
-	<li><logiccolor>refused</logiccolor>: similar to missing but can add special handling to make it more difficult to select. You must create an entry for it in the value set.</li>
-	<li><logiccolor>default</logiccolor>: results from an error reading from a data file or from a calculation error (like trying to calculate notappl + 2 or dividing by zero) or moving a value into a variable that is too small to hold the value. For example, if AGE is a two digit field, AGE = 118 will result in <logiccolor>default</logiccolor>.</li>
+    <li><logiccolor>missing</logiccolor>: can be used as an alias for no response codes (9, 99, 999…). You must create an entry for it in the value set.</li>
+    <li><logiccolor>refused</logiccolor>: similar to missing but can add special handling to make it more difficult to select. You must create an entry for it in the value set.</li>
+    <li><logiccolor>default</logiccolor>: results from an error reading from a data file or from a calculation error (like trying to calculate notappl + 2 or dividing by zero) or moving a value into a variable that is too small to hold the value. For example, if AGE is a two digit field, AGE = 118 will result in <logiccolor>default</logiccolor>.</li>
 </list>
 
 <subheader>Getting the size of a roster</subheader>
@@ -101,9 +101,9 @@ What proc can we use to set the occurrence labels? We could use the preproc of t
 
 The general rule is that
 <list ordered>
-	<li>Parent items have their preproc called first,</li>
-	<li>then the procs of the child items are called,</li>
-	<li>and finally, the postproc of the parent is called.</li>
+    <li>Parent items have their preproc called first,</li>
+    <li>then the procs of the child items are called,</li>
+    <li>and finally, the postproc of the parent is called.</li>
 </list>
 
 <callout>
@@ -135,10 +135,10 @@ preproc
 // until after we pass through the household members roster.
 
 do numeric i = 1 while i <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
-	setocclabel(HOUSEHOLD_MEMBERS_ROSTER(i), strip(NAME(i)));
-	setocclabel(DEMOGRAPHICS_ROSTER(i), strip(NAME(i)));
-	setocclabel(EDUCATION_ROSTER(i), strip(NAME(i)));
-	setocclabel(FERTILITY_ROSTER(i), strip(NAME(i)));
+    setocclabel(HOUSEHOLD_MEMBERS_ROSTER(i), strip(NAME(i)));
+    setocclabel(DEMOGRAPHICS_ROSTER(i), strip(NAME(i)));
+    setocclabel(EDUCATION_ROSTER(i), strip(NAME(i)));
+    setocclabel(FERTILITY_ROSTER(i), strip(NAME(i)));
 enddo;
 </logic>
 
@@ -232,14 +232,14 @@ Instead of allowing the interviewer to enter the head of household on any line o
 PROC RELATIONSHIP
 // Don't allow non-head of household on first row
 if RELATIONSHIP <> 1 and curocc() = 1 then
-	errmsg("Please enter the head of household before the other household members.");
-	reenter;
+    errmsg("Please enter the head of household before the other household members.");
+    reenter;
 endif;
 
 // Don't allow head of household on a row other than first row
 if RELATIONSHIP = 1 and curocc() <> 1 then
     errmsg("Only one head of household is allowed. Head of household was already entered.");
-	reenter;
+    reenter;
 endif;
 </logic>
 
@@ -251,7 +251,7 @@ This replaces our logic for counting the number of heads of household in the pos
 PROC AGE
 // Compare age of child to age of the head
 if RELATIONSHIP = 3 and AGE(1) - AGE < 12 then
-	errmsg("Child %s is %d years old but head %s is %d. Parent must be at least 12 years older than child.",
+    errmsg("Child %s is %d years old but head %s is %d. Parent must be at least 12 years older than child.",
                 strip(NAME),
                 AGE,
                 strip(NAME(1)),
@@ -276,24 +276,24 @@ PROC HAVE_CHILDREN_IN_HOUSEHOLD
 numeric womanLineNumber = curocc();
 numeric childLineNumber = seek(MOTHER_LINE_NUMBER = womanLineNumber);
 if childLineNumber > 0 and HAVE_CHILDREN_IN_HOUSEHOLD = 2 then
-	warning("There are children in the household who have listed %s as their mother", strip(NAME))
-	select("Correct have children in household", HAVE_CHILDREN_IN_HOUSEHOLD,
-	       "Correct mother line number", MOTHER_LINE_NUMBER(childLineNumber),
-	       "Ignore error", continue);
+    warning("There are children in the household who have listed %s as their mother", strip(NAME))
+    select("Correct have children in household", HAVE_CHILDREN_IN_HOUSEHOLD,
+           "Correct mother line number", MOTHER_LINE_NUMBER(childLineNumber),
+           "Ignore error", continue);
 elseif childLineNumber = 0 and HAVE_CHILDREN_IN_HOUSEHOLD = 1 then
-	warning("There are no children in the household who have listed %s as their mother", strip(NAME))
-	select("Correct have children in household", HAVE_CHILDREN_IN_HOUSEHOLD,
-	       "Correct mother line number", MOTHER_LINE_NUMBER(1),
-	       "Ignore error", continue);
+    warning("There are no children in the household who have listed %s as their mother", strip(NAME))
+    select("Correct have children in household", HAVE_CHILDREN_IN_HOUSEHOLD,
+           "Correct mother line number", MOTHER_LINE_NUMBER(1),
+           "Ignore error", continue);
 endif;
 </logic>
 
 <subheader>Exercises</subheader>
 <list ordered>
-	<li>Ensure that the age difference between the head of household and the grandchild should not be less than 24 years. If age of head is X years and the age of the child is Y years, then X-Y ≥ 24.</li>
-	<li>Show an error message if the head of household has at least one spouse in the household and the marital of status of the head of household is not married.</li>
-	<li>Show an error message if the head of household and his/her spouse are of the same gender. Make sure that your logic works with polygamous households as well as households with just one spouse.</li>
-	<li>Set the occurrence labels in the section E roster, deaths, to the names of the deceased, <b>E04</b>, in that section. Make sure that the labels are set correctly when resuming from partial save.</li>
+    <li>Ensure that the age difference between the head of household and the grandchild should not be less than 24 years. If age of head is X years and the age of the child is Y years, then X-Y ≥ 24.</li>
+    <li>Show an error message if the head of household has at least one spouse in the household and the marital of status of the head of household is not married.</li>
+    <li>Show an error message if the head of household and his/her spouse are of the same gender. Make sure that your logic works with polygamous households as well as households with just one spouse.</li>
+    <li>Set the occurrence labels in the section E roster, deaths, to the names of the deceased, <b>E04</b>, in that section. Make sure that the labels are set correctly when resuming from partial save.</li>
 </list>
 
 <pagebreak />

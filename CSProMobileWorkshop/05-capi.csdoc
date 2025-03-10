@@ -2,12 +2,12 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Add question text and help text</li>
-	<li>Add fills in question text</li>
-	<li>Use multiple languages in question text, error messages and the dictionary</li>
-	<li>Use occurrence labels as fills in question text</li>
-	<li>Use <logiccolor>setcaselabel</logiccolor> to customize the case listing</li>
-	<li>Use dynamic value sets</li>
+    <li>Add question text and help text</li>
+    <li>Add fills in question text</li>
+    <li>Use multiple languages in question text, error messages and the dictionary</li>
+    <li>Use occurrence labels as fills in question text</li>
+    <li>Use <logiccolor>setcaselabel</logiccolor> to customize the case listing</li>
+    <li>Use dynamic value sets</li>
 </list>
 
 <subheader>Question Text</subheader>
@@ -105,8 +105,8 @@ PROC AGE
 
 // Ensure that head of household is at least 15 years old
 if AGE < 15 and RELATIONSHIP = 1 then
-	errmsg(100)
-		select(tr(101), AGE, tr(102), RELATIONSHIP);
+    errmsg(100)
+        select(tr(101), AGE, tr(102), RELATIONSHIP);
 endif;
 </logic>
 
@@ -122,11 +122,11 @@ Add the question text and the French translations for the question text, labels,
 <subheader>Using Occurrence Labels in Question Text</subheader>
 We have the following occurrence labels for the housing unit types in question <b>F05</b>.
 <list>
-	<li>Traditional round hut</li>
-	<li>Detached house</li>
-	<li>Semi-detached house</li>
-	<li>Flat/apartment</li>
-	<li>Improvised (kiosk/container)</li>
+    <li>Traditional round hut</li>
+    <li>Detached house</li>
+    <li>Semi-detached house</li>
+    <li>Flat/apartment</li>
+    <li>Improvised (kiosk/container)</li>
 </list>
 
 We can use these occurrence labels in the question text for <b>F05</b>:
@@ -196,10 +196,10 @@ We will fill in the ValueSet object with names and line numbers of the eligible 
 We would fill in the ValueSet object as follows:
 
 <table 3 header>
-	<cell>Subscript</cell><cell>Codes</cell><cell>Labels</cell>
-	<cell>1</cell><cell>1</cell><cell>John Brown</cell>
-	<cell>2</cell><cell>2</cell><cell>Mary Brown</cell>
-	<cell>3</cell><cell>4</cell><cell>Jane Brown</cell>
+    <cell>Subscript</cell><cell>Codes</cell><cell>Labels</cell>
+    <cell>1</cell><cell>1</cell><cell>John Brown</cell>
+    <cell>2</cell><cell>2</cell><cell>Mary Brown</cell>
+    <cell>3</cell><cell>4</cell><cell>Jane Brown</cell>
 </table>
 
 To create the value set from the household roster we need the second form of setvalueset that takes a ValueSet object. This will allow us to create the list of names in logic instead of in the dictionary.
@@ -235,7 +235,7 @@ onfocus
 ValueSet eligibleMembersVSet;
 do numeric indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
     if AGE(indexRoster) >= 12 then
-		eligibleMembersVSet.add(NAME(indexRoster),indexRoster);
+        eligibleMembersVSet.add(NAME(indexRoster),indexRoster);
     endif;
 enddo;
 
@@ -253,9 +253,9 @@ numeric indexRoster;
 ValueSet motherVSet;
 
 do numeric indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
-	if SEX(indexRoster) = 2 and AGE(indexRoster) > 12 and indexRoster <> curocc() then
-		motherVSet.add(NAME(indexRoster),indexRoster);
-	endif;
+    if SEX(indexRoster) = 2 and AGE(indexRoster) > 12 and indexRoster <> curocc() then
+        motherVSet.add(NAME(indexRoster),indexRoster);
+    endif;
 enddo;
 </logic>
 
@@ -296,7 +296,7 @@ do numeric languageNumericCode = 1 while languageNumericCode <= 8
     // Check if the language is selected in the checkbox field
     if pos(languageCheckboxCode, LANGUAGES_SPOKEN) = 0 then
         // Language is not selected. Remove it from the value set.
-		languageVSet.remove(languageNumericCode);
+        languageVSet.remove(languageNumericCode);
     endif;
 
 enddo;
@@ -353,10 +353,10 @@ setvalueset($, possessionsVSet);
 
 <subheader>Exercises</subheader>
 <list ordered>
-	<li>Add question text to questions B06 through B8. Use fills to include the name as we did in the examples.</li>
-	<li>Add a new language, the language of your choice, to the CAPI text and to the dictionary. Translate the question text, labels and value sets questions B06-B08 into the new language.</li>
-	<li>Add question text for section G and use the occurrence labels to fill in the name of the possessions in the quantity and value fields.</li>
-	<li>In question B06 (date of birth) use a dynamic value set for the day based on the month (January: 1-31, February: 1-28, March: 1-31…) so that the interviewer cannot enter an invalid date like February 30 or April 31. Bonus if you can correctly handle leap years.</li>
-	<li>For E08 (line number of mother of deceased) use a dynamic value set to list the names of all eligible women from the household roster.</li>
+    <li>Add question text to questions B06 through B8. Use fills to include the name as we did in the examples.</li>
+    <li>Add a new language, the language of your choice, to the CAPI text and to the dictionary. Translate the question text, labels and value sets questions B06-B08 into the new language.</li>
+    <li>Add question text for section G and use the occurrence labels to fill in the name of the possessions in the quantity and value fields.</li>
+    <li>In question B06 (date of birth) use a dynamic value set for the day based on the month (January: 1-31, February: 1-28, March: 1-31…) so that the interviewer cannot enter an invalid date like February 30 or April 31. Bonus if you can correctly handle leap years.</li>
+    <li>For E08 (line number of mother of deceased) use a dynamic value set to list the names of all eligible women from the household roster.</li>
 </list>
 <pagebreak />

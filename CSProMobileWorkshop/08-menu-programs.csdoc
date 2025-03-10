@@ -2,10 +2,10 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Understand how to design the screens of a menu program</li>
-	<li>Use variables of type pff to launch one CSPro application from another</li>
-	<li>Create a simple menu program to launch the main data entry program</li>
-	<li>Create dynamic menus with dynamic value sets</li>
+    <li>Understand how to design the screens of a menu program</li>
+    <li>Use variables of type pff to launch one CSPro application from another</li>
+    <li>Create a simple menu program to launch the main data entry program</li>
+    <li>Create dynamic menus with dynamic value sets</li>
 </list>
 
 <subheader>What is a Menu Program?</subheader>
@@ -13,11 +13,11 @@ At the end of this session participants will be able to:
 A menu program is a CSPro data entry application that is used to manage the data entry workflow. A menu program is not used for capturing any interview data itself. Instead, it launches other data entry programs for interviews. Menu programs generally have some or all of following functions:
 
 <list>
-	<li>Launches other CSPro applications to do data collection (often pre-filling ID items)</li>
-	<li>Show reports on progress, summary statistics</li>
-	<li>Manage user access through usernames/passwords</li>
-	<li>Manage household listing and interview assignments</li>
-	<li>Launch synchronization</li>
+    <li>Launches other CSPro applications to do data collection (often pre-filling ID items)</li>
+    <li>Show reports on progress, summary statistics</li>
+    <li>Manage user access through usernames/passwords</li>
+    <li>Manage household listing and interview assignments</li>
+    <li>Launch synchronization</li>
 </list>
 
 <subheader>Designing the Screens and Flow</subheader>
@@ -31,9 +31,9 @@ Once you have the screens, the next step is to create a new data entry applicati
 Each menu screen will be a different variable in the dictionary. The value set for the variable will show the available menu choices to the enumerator on that screen. In the menu example above we will have three variables:
 
 <list>
-	<li>LOGIN (value set: Interviewer - 1, Supervisor - 2)</li>
-	<li>INTERVIEWER_MAIN_MENU (value set: List Households - 1, Interview Household - 2, Logout - 9)</li>
-	<li>SUPERVISOR_MAIN_MENU (value set: Completion report - 1, Logout - 9).</li>
+    <li>LOGIN (value set: Interviewer - 1, Supervisor - 2)</li>
+    <li>INTERVIEWER_MAIN_MENU (value set: List Households - 1, Interview Household - 2, Logout - 9)</li>
+    <li>SUPERVISOR_MAIN_MENU (value set: Completion report - 1, Logout - 9).</li>
 </list>
 
 We will keep the default ID item that CSPro creates for us. The menu program dictionary doesn't really need an ID item since we do not need to save our menu choices to the data file. However, CSPro requires that we have at least one ID item so we will keep it.
@@ -105,7 +105,7 @@ if $ = 1 then
     showCompletionReport();
 elseif $ = 9 then
     // Logout
-	stop(1);
+    stop(1);
 endif;
 
 // Show supervisor menu again
@@ -120,9 +120,9 @@ The following logic will launch a data entry application using the pff file Pops
 <logic>
 function launchHouseholdDataEntry()
 
-	Pff householdPff;
-	householdPff.load("../Household/Popstan2020.pff");
-	householdPff.exec();
+    Pff householdPff;
+    householdPff.load("../Household/Popstan2020.pff");
+    householdPff.exec();
 end;
 </logic>
 
@@ -227,8 +227,8 @@ forcase LISTING_DICT do
 endfor;
 
 if length(householdVSet.codes) = 0 then
-	errmsg("No households have been listed. Please list households first before interviewing.");
-	reenter INTERVIEWER_MAIN_MENU;
+    errmsg("No households have been listed. Please list households first before interviewing.");
+    reenter INTERVIEWER_MAIN_MENU;
 endif;
 
 setvalueset($, householdVSet);
@@ -242,10 +242,10 @@ The next step is to handle the menu choice in the postproc to launch the househo
 <logic>
 // Launch household questionnaire data entry application
 function launchHouseholdDataEntry()
-	Pff householdPff;
-	householdPff.load("../Household/Popstan2020.pff");
-	householdPff.setProperty("Key", CHOOSE_HOUSEHOLD);
-	householdPff.exec();
+    Pff householdPff;
+    householdPff.load("../Household/Popstan2020.pff");
+    householdPff.setProperty("Key", CHOOSE_HOUSEHOLD);
+    householdPff.exec();
 end;
 </logic>
 
@@ -270,12 +270,12 @@ The logic for <b>DISTRICT</b>, <b>ENUMERATION_AREA</b>, and <b>HOUSEHOLD_NUMBER<
 Rather than have the user choose their role, lets assign each interviewer and supervisor a staff code and then create a lookup file containing the staff codes along with the role and the district/enumeration area assigned to the interviewer/supervisor. Here is an example staff file:
 
 <table 6>
-	<cell>Staff code</cell><cell>Name</cell><cell>Role (1=interviewer, 2=supervisor)</cell><cell>Province</cell><cell>District</cell><cell>EA</cell>
-	<cell>001</cell><cell>Shemika Rothenberger</cell><cell>2</cell><cell>1</cell><cell>1</cell><cell></cell>
-	<cell>002</cell><cell>Andrew Benninger</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>1</cell>
-	<cell>003</cell><cell>Angelica Swenson</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>2</cell>
-	<cell>004</cell><cell>Zelma Hawke</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>3</cell>
-	<cell>005</cell><cell>Willis Catron</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>4</cell>
+    <cell>Staff code</cell><cell>Name</cell><cell>Role (1=interviewer, 2=supervisor)</cell><cell>Province</cell><cell>District</cell><cell>EA</cell>
+    <cell>001</cell><cell>Shemika Rothenberger</cell><cell>2</cell><cell>1</cell><cell>1</cell><cell></cell>
+    <cell>002</cell><cell>Andrew Benninger</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>1</cell>
+    <cell>003</cell><cell>Angelica Swenson</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>2</cell>
+    <cell>004</cell><cell>Zelma Hawke</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>3</cell>
+    <cell>005</cell><cell>Willis Catron</cell><cell>1</cell><cell>1</cell><cell>1</cell><cell>4</cell>
 </table>
 
 Note that for the supervisor we leave the enumeration area blank since they are assigned to an entire district and not to an enumeration area. The supervisor will supervise all of the enumerators in their district.
@@ -371,11 +371,11 @@ The parameter section in the pff file allows you to pass any value to your data 
 <logic>
 // Launch household questionnaire data entry application
 function launchHouseholdDataEntry()
-	Pff householdPff;
-	householdPff.load("../Household/Popstan2020.pff");
-	householdPff.setProperty("Key", CHOOSE_HOUSEHOLD);
-	householdPff.setProperty("INTERVIEWER_CODE", maketext("%v", STAFF_CODE));
-	householdPff.exec();
+    Pff householdPff;
+    householdPff.load("../Household/Popstan2020.pff");
+    householdPff.setProperty("Key", CHOOSE_HOUSEHOLD);
+    householdPff.setProperty("INTERVIEWER_CODE", maketext("%v", STAFF_CODE));
+    householdPff.exec();
 end;
 </logic>
 
@@ -386,10 +386,10 @@ PROC INTERVIEWER_CODE
 // Prefill with parameter from pff
 preproc
 if sysparm("INTERVIEWER_CODE") <> "" then
-	$ = tonumber(sysparm("INTERVIEWER_CODE"));
+    $ = tonumber(sysparm("INTERVIEWER_CODE"));
 
-	// make field protected
-	protect($, true);
+    // make field protected
+    protect($, true);
 endif;
 </logic>
 
@@ -417,7 +417,7 @@ To generate this report, we need to loop through all the cases in the household 
 // for all cases in the supervisor's district.
 function showCompletionReport()
     string reportFilename = maketext("%sreport.txt", pathname(Application));
-	File tempFile;
+    File tempFile;
     setfile(tempFile, reportFilename, create);
 
     filewrite(tempFile, "Completion Report");
@@ -467,11 +467,11 @@ end;
 
 <subheader>Exercises</subheader>
 <list ordered>
-	<li>Implement the function launchHouseholdListing() in the menu program. It should write out and launch a pff file to run the listing program. Set the "Key" attribute in the pff file to the province, district, and enumeration area. Set the staff area type and the code from the staff file as a parameter in the pff file. Prefill the staff code in the listing program. Make sure that the listing program returns to the menu program on exit.</li>
-	<li>Modify the logic in the onfocus and postproc of <b>CHOOSE_HOUSEHOLD</b> to add an extra option to the end of the list labeled "Back" that will move back to the interviewer main menu.</li>
-	<li>Modify the dynamic value set we create in the onfocus proc of <b>CHOOSE_HOUSEHOLD</b> to show the interview status (<b>A10</b> in the household questionnaire) in addition to the household number and the head's name. To do this you will need to use loadcase on the household questionnaire dictionary to find the case from the household data file. You will also need to handle the case where the household does not yet exist in the household data file.</li>
-	<li>Create a new menu called "Summary Reports" that has options for the completion report (the one we implemented already) and a new "Total Population Report" that you will implement. This new menu should also have an option to go back to the main menu. The "Summary Reports" menu should be accessed from the Supervisor Main Menu. The new "Total Population Report" should look like:
-	~!~~!~<font monospace><indent>Total Population Report~!~-----------------------~!~Province: 01 District: 02~!~Male: 1020~!~Female: 1025~!~Total: 2045</indent></font>
+    <li>Implement the function launchHouseholdListing() in the menu program. It should write out and launch a pff file to run the listing program. Set the "Key" attribute in the pff file to the province, district, and enumeration area. Set the staff area type and the code from the staff file as a parameter in the pff file. Prefill the staff code in the listing program. Make sure that the listing program returns to the menu program on exit.</li>
+    <li>Modify the logic in the onfocus and postproc of <b>CHOOSE_HOUSEHOLD</b> to add an extra option to the end of the list labeled "Back" that will move back to the interviewer main menu.</li>
+    <li>Modify the dynamic value set we create in the onfocus proc of <b>CHOOSE_HOUSEHOLD</b> to show the interview status (<b>A10</b> in the household questionnaire) in addition to the household number and the head's name. To do this you will need to use loadcase on the household questionnaire dictionary to find the case from the household data file. You will also need to handle the case where the household does not yet exist in the household data file.</li>
+    <li>Create a new menu called "Summary Reports" that has options for the completion report (the one we implemented already) and a new "Total Population Report" that you will implement. This new menu should also have an option to go back to the main menu. The "Summary Reports" menu should be accessed from the Supervisor Main Menu. The new "Total Population Report" should look like:
+    ~!~~!~<font monospace><indent>Total Population Report~!~-----------------------~!~Province: 01 District: 02~!~Male: 1020~!~Female: 1025~!~Total: 2045</indent></font>
 </li>
 </list>
 <pagebreak />

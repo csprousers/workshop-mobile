@@ -2,12 +2,12 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Use lookup files in data entry</li>
-	<li>Create user-defined functions in CSPro</li>
-	<li>Extend the interface of CSEntry with userbar buttons</li>
-	<li>Use the commands <logiccolor>advance</logiccolor> and <logiccolor>move</logiccolor> to navigate through the questionnaire</li>
-	<li>Use the function <logiccolor>visualvalue</logiccolor> to get the value of variables that are "off path"</li>
-	<li>Use the command <logiccolor>showarray</logiccolor> to display tables to the interviewer</li>
+    <li>Use lookup files in data entry</li>
+    <li>Create user-defined functions in CSPro</li>
+    <li>Extend the interface of CSEntry with userbar buttons</li>
+    <li>Use the commands <logiccolor>advance</logiccolor> and <logiccolor>move</logiccolor> to navigate through the questionnaire</li>
+    <li>Use the function <logiccolor>visualvalue</logiccolor> to get the value of variables that are "off path"</li>
+    <li>Use the command <logiccolor>showarray</logiccolor> to display tables to the interviewer</li>
 </list>
 
 <subheader>Lookup Files</subheader>
@@ -64,7 +64,7 @@ if loadcase(DISTRICT_DICT, PROVINCE, DISTRICT)  = 0 then
 else
     // Assign province and district names from lookup to main
     // dictionary variables so we can display them on form.
-	PROVINCE_NAME = DI_PROVINCE_NAME;
+    PROVINCE_NAME = DI_PROVINCE_NAME;
     DISTRICT_NAME = DI_DISTRICT_NAME;
 endif;
 </logic>
@@ -131,7 +131,7 @@ onfocus
 ValueSet motherVSet;
 do numeric indexRoster = 1 while indexRoster <= totocc(HOUSEHOLD_MEMBERS_ROSTER)
     if isChildbearingWoman(indexRoster) = 1 then
-		motherVSet.add(NAME(indexRoster), indexRoster);
+        motherVSet.add(NAME(indexRoster), indexRoster);
     endif;
 enddo;
 motherVSet.add("not in household",99);
@@ -200,7 +200,7 @@ We can use the question text for this but we don't have a dictionary variable fo
 <logic>
 // Compute totalBirths to display in question text in fertility section
 function totalBirths()
-	totalBirths = CHILDREN_IN_HOUSEHOLD + CHILDREN_ELSEWHERE + CHILDREN_DECEASED;
+    totalBirths = CHILDREN_IN_HOUSEHOLD + CHILDREN_ELSEWHERE + CHILDREN_DECEASED;
 end;
 </logic>
 
@@ -214,20 +214,20 @@ What happens when one of the fields in this calculation is skipped? The value be
 // Compute totalBirths to display in question text in fertility section
 function totalBirths()
 
-	numeric total = 0;
+    numeric total = 0;
 
-	if CHILDREN_IN_HOUSEHOLD <> notappl then
-		total = total + CHILDREN_IN_HOUSEHOLD;
-	endif;
+    if CHILDREN_IN_HOUSEHOLD <> notappl then
+        total = total + CHILDREN_IN_HOUSEHOLD;
+    endif;
 
-	if CHILDREN_ELSEWHERE <> notappl then
-		total = total + CHILDREN_ELSEWHERE;
-	endif;
+    if CHILDREN_ELSEWHERE <> notappl then
+        total = total + CHILDREN_ELSEWHERE;
+    endif;
 
-	if CHILDREN_DECEASED <> notappl then
-		total = total + CHILDREN_DECEASED;
-	endif;
-	totalBirths = total;
+    if CHILDREN_DECEASED <> notappl then
+        total = total + CHILDREN_DECEASED;
+    endif;
+    totalBirths = total;
 end;
 </logic>
 
@@ -355,7 +355,7 @@ function pickFromHouseholdRoster()
     enddo;
     householdMembersArray(i, 1) = ""; // Mark end
     numeric picked = showarray(householdMembersArray, title("Name", "Sex",
-	                                                        "Relationship"));
+                                                            "Relationship"));
     pickFromHouseholdRoster = picked;
 end;
 
@@ -388,10 +388,10 @@ Interestingly, as we can see from our current code, this only applies to numeric
 
 You can see which fields are "on path" by looking at the background color of the field:
 <list>
-	<li>Green: on path</li>
-	<li>Dark Gray: skipped</li>
-	<li>White: not yet been filled in</li>
-	<li>Light Gray: protected</li>
+    <li>Green: on path</li>
+    <li>Dark Gray: skipped</li>
+    <li>White: not yet been filled in</li>
+    <li>Light Gray: protected</li>
 </list>
 
 Note that the field coloring scheme is different in operator controlled mode.
@@ -419,10 +419,10 @@ All that is left now is to use the appropriate relationship for the sex of the h
 <logic>
 if visualvalue(SEX(i)) = 1 then
     householdMembersArray(i, 3) = getlabel(RELATIONSHIP_MALE,
-										   visualvalue(RELATIONSHIP(i)));
+                                           visualvalue(RELATIONSHIP(i)));
 else
     householdMembersArray(i, 3) = getlabel(RELATIONSHIP_FEMALE,
-										   visualvalue(RELATIONSHIP(i)));
+                                           visualvalue(RELATIONSHIP(i)));
 endif;
 </logic>
 
@@ -466,7 +466,7 @@ postproc
 
 // Set interview end time first time end of questionnaire is reached
 if INTERVIEW_END_TIME = notappl then
-	INTERVIEW_END_TIME = systime("HHMM");
+    INTERVIEW_END_TIME = systime("HHMM");
 endif;
 </logic>
 
@@ -487,8 +487,8 @@ postproc
 
 // Set interview end time and total time first time end of questionnaire is reached
 if INTERVIEW_END_TIMESTAMP = notappl then
-	INTERVIEW_END_TIMESTAMP = timestamp();
-	INTERVIEW_DURATION_MINUTES = (INTERVIEW_END_TIMESTAMP - INTERVIEW_START_TIMESTAMP)/60;
+    INTERVIEW_END_TIMESTAMP = timestamp();
+    INTERVIEW_DURATION_MINUTES = (INTERVIEW_END_TIMESTAMP - INTERVIEW_START_TIMESTAMP)/60;
 endif;
 </logic>
 
@@ -497,11 +497,11 @@ If we don't need to display the start and end times on the form we can avoid usi
 
 <subheader>Exercises</subheader>
 <list ordered>
-	<li>Modify the question text for <b>E01</b> to say "Has any member of this household passed away in the past years, that is since (year)?" where year is replaced by the year of the interview minus 5. For example, if the year of the interview is 2018 it should read "Has any member of this household passed away in the past years, that is since 2013?". Use the the interview date from question <b>A6</b> to compute the value to insert.</li>
-	<li>Extend the goto() function to include the remaining sections of the questionnaire (D through G).</li>
-	<li>Add a button to the userbar called "household summary" that when clicked uses the errmsg function to display a message that shows the name of the head of household, and the number of household members by sex. For example: "Head of Household: John Brown, Total Members: 5, Women: 2, Men: 3". Bonus if you can get this to work when you click the button from section A. Hint: count and seek will not work with visualvalue so you will need to use a loop to find the number of males and females.</li>
-	<li>Implement a check on the minimum and maximum per unit possession values in question G01. Use the spreadsheet in annex 4 to create a lookup file containing the asset code, minimum value and maximum value. Use the loadcase command with this lookup file to find the minimum and maximum values for the selected asset and show an error message if the per unit asset value entered in the roster is below the minimum value or above the maximum value. This should be a soft check.</li>
-	<li>Fill in the interview start and end date automatically using the sysdate() command and make the interview start and end date fields protected.</li>
-	<li>Add question A10, interview status to the dictionary and form. We want to fill in this question at the start of the interview if the response is code 2 (non-contact), 3 (vacant) or 4 (refused) and then immediately end the questionnaire without going into any of the subsequent questions. However, if there is a respondent willing to give the interview, then the interview status should be set 5 (partially complete) until the entire questionnaire is complete at which point it should be set to 1 (complete). To implement this, keep the question in its current position in the questionnaire but use a dynamic value set to limit the options so that the interview cannot be set as completed until the entire questionnaire has been completed. The first time the field is entered (before any value has been entered) the value set should be: 2 Non-contact, 3 Vacant, 4 Refused, 5 Continue interview. If the interviewer chooses 2, 3 or 4, end the interview, otherwise, if they choose 5, continue to the next field. At the end of the interview (postproc of the level), if the value is currently 5, set it to 1 (complete). If the interviewer returns to A9 after the field has been set to 1 (complete) then display the value set as it is on the questionnaire.</li>
+    <li>Modify the question text for <b>E01</b> to say "Has any member of this household passed away in the past years, that is since (year)?" where year is replaced by the year of the interview minus 5. For example, if the year of the interview is 2018 it should read "Has any member of this household passed away in the past years, that is since 2013?". Use the the interview date from question <b>A6</b> to compute the value to insert.</li>
+    <li>Extend the goto() function to include the remaining sections of the questionnaire (D through G).</li>
+    <li>Add a button to the userbar called "household summary" that when clicked uses the errmsg function to display a message that shows the name of the head of household, and the number of household members by sex. For example: "Head of Household: John Brown, Total Members: 5, Women: 2, Men: 3". Bonus if you can get this to work when you click the button from section A. Hint: count and seek will not work with visualvalue so you will need to use a loop to find the number of males and females.</li>
+    <li>Implement a check on the minimum and maximum per unit possession values in question G01. Use the spreadsheet in annex 4 to create a lookup file containing the asset code, minimum value and maximum value. Use the loadcase command with this lookup file to find the minimum and maximum values for the selected asset and show an error message if the per unit asset value entered in the roster is below the minimum value or above the maximum value. This should be a soft check.</li>
+    <li>Fill in the interview start and end date automatically using the sysdate() command and make the interview start and end date fields protected.</li>
+    <li>Add question A10, interview status to the dictionary and form. We want to fill in this question at the start of the interview if the response is code 2 (non-contact), 3 (vacant) or 4 (refused) and then immediately end the questionnaire without going into any of the subsequent questions. However, if there is a respondent willing to give the interview, then the interview status should be set 5 (partially complete) until the entire questionnaire is complete at which point it should be set to 1 (complete). To implement this, keep the question in its current position in the questionnaire but use a dynamic value set to limit the options so that the interview cannot be set as completed until the entire questionnaire has been completed. The first time the field is entered (before any value has been entered) the value set should be: 2 Non-contact, 3 Vacant, 4 Refused, 5 Continue interview. If the interviewer chooses 2, 3 or 4, end the interview, otherwise, if they choose 5, continue to the next field. At the end of the interview (postproc of the level), if the value is currently 5, set it to 1 (complete). If the interviewer returns to A9 after the field has been set to 1 (complete) then display the value set as it is on the questionnaire.</li>
 </list>
 <pagebreak />

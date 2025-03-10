@@ -2,10 +2,10 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Deploy applications to mobile devices over the Internet</li>
-	<li>Use the synchronization options dialog to add synchronization to an application</li>
-	<li>Create advanced synchronizations using CSPro logic to synchronize data files and update applications in the field</li>
-	<li>Create peer to peer synchronizations between devices for situations where there is no Internet access</li>
+    <li>Deploy applications to mobile devices over the Internet</li>
+    <li>Use the synchronization options dialog to add synchronization to an application</li>
+    <li>Create advanced synchronizations using CSPro logic to synchronize data files and update applications in the field</li>
+    <li>Create peer to peer synchronizations between devices for situations where there is no Internet access</li>
 </list>
 
 <subheader>Synchronization in CSPro</subheader>
@@ -16,9 +16,9 @@ After collecting data in the field, you need to get the data from the interviewe
 <subheader>The Sync Server</subheader>
 In order to use Internet synchronization in CSPro you need a server accessible over a network. CSPro supports three types of Synchronization servers:
 <list>
-	<li>CSWeb: A free web application that can run in a local data center or hosted on a server in the cloud. Best for large surveys. Requires skills in setting up and administering a website and SQL database.</li>
-	<li>Dropbox: A free service for synchronization with servers in the cloud using an account created at www.dropbox.com. Data is stored on the servers managed by Dropbox in the United States. Best for small surveys when the skills and infrastructure for setting up CSWeb are not available.</li>
-	<li>FTP: CSPro can synchronize with any FTP (File Transfer Protocol) server accessible over the network. Best for small surveys when the skills and infrastructure for setting up CSWeb are not available and you don't want your data on the Dropbox servers.</li>
+    <li>CSWeb: A free web application that can run in a local data center or hosted on a server in the cloud. Best for large surveys. Requires skills in setting up and administering a website and SQL database.</li>
+    <li>Dropbox: A free service for synchronization with servers in the cloud using an account created at www.dropbox.com. Data is stored on the servers managed by Dropbox in the United States. Best for small surveys when the skills and infrastructure for setting up CSWeb are not available.</li>
+    <li>FTP: CSPro can synchronize with any FTP (File Transfer Protocol) server accessible over the network. Best for small surveys when the skills and infrastructure for setting up CSWeb are not available and you don't want your data on the Dropbox servers.</li>
 </list>
 
 For our examples in this workshop we will use a CSWeb server, however using Dropbox or FTP is very similar. Installing the CSWeb server is beyond the scope of this training so we will work with a server that is already installed and running. The process for setting up a CSWeb server is well documented in the <link https://www.csprousers.org/help/CSWeb/introduction_to_csweb.html>CSWeb User's Guide.</link>
@@ -38,9 +38,9 @@ In order to use synchronization, you must first add the server information to th
 In the dropdown, you have three choices for how to synchronize the main data file:
 
 <list>
-	<li>Upload changes to server: all new cases and any cases modified locally will be uploaded to the server.</li>
-	<li>Download changes from server: all new cases and cases modified on server will be downloaded from server.</li>
-	<li>Sync local and remote changes: combines the first two options by sending updates to the server and downloading updates from the server.</li>
+    <li>Upload changes to server: all new cases and any cases modified locally will be uploaded to the server.</li>
+    <li>Download changes from server: all new cases and cases modified on server will be downloaded from server.</li>
+    <li>Sync local and remote changes: combines the first two options by sending updates to the server and downloading updates from the server.</li>
 </list>
 
 In most cases you will want to choose either the first or third option. Use the third option if you want to share cases between multiple devices in the field as this will download every case on the server onto the local device. For a survey operation with a large number of interviewers you may want to avoid this as it will cause you to download a lot of data. For our test, we will use the first option.
@@ -100,24 +100,24 @@ We will also add calls to <logiccolor>syncfile()</logiccolor> to download the la
 // and download latest version of application files
 function syncWithHeadquarters()
 
-	// Connect to the webserver
-	if syncconnect(CSWeb, "http://csweb.teleyah.com/api") then
+    // Connect to the webserver
+    if syncconnect(CSWeb, "http://csweb.teleyah.com/api") then
 
-		// Sync cases from household data file with server
-		syncdata(BOTH, POPSTAN2020_DICT);
+        // Sync cases from household data file with server
+        syncdata(BOTH, POPSTAN2020_DICT);
 
-		// Download latest version of menu application
-		syncfile(GET, "/Popstan2020/Menu/Menu.pen", "./Menu.pen");
-		syncfile(GET, "/Popstan2020/Menu/Menu.pff", "./Menu.pen");
+        // Download latest version of menu application
+        syncfile(GET, "/Popstan2020/Menu/Menu.pen", "./Menu.pen");
+        syncfile(GET, "/Popstan2020/Menu/Menu.pff", "./Menu.pen");
 
-		// Get latest household data entry program
-		syncfile(GET, "/Popstan2020/Household/Popstan2020.pen",
-					  "../Household/Popstan2020.pen");
+        // Get latest household data entry program
+        syncfile(GET, "/Popstan2020/Household/Popstan2020.pen",
+                      "../Household/Popstan2020.pen");
 
-		// Disconnect from the server
-		syncdisconnect();
+        // Disconnect from the server
+        syncdisconnect();
 
-	endif;
+    endif;
 end;
 </logic>
 <pagebreak />
@@ -187,9 +187,9 @@ The rest of the logic is the same as for web synchronization except that the "fr
 
 <logic>
 function syncWithSupervisor()
-	// Connect to the supervisor device
+    // Connect to the supervisor device
     // We do not specify the device name to connect to which allows the interviewer
-	// to pick the device from a list of nearby devices.
+    // to pick the device from a list of nearby devices.
     if syncconnect(bluetooth) then
 
         // Sync main data file.
@@ -201,8 +201,8 @@ function syncWithSupervisor()
         syncfile(GET, "./Menu.pff", "./Menu.pff");
 
         // Since the current application is in the Menu folder we need to use
-		// "../Household" to go up one level and back down into the Household
-		// folder for the household application files.
+        // "../Household" to go up one level and back down into the Household
+        // folder for the household application files.
         syncfile(GET, "../Household/Popstan2020.pen",
                  "../Household/Popstan2020.pen");
 

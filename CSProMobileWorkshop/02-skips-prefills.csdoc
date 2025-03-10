@@ -2,10 +2,10 @@
 
 At the end of this session participants will be able to:
 <list>
-	<li>Use the commands <logiccolor>skip</logiccolor> and <logiccolor>ask if</logiccolor> to skip fields</li>
-	<li>Use <logiccolor>if then else</logiccolor> statements to implement skip patterns</li>
-	<li>End rosters from logic using <logiccolor>endgroup</logiccolor></li>
-	<li>Automatically fill in fields using logic</li>
+    <li>Use the commands <logiccolor>skip</logiccolor> and <logiccolor>ask if</logiccolor> to skip fields</li>
+    <li>Use <logiccolor>if then else</logiccolor> statements to implement skip patterns</li>
+    <li>End rosters from logic using <logiccolor>endgroup</logiccolor></li>
+    <li>Automatically fill in fields using logic</li>
 </list>
 
 <subheader>Skips</subheader>
@@ -30,13 +30,13 @@ This will skip directly to TENURE for individuals who answer "no" to OTHER_HOUSI
 In addition to "=" to check if two values are equal, you can use the following operators:
 
 <indent><table 2>
-	<cell><b>Operation</b></cell><cell><b>Symbol</b></cell>
-	<cell>Equal to</cell><cell>=</cell>
-	<cell>Not equal to</cell><cell>&lt;&gt;</cell>
-	<cell>Less than</cell><cell>&lt;</cell>
-	<cell>Less than or equal to</cell><cell>&lt;=</cell>
-	<cell>Greater than</cell><cell>&gt;</cell>
-	<cell>Greater than or equal to</cell><cell>&gt;=</cell>
+    <cell><b>Operation</b></cell><cell><b>Symbol</b></cell>
+    <cell>Equal to</cell><cell>=</cell>
+    <cell>Not equal to</cell><cell>&lt;&gt;</cell>
+    <cell>Less than</cell><cell>&lt;</cell>
+    <cell>Less than or equal to</cell><cell>&lt;=</cell>
+    <cell>Greater than</cell><cell>&gt;</cell>
+    <cell>Greater than or equal to</cell><cell>&gt;=</cell>
 </table></indent>
 
 For example, to skip over <b>B08</b>, residence one year ago, for those less than one year of age we could add the following logic to the PROC of the preceding question:
@@ -113,10 +113,10 @@ In addition to the "or" operator you can also make compound conditions using the
 In addition to "or", CSPro supports the following logical operators:
 
 <table 2>
-	<cell><b>Operation</b></cell><cell><b>Keyword</b></cell>
-	<cell>Negate an expression</cell><cell>not</cell>
-	<cell>True if both expressions are true</cell><cell>and</cell>
-	<cell>True if either expression is true</cell><cell>or</cell>
+    <cell><b>Operation</b></cell><cell><b>Keyword</b></cell>
+    <cell>Negate an expression</cell><cell>not</cell>
+    <cell>True if both expressions are true</cell><cell>and</cell>
+    <cell>True if either expression is true</cell><cell>or</cell>
 </table>
 
 You can also use compound conditions with <logiccolor>ask if</logiccolor>. For example we only want to ask question <b>B14</b>, age at first marriage, for those who responded "married" or "widowed" or "divorced" for marital status.
@@ -278,19 +278,19 @@ endif;
 
 <subheader>Exercises</subheader>
 <list ordered>
-	<li>Skip question <b>F07</b>, monthly rent, if dwelling is not rented in <b>F06</b>.</li>
-	<li>In section E, deaths, implement the skip pattern for question <b>E01</b>, any deaths.</li>
-	<li>In section E, deaths, implement the skip pattern for question <b>E08</b>, mother of deceased, based on the age at time of death <b>E07</b>.</li>
-	<li>In section E, deaths, implement the skip pattern for question <b>E09</b>, died while pregnant.</li>
-	<li>In section E, deaths, skip questions <b>E09</b> and <b>E10</b> for deceased household members who are NOT women aged 12-50.</li>
-	<li>In section E, use logic to pre-fill the line number field <b>E03</b>. Make sure that the line number is protected.</li>
-	<li>Skip all of section C for persons under 3 years of age.</li>
-	<li>Add an additional question to <b>F13</b> to determine if the respondent wants to give the distance to water in minutes or kilometers. If they choose kilometers then skip the distance in minutes question otherwise skip the distance in km question.</li>
-	<li>Add the other(specify) field and skip pattern for <b>F08</b>, wall material.</li>
-	<li>Add the other(specify) field for <b>B15</b>, languages spoken.</li>
-	<li>Automatically fill in the  the possession code in question <b>G01</b>.</li>
-	<li>In question <b>G01</b>, household possessions, skip the value field if the quantity is zero.</li>
-	<li>Add variables and a form for section D: Fertility. Add the variables to the person record but create a new form with its own roster just like we did for section C. Don't worry about the last question on the form that displays the total births. We will cover that in a later lesson. Add the skip patterns for the fertility section. Don't forget to skip the entire section for males and females NOT between 12 and 50 years old.</li>
+    <li>Skip question <b>F07</b>, monthly rent, if dwelling is not rented in <b>F06</b>.</li>
+    <li>In section E, deaths, implement the skip pattern for question <b>E01</b>, any deaths.</li>
+    <li>In section E, deaths, implement the skip pattern for question <b>E08</b>, mother of deceased, based on the age at time of death <b>E07</b>.</li>
+    <li>In section E, deaths, implement the skip pattern for question <b>E09</b>, died while pregnant.</li>
+    <li>In section E, deaths, skip questions <b>E09</b> and <b>E10</b> for deceased household members who are NOT women aged 12-50.</li>
+    <li>In section E, use logic to pre-fill the line number field <b>E03</b>. Make sure that the line number is protected.</li>
+    <li>Skip all of section C for persons under 3 years of age.</li>
+    <li>Add an additional question to <b>F13</b> to determine if the respondent wants to give the distance to water in minutes or kilometers. If they choose kilometers then skip the distance in minutes question otherwise skip the distance in km question.</li>
+    <li>Add the other(specify) field and skip pattern for <b>F08</b>, wall material.</li>
+    <li>Add the other(specify) field for <b>B15</b>, languages spoken.</li>
+    <li>Automatically fill in the  the possession code in question <b>G01</b>.</li>
+    <li>In question <b>G01</b>, household possessions, skip the value field if the quantity is zero.</li>
+    <li>Add variables and a form for section D: Fertility. Add the variables to the person record but create a new form with its own roster just like we did for section C. Don't worry about the last question on the form that displays the total births. We will cover that in a later lesson. Add the skip patterns for the fertility section. Don't forget to skip the entire section for males and females NOT between 12 and 50 years old.</li>
 </list>
 
 <pagebreak />
