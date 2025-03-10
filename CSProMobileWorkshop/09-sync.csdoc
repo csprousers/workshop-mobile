@@ -31,7 +31,7 @@ Once you have uploaded the application to the server you can download to a mobil
 You can also deploy updated versions of your application to the server and use the same procedure to download the updated application to your device.
 
 <subheader>Adding Synchronization to the Data Entry Application</subheader>
-In order to use synchronization, you must first add the server information to the application to enable synchronization. In CSPro choose "Synchronization…" from the options menu. Choose the server type (CSWeb, Dropbox or FTP). For CSWeb or FTP, enter the server URL (for Dropbox no URL is required). You can use the "Test Connection…" button to verify that the URL is correct. For CSWeb, the URL to use for synchronization in CSPro will usually end with "/api" while the URL to use to access the web interface will usually end in "/ui". The former is for CSPro itself to connect to the server while the latter is for use only in the web browser.
+In order to use synchronization, you must first add the server information to the application to enable synchronization. In CSPro choose "Synchronization" from the Options menu. Choose the server type (CSWeb, Dropbox, or FTP). For CSWeb or FTP, enter the server URL (for Dropbox no URL is required). You can use the "Test Connection" button to verify that the URL is correct. For CSWeb, the URL to use for synchronization in CSPro will usually end with "/api" while the URL to use to access the web interface will usually end in "/ui". The former is for CSPro itself to connect to the server while the latter is for use only in the web browser.
 
 <center><image syncoptions.png /></center>
 
@@ -45,24 +45,22 @@ In the dropdown, you have three choices for how to synchronize the main data fil
 
 In most cases you will want to choose either the first or third option. Use the third option if you want to share cases between multiple devices in the field as this will download every case on the server onto the local device. For a survey operation with a large number of interviewers you may want to avoid this as it will cause you to download a lot of data. For our test, we will use the first option.
 
-In addition to synchronizing the data file you can also download the pen and pff files from the server. This provides a way to do remote updates to the application while interviewers are in the field. In order for this to work you must place a copy of the pen and pff files on the server. For CSWeb these must be placed in the <i>csweb/files/</i> on the server. For Dropbox, they may be placed anywhere in the Dropbox folder. For FTP they must be placed in the home directory of the user that will be used to log into the server. Enter the path on the server where the files were placed under "Path to application on server". We will place these files in the directory <i>/Popstan2020Census</i> on the server. Note that this is an alternative to using the Deploy Application tool and Add Application to update the application. The advantage of this approach is that it combines the data synchronization with the application update in a single operation. The disadvantage is that you have to copy the .pen and .pff files to the server manually instead of using the Deploy Application tool.
-
 Once the sync settings are complete, regenerate the pen file. The sync settings are stored in the pen file so if it is not updated you won't be able to sync. Copy the pen and pff file into the Popstan2020Census directory under the files directory on the server so that it will be downloaded to the local device during sync.
 
 <subheader>Running Sync</subheader>
 To synchronize the application with the server, run the application in CSPro and from the case listing screen choose "Synchronize…" from the file menu on the PC or tap the synchronize icon (<image sync_icon.png />) on mobile.
 
 <subheader>Downloading the Combined Data File</subheader>
-Once you have used synchronize to upload data to the server you can download the data file from the server using the Data Viewer tool. This will download a single data file that combines all the data uploaded from all the devices that have synchronized with the server. Open Data Viewer, choose the server type, enter the same URL you used in the synchronization options dialog, click "Connect" to download the list of data files available on the server, choose the data file, choose a place to save the downloaded file and click "Download".
+Once you have used synchronize to upload data to the server you can download the data file from the server using the Data Manager tool. This will download a single data file that combines all the data uploaded from all the devices that have synchronized with the server. Open Data Manager, choose the server type, enter the same URL you used in the synchronization options dialog, click "Show Available Data" to download the list of data files available on the server, choose the data file, choose a place to save the downloaded file and click "Download".
 
-<center><image dataviewerdownload.png /></center>
+<center><image data-manager-download.png /></center>
 
 <subheader>Using the CSPro Web Server interface</subheader>
 The CSWeb server has a web interface that you can access through a browser. The URL for the web interface is similar to the one used in CSPro except that the "api" at the end is replaced by "ui". The web interface allows you to manage deployed applications, data dictionaries and user accounts.
 
 <center><image cswebui.png width 600 /></center>
 
-If you are using CSWeb, you can avoid filling out the download dialog by clicking on the "Download" icon in the CSWeb interface in the browser. This will download a pff file. When you open the downloaded pff file, it will automatically open Data Viewer and begin downloading the combined data. Once you have downloaded the data file the first time, you can use the "synchronize" function in Data Viewer to only download the newly updated data rather downloading the entire file a second time. If you are using Dropbox or FTP, CSPro will automatically create a pff file named <i>DownloadData-&lt;your dictionary name&gt;.pff</i> in your Dropbox or on your FTP server that will launch Data Viewer to download the data.
+If you are using CSWeb, you can avoid filling out the download dialog by clicking on the "Download" icon in the CSWeb interface in the browser. This will download a pff file. When you open the downloaded pff file, it will automatically open Data Manager and begin downloading the combined data. Once you have downloaded the data file the first time, you can use the "synchronize" function in Data Manager to only download the newly updated data rather downloading the entire file a second time. If you are using Dropbox or FTP, CSPro will automatically create a pff file named <i>DownloadData-&lt;your dictionary name&gt;.pff</i> in your Dropbox or on your FTP server that will launch Data Manager to download the data.
 
 <callout>
 <center><b>Group exercise – Sync Race</b></center>

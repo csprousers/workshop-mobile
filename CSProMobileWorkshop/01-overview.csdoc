@@ -6,7 +6,7 @@ At the end of this session participants will be able to:
     <li>Create a simple data entry application including dictionary and forms</li>
     <li>Run a data entry application on Windows</li>
     <li>Run a data entry application on mobile and retrieve the data entered</li>
-    <li>View data using Data Viewer</li>
+    <li>View data using Data Manager</li>
 </list>
 
 <subheader>CSPro Overview</subheader>
@@ -185,7 +185,7 @@ For paper and pencil surveys, we would spend a lot of time on the layout, adding
 Click on the green light icon on the toolbar to run the data entry application on your PC. Enter the name of the data file. For data files CSPro uses the file extension ".csdb". Let's name our data file "Household.csdb".
 
 <subheader>Data File Types</subheader>
-By default CSPro stores data in a CSPro database file with the extension .csdb. This file not only contains the data itself but it also contains the notes, the index, the partial save status and metadata used for data synchronization. CSPro database files can be viewed by double clicking on them or using the Data Viewer tool from the tools menu.
+By default CSPro stores data in a CSPro database file with the extension .csdb. This file not only contains the data itself but it also contains the notes, the index, the partial save status and metadata used for data synchronization. CSPro database files can be viewed by double clicking on them or using the Data Manager tool from the tools menu.
 
 The csdb extension is new in CSPro 7.0. In earlier versions of CSPro, the notes, index and partial save were stored in extra files that accompanied the data file itself. Unlike the text file used by earlier versions of CSPro, this is a binary file that cannot be viewed using Text Viewer. While it is still possible to use text files in CSPro 7.0, it is highly recommended to use CSPro DB instead. There are new features such as smart sync and case labels that are not supported using text files.
 
@@ -222,8 +222,8 @@ When we copied the application to the tablet we copied the pen and the pff file.
 
 On Android, the list of available applications on the device is constructed by finding all the pff files in the CSEntry directory and subdirectories so a pen file without a pff will not show up in the list.
 
-<subheader>Data Viewer</subheader>
-Double-clicking on the file household.csdb opens the file in the Data Viewer tool. Data Viewer provides a simple way to view the data that was entered.
+<subheader>Data Manager</subheader>
+Double-clicking on the file household.csdb opens the file in the Data Manager tool. Data Manager provides a simple way to view the data that was entered.
 
 <callout><center><b>Group exercise</b></center>
 Add a new record to the dictionary for section E of the questionnaire (deaths). Name this record "Deaths". How many occurrences should it have? Don't include E01 and E02 in the new record as they do not have the same number of occurrences as the other variables in this section. Instead, add them to the housing record. Create a new form for section E and add the fields onto it to create a roster. Use E02 as an occurrence control field to the roster to limit the number of rows to the number of deaths in the household. Test the application on both Windows and on Android.
